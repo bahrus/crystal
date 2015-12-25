@@ -1,5 +1,3 @@
-/// <reference path="../bower_components/polymer-ts/polymer-ts.d.ts" />
-/// <reference path="../crystal.ts"/>
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -16,32 +14,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var TestElements;
 (function (TestElements) {
-    //#region abbreviations
-    function rn(getter) {
-        return crystal.getName(getter);
-    }
-    var c = {
-        'myProp': rn(function (o) { return o.myProp; }),
-    };
-    var MyParentModel = (function () {
-        function MyParentModel() {
-        }
-        return MyParentModel;
-    })();
-    var MyParentElement = (function (_super) {
-        __extends(MyParentElement, _super);
-        function MyParentElement() {
+    var MyChildElement = (function (_super) {
+        __extends(MyChildElement, _super);
+        function MyChildElement() {
             _super.apply(this, arguments);
-            this.myProp = 42; // direct initialization
         }
-        MyParentElement = __decorate([
-            behavior(MyParentModel),
-            component("my-parent-element"),
-            template("\n        <div>myProp: [[" + c.myProp + "]]</div>\n        <my-child-element></my-child-element>\n    "), 
+        MyChildElement = __decorate([
+            component("my-child-element"),
+            template("\n        <div style=\"background-color:#eeee77\">\n            <div>My Child component</div>\n            <div>myProp: [[myProp]]</div>\n        </div>\n    "), 
             __metadata('design:paramtypes', [])
-        ], MyParentElement);
-        return MyParentElement;
+        ], MyChildElement);
+        return MyChildElement;
     })(polymer.Base);
-    MyParentElement.register();
+    MyChildElement.register();
 })(TestElements || (TestElements = {}));
-//# sourceMappingURL=MyParentElement.js.map
+//# sourceMappingURL=MyChildElement.js.map

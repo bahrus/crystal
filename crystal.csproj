@@ -41,6 +41,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="crystal.ts" />
     <TypeScriptCompile Include="TestElements\EmployeeInfo.ts" />
+    <TypeScriptCompile Include="TestElements\MyChildElement.ts" />
     <TypeScriptCompile Include="TestElements\MyParentElement.ts" />
   </ItemGroup>
   <PropertyGroup>

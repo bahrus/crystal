@@ -20,6 +20,7 @@ module TestElements {
     @component("my-parent-element")
     @template(`
         <div>myProp: [[${c.myProp}]]</div>
+        <my-child-element></my-child-element>
     `)
     class MyParentElement extends polymer.Base{
         myProp = 42;  // direct initialization
