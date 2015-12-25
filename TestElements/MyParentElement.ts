@@ -12,12 +12,17 @@ module TestElements {
         'myProp': rn(o => o.myProp),
         'incrementMyProp': rn(o => o.incrementMyProp),
         'onMyPropChange': rn(o => o.onMyPropChange),
+        'myEmployee': rn(o => o.myEmployee),
+        'changeEmployeeName': rn(o => o.changeEmployeeName),
+        'myEmployee_Name': rn(o => o.myEmployee.Name),
     }
 
     interface IMyParentModel {
         myProp?: number;
         incrementMyProp?: () => void;
         onMyPropChange?: (newVal, oldVal) => void;
+        myEmployee?: EmployeeInfo;
+        changeEmployeeName?: (e?) => void;
     }
 
     class MyParentModel implements IMyParentModel {
@@ -31,7 +36,26 @@ module TestElements {
         }
 
 
-        //onMyPropChange(newVal, oldVal) { }
+        @property()
+        myEmployee: EmployeeInfo;
+
+    
+        changeEmployeeName(e) {
+            if (this['set']) {
+                this['set'](c.myEmployee_Name, 'Austin');
+            } else {
+                this.myEmployee.Name = 'Austin';
+            }
+        }
+
+        @observe(c.myEmployee + '.*')
+        @crystal.methodCallAction({
+            do: pc => {
+                console.log(pc);
+            },
+            before: true
+        })
+        onMyEmployeeChange(newVal, oldVal) { }
     }
 
     @behavior(MyParentModel)
@@ -39,6 +63,8 @@ module TestElements {
     @template(`
         <div>myProp: [[${c.myProp}]]</div>
         <div on-click="${c.incrementMyProp}">Increment myProp</div>
+        <div>Employee name: [[${c.myEmployee_Name}]]</div>
+        <div on-click="${c.changeEmployeeName}">Change Employee Name</div>
         <my-child-element></my-child-element>
     `)
     class MyParentElement extends polymer.Base implements IMyParentModel{
@@ -49,6 +75,7 @@ module TestElements {
         })
         onMyPropChange(newVal, oldVal) { }
 
+        myEmployee = new EmployeeInfo('Sydney', '102 Wallaby Lane');
         
     }
 

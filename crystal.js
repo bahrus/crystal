@@ -43,5 +43,42 @@ var crystal;
         };
     }
     crystal.metaBind = metaBind;
+    function methodCallAction(action) {
+        return function methodCallAction(target, propertyKey, descriptor) {
+            if (!descriptor) {
+                descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
+            }
+            var originalMethod = descriptor.value;
+            var polymerContext = {
+                element: target,
+                action: action,
+                methodName: propertyKey,
+                methodDescriptor: descriptor
+            };
+            // NOTE: Do not use arrow syntax here. Use a function expression in
+            // order to use the correct value of `this` in this method (see notes below)
+            descriptor.value = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                polymerContext.args = args;
+                if (action.before) {
+                    polymerContext.isBeforeMethod = true;
+                    action.do(polymerContext);
+                }
+                if (!action.skipMethodCall) {
+                    var result = originalMethod.apply(this, args); // run and store the result
+                }
+                if (action.after) {
+                    polymerContext.isBeforeMethod = false;
+                    action.do(polymerContext);
+                }
+                return result; // return the result of the original method
+            };
+            return descriptor;
+        };
+    }
+    crystal.methodCallAction = methodCallAction;
 })(crystal || (crystal = {}));
 //# sourceMappingURL=crystal.js.map

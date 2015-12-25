@@ -24,6 +24,9 @@ var TestElements;
         'myProp': rn(function (o) { return o.myProp; }),
         'incrementMyProp': rn(function (o) { return o.incrementMyProp; }),
         'onMyPropChange': rn(function (o) { return o.onMyPropChange; }),
+        'myEmployee': rn(function (o) { return o.myEmployee; }),
+        'changeEmployeeName': rn(function (o) { return o.changeEmployeeName; }),
+        'myEmployee_Name': rn(function (o) { return o.myEmployee.Name; }),
     };
     var MyParentModel = (function () {
         function MyParentModel() {
@@ -31,18 +34,44 @@ var TestElements;
         MyParentModel.prototype.incrementMyProp = function () {
             this.myProp++;
         };
+        MyParentModel.prototype.changeEmployeeName = function (e) {
+            if (this['set']) {
+                this['set'](c.myEmployee_Name, 'Austin');
+            }
+            else {
+                this.myEmployee.Name = 'Austin';
+            }
+        };
+        MyParentModel.prototype.onMyEmployeeChange = function (newVal, oldVal) { };
         __decorate([
             property({
                 observer: c.onMyPropChange
             }), 
             __metadata('design:type', Number)
         ], MyParentModel.prototype, "myProp", void 0);
+        __decorate([
+            property(), 
+            __metadata('design:type', TestElements.EmployeeInfo)
+        ], MyParentModel.prototype, "myEmployee", void 0);
+        __decorate([
+            observe(c.myEmployee + '.*'),
+            crystal.methodCallAction({
+                do: function (pc) {
+                    console.log(pc);
+                },
+                before: true
+            }), 
+            __metadata('design:type', Function), 
+            __metadata('design:paramtypes', [Object, Object]), 
+            __metadata('design:returntype', void 0)
+        ], MyParentModel.prototype, "onMyEmployeeChange", null);
         return MyParentModel;
     })();
     var MyParentElement = (function (_super) {
         __extends(MyParentElement, _super);
         function MyParentElement() {
             _super.apply(this, arguments);
+            this.myEmployee = new TestElements.EmployeeInfo('Sydney', '102 Wallaby Lane');
         }
         MyParentElement.prototype.onMyPropChange = function (newVal, oldVal) { };
         __decorate([
@@ -57,7 +86,7 @@ var TestElements;
         MyParentElement = __decorate([
             behavior(MyParentModel),
             component("my-parent-element"),
-            template("\n        <div>myProp: [[" + c.myProp + "]]</div>\n        <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n        <my-child-element></my-child-element>\n    "), 
+            template("\n        <div>myProp: [[" + c.myProp + "]]</div>\n        <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n        <div>Employee name: [[" + c.myEmployee_Name + "]]</div>\n        <div on-click=\"" + c.changeEmployeeName + "\">Change Employee Name</div>\n        <my-child-element></my-child-element>\n    "), 
             __metadata('design:paramtypes', [])
         ], MyParentElement);
         return MyParentElement;
