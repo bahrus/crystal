@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="crystal.ts" />
+    <TypeScriptCompile Include="xtal-elements\xtal-include.ts" />
     <TypeScriptCompile Include="TestElements\EmployeeInfo.ts" />
     <TypeScriptCompile Include="TestElements\MyChildElement.ts" />
     <TypeScriptCompile Include="TestElements\MyParentElement.ts" />

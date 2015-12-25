@@ -31,7 +31,6 @@ var TestElements;
         MyParentModel.prototype.incrementMyProp = function () {
             this.myProp++;
         };
-        MyParentModel.prototype.onMyPropChange = function (newVal, oldVal) { };
         __decorate([
             property({
                 observer: c.onMyPropChange
@@ -44,11 +43,9 @@ var TestElements;
         __extends(MyParentElement, _super);
         function MyParentElement() {
             _super.apply(this, arguments);
-            this.myProp = 42; // direct initialization
         }
         MyParentElement.prototype.onMyPropChange = function (newVal, oldVal) { };
         __decorate([
-            // direct initialization
             crystal.metaBind({
                 elementSelector: 'my-child-element',
                 setPath: c.myProp

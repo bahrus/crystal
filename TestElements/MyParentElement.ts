@@ -4,8 +4,8 @@
 module TestElements {
 
     //#region abbreviations
-    function rn(getter: crystal.IGetter<MyParentModel>) {
-        return crystal.getName<MyParentModel>(getter);
+    function rn(getter: crystal.IGetter<IMyParentModel>) {
+        return crystal.getName<IMyParentModel>(getter);
     }
 
     const c = {
@@ -14,7 +14,13 @@ module TestElements {
         'onMyPropChange': rn(o => o.onMyPropChange),
     }
 
-    class MyParentModel {
+    interface IMyParentModel {
+        myProp?: number;
+        incrementMyProp?: () => void;
+        onMyPropChange?: (newVal, oldVal) => void;
+    }
+
+    class MyParentModel implements IMyParentModel {
         @property({
             observer: c.onMyPropChange
         })
@@ -25,7 +31,7 @@ module TestElements {
         }
 
 
-        onMyPropChange(newVal, oldVal) { }
+        //onMyPropChange(newVal, oldVal) { }
     }
 
     @behavior(MyParentModel)
@@ -35,14 +41,15 @@ module TestElements {
         <div on-click="${c.incrementMyProp}">Increment myProp</div>
         <my-child-element></my-child-element>
     `)
-    class MyParentElement extends polymer.Base{
-        myProp = 42;  // direct initialization
+    class MyParentElement extends polymer.Base implements IMyParentModel{
 
         @crystal.metaBind({
             elementSelector: 'my-child-element',
             setPath: c.myProp
         })
         onMyPropChange(newVal, oldVal) { }
+
+        
     }
 
     MyParentElement.register();
