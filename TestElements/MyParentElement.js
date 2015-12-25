@@ -23,6 +23,7 @@ var TestElements;
     var c = {
         'myProp': rn(function (o) { return o.myProp; }),
         'incrementMyProp': rn(function (o) { return o.incrementMyProp; }),
+        'onMyPropChange': rn(function (o) { return o.onMyPropChange; }),
     };
     var MyParentModel = (function () {
         function MyParentModel() {
@@ -30,6 +31,13 @@ var TestElements;
         MyParentModel.prototype.incrementMyProp = function () {
             this.myProp++;
         };
+        MyParentModel.prototype.onMyPropChange = function (newVal, oldVal) { };
+        __decorate([
+            property({
+                observer: c.onMyPropChange
+            }), 
+            __metadata('design:type', Number)
+        ], MyParentModel.prototype, "myProp", void 0);
         return MyParentModel;
     })();
     var MyParentElement = (function (_super) {
@@ -38,6 +46,17 @@ var TestElements;
             _super.apply(this, arguments);
             this.myProp = 42; // direct initialization
         }
+        MyParentElement.prototype.onMyPropChange = function (newVal, oldVal) { };
+        __decorate([
+            // direct initialization
+            crystal.metaBind({
+                elementSelector: 'my-child-element',
+                setPath: c.myProp
+            }), 
+            __metadata('design:type', Function), 
+            __metadata('design:paramtypes', [Object, Object]), 
+            __metadata('design:returntype', void 0)
+        ], MyParentElement.prototype, "onMyPropChange", null);
         MyParentElement = __decorate([
             behavior(MyParentModel),
             component("my-parent-element"),

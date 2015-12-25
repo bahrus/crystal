@@ -11,14 +11,21 @@ module TestElements {
     const c = {
         'myProp': rn(o => o.myProp),
         'incrementMyProp': rn(o => o.incrementMyProp),
+        'onMyPropChange': rn(o => o.onMyPropChange),
     }
 
     class MyParentModel {
+        @property({
+            observer: c.onMyPropChange
+        })
         myProp: number;
 
         incrementMyProp() {
             this.myProp++;
         }
+
+
+        onMyPropChange(newVal, oldVal) { }
     }
 
     @behavior(MyParentModel)
@@ -30,6 +37,12 @@ module TestElements {
     `)
     class MyParentElement extends polymer.Base{
         myProp = 42;  // direct initialization
+
+        @crystal.metaBind({
+            elementSelector: 'my-child-element',
+            setPath: c.myProp
+        })
+        onMyPropChange(newVal, oldVal) { }
     }
 
     MyParentElement.register();
