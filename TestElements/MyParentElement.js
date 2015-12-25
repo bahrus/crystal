@@ -22,10 +22,14 @@ var TestElements;
     }
     var c = {
         'myProp': rn(function (o) { return o.myProp; }),
+        'incrementMyProp': rn(function (o) { return o.incrementMyProp; }),
     };
     var MyParentModel = (function () {
         function MyParentModel() {
         }
+        MyParentModel.prototype.incrementMyProp = function () {
+            this.myProp++;
+        };
         return MyParentModel;
     })();
     var MyParentElement = (function (_super) {
@@ -37,7 +41,7 @@ var TestElements;
         MyParentElement = __decorate([
             behavior(MyParentModel),
             component("my-parent-element"),
-            template("\n        <div>myProp: [[" + c.myProp + "]]</div>\n        <my-child-element></my-child-element>\n    "), 
+            template("\n        <div>myProp: [[" + c.myProp + "]]</div>\n        <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n        <my-child-element></my-child-element>\n    "), 
             __metadata('design:paramtypes', [])
         ], MyParentElement);
         return MyParentElement;

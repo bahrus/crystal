@@ -26,4 +26,7 @@ module crystal {
         return getMemberName(getter.toString());
     }
     //#endregion
+
+    //#region Support MetaBinding #2 https://github.com/bahrus/crystal/issues/2
+    //#endregion
 }
