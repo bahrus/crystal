@@ -3,3 +3,5 @@ obj
 /logs
 /temp
 *.map
+/.vs/crystal/v14/*.suo
+/*.user

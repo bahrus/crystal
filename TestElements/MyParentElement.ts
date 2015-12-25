@@ -1,18 +1,28 @@
 ﻿/// <reference path="../bower_components/polymer-ts/polymer-ts.d.ts" />
+/// <reference path="../crystal.ts"/>
 
 module TestElements {
 
-    //For Add Name Resolver #1 https://github.com/bahrus/crystal/issues/1
+    //#region abbreviations
+    function rn(getter: crystal.IGetter<MyParentModel>) {
+        return crystal.getName<MyParentModel>(getter);
+    }
+
+    const c = {
+        'myProp': rn(o => o.myProp),
+    }
 
     class MyParentModel {
+        myProp: number;
     }
 
     @behavior(MyParentModel)
     @component("my-parent-element")
     @template(`
-        <div>I am here</div>
+        <div>myProp: [[${c.myProp}]]</div>
     `)
     class MyParentElement extends polymer.Base{
+        myProp = 42;  // direct initialization
     }
 
     MyParentElement.register();
