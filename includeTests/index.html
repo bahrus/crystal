@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Include Tests</title>
+    <!--<script src="Scripts/src/webcomponents-lite.js"></script>-->
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../bower_components/polymer/polymer.html">
+    <link rel="import" href="../bower_components/polymer-ts/polymer-ts.html">
+    <link rel="import" href="../xtal-elements/xtal-include.html" />
+</head>
+<body>
+<script>
+    function handleClick(){
+        var includeEl = document.querySelector('link[is="xtal-include"]');
+        includeEl.href = "HTML2.html"
+    }
+</script>
+<div onclick="handleClick()">Click me to change included url</div>
+<link rel="subresource" is="xtal-include" href="HTML1.html"/>
+</body>
+</html>

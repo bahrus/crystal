@@ -24,10 +24,14 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="includeTests\HTML1.html" />
+    <Content Include="includeTests\HTML2.html" />
+    <Content Include="includeTests\index.html" />
     <Content Include="index.html" />
     <Content Include="ParentChild.html" />
     <Content Include="TestElements\MyParentElement.html" />
     <Content Include="web.config" />
+    <Content Include="xtal-elements\xtal-include.html" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.md" />
@@ -45,6 +49,7 @@
     <TypeScriptCompile Include="TestElements\MyChildElement.ts" />
     <TypeScriptCompile Include="TestElements\MyParentElement.ts" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
