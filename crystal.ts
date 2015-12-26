@@ -1,6 +1,15 @@
 ﻿/// <reference path="bower_components/polymer-ts/polymer-ts.d.ts" />
 
 module crystal {
+    //#region Polyfills
+    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
+    if (!String.prototype['startsWith']) {
+        String.prototype['startsWith'] = function(searchString, position) {
+            position = position || 0;
+            return this.indexOf(searchString, position) === position;
+        };
+    }
+    //#endregion
 
     //#region Add Name Resolver #1 https://github.com/bahrus/crystal/issues/1
     export interface IGetter<T> {

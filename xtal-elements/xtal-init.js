@@ -23,7 +23,10 @@ var crystal;
                 _super.apply(this, arguments);
             }
             XtalInit.prototype.attached = function () {
-                var inner = this.innerText;
+                var inner = this.innerText.trim();
+                if (!inner['startsWith']('[')) {
+                    inner = '[' + inner + ']';
+                }
                 var actions = eval(inner);
                 var target = nextNonScriptSibling(this);
                 for (var i = 0, ii = actions.length; i < ii; i++) {

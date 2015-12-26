@@ -1,6 +1,14 @@
 /// <reference path="bower_components/polymer-ts/polymer-ts.d.ts" />
 var crystal;
 (function (crystal) {
+    //#region Polyfills
+    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
+    if (!String.prototype['startsWith']) {
+        String.prototype['startsWith'] = function (searchString, position) {
+            position = position || 0;
+            return this.indexOf(searchString, position) === position;
+        };
+    }
     ;
     var fnSignature = 'return ';
     var fnSignatureLn = fnSignature.length;
