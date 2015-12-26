@@ -21,7 +21,7 @@ var TestElements;
         }
         MyChildElement = __decorate([
             component("my-child-element"),
-            template("\n        <div style=\"background-color:#eeee77\">\n            <div>My Child component</div>\n            <div>myProp: [[myProp]]</div>\n        </div>\n    "), 
+            template("\n        <div style=\"background-color:#eeee77;left:30px;position:relative;width:500px\">\n            <div>My Child component</div>\n            <div>myProp: [[myProp]]</div>\n        </div>\n    "), 
             __metadata('design:paramtypes', [])
         ], MyChildElement);
         return MyChildElement;

@@ -8,8 +8,14 @@
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
 
     <link rel="import" href="TestElements/MyParentElement.html" />
+    <link rel="import" href="../xtal-elements/xtal-init.html" />
 </head>
 <body>
+    <script is="xtal-init">
+        [{
+            myEmployee: new TestElements.EmployeeInfo('Sydney', '102 Wallaby Lane')
+        }]
+    </script>
     <my-parent-element my-prop="47"></my-parent-element>
 </body>
 </html>

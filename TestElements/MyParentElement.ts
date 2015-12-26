@@ -61,11 +61,13 @@ module TestElements {
     @behavior(MyParentModel)
     @component("my-parent-element")
     @template(`
-        <div>myProp: [[${c.myProp}]]</div>
-        <div on-click="${c.incrementMyProp}">Increment myProp</div>
-        <div>Employee name: [[${c.myEmployee_Name}]]</div>
-        <div on-click="${c.changeEmployeeName}">Change Employee Name</div>
-        <my-child-element></my-child-element>
+        <div style="background-color:#cceeee">
+            <div>myProp: [[${c.myProp}]]</div>
+            <div on-click="${c.incrementMyProp}">Increment myProp</div>
+            <div>Employee name: [[${c.myEmployee_Name}]]</div>
+            <div on-click="${c.changeEmployeeName}">Change Employee Name</div>
+            <my-child-element></my-child-element>
+        </div>
     `)
     class MyParentElement extends polymer.Base implements IMyParentModel{
 
@@ -75,7 +77,7 @@ module TestElements {
         })
         onMyPropChange(newVal, oldVal) { }
 
-        myEmployee = new EmployeeInfo('Sydney', '102 Wallaby Lane');
+        //myEmployee = new EmployeeInfo('Sydney', '102 Wallaby Lane');
         
     }
 

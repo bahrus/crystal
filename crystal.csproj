@@ -32,6 +32,7 @@
     <Content Include="TestElements\MyParentElement.html" />
     <Content Include="web.config" />
     <Content Include="xtal-elements\xtal-include.html" />
+    <Content Include="xtal-elements\xtal-init.html" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.md" />
@@ -48,6 +49,7 @@
     <TypeScriptCompile Include="TestElements\EmployeeInfo.ts" />
     <TypeScriptCompile Include="TestElements\MyChildElement.ts" />
     <TypeScriptCompile Include="TestElements\MyParentElement.ts" />
+    <TypeScriptCompile Include="xtal-elements\xtal-init.ts" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

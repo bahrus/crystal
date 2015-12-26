@@ -71,7 +71,6 @@ var TestElements;
         __extends(MyParentElement, _super);
         function MyParentElement() {
             _super.apply(this, arguments);
-            this.myEmployee = new TestElements.EmployeeInfo('Sydney', '102 Wallaby Lane');
         }
         MyParentElement.prototype.onMyPropChange = function (newVal, oldVal) { };
         __decorate([
@@ -86,7 +85,7 @@ var TestElements;
         MyParentElement = __decorate([
             behavior(MyParentModel),
             component("my-parent-element"),
-            template("\n        <div>myProp: [[" + c.myProp + "]]</div>\n        <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n        <div>Employee name: [[" + c.myEmployee_Name + "]]</div>\n        <div on-click=\"" + c.changeEmployeeName + "\">Change Employee Name</div>\n        <my-child-element></my-child-element>\n    "), 
+            template("\n        <div style=\"background-color:#cceeee\">\n            <div>myProp: [[" + c.myProp + "]]</div>\n            <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n            <div>Employee name: [[" + c.myEmployee_Name + "]]</div>\n            <div on-click=\"" + c.changeEmployeeName + "\">Change Employee Name</div>\n            <my-child-element></my-child-element>\n        </div>\n    "), 
             __metadata('design:paramtypes', [])
         ], MyParentElement);
         return MyParentElement;
