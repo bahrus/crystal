@@ -12,7 +12,15 @@
             for(let i = 0, ii = actions.length; i < ii; i++){
                 const action = actions[i];
                 for(const key in action){
-                    target.set(key, action[key]);
+                    const currVal = target.get(key);
+                    const newOrExtendedVal = action[key];
+                    if(!currVal){
+                        target.set(key, newOrExtendedVal);
+                    }else{
+                        //TODO:  untested condition
+                        extend(currVal, newOrExtendedVal, true); 
+                        target.set(key, currVal);
+                    }
                 }
             }
         }

@@ -32,7 +32,16 @@ var crystal;
                 for (var i = 0, ii = actions.length; i < ii; i++) {
                     var action = actions[i];
                     for (var key in action) {
-                        target.set(key, action[key]);
+                        var currVal = target.get(key);
+                        var newOrExtendedVal = action[key];
+                        if (!currVal) {
+                            target.set(key, newOrExtendedVal);
+                        }
+                        else {
+                            //TODO:  untested condition
+                            crystal.extend(currVal, newOrExtendedVal, true);
+                            target.set(key, currVal);
+                        }
                     }
                 }
             };
