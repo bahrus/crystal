@@ -80,5 +80,46 @@ var crystal;
         };
     }
     crystal.methodCallAction = methodCallAction;
+    //#endregion 
+    //#region Merge Properties / Methods via html tag decorator #5 https://github.com/bahrus/crystal/issues/5
+    // http://stackoverflow.com/questions/17242927/deep-merge-objects-with-angularjs
+    function setHashKey(obj, h) {
+        if (h) {
+            obj.$$hashKey = h;
+        }
+        else {
+            delete obj.$$hashKey;
+        }
+    }
+    function extend(dest, obj, deep) {
+        var h = dest.$$hashKey;
+        //for (let i = 0, ii = src.length; i < ii; ++i) {
+        //const obj = src[i];
+        if ((typeof obj !== 'object') && (typeof obj !== 'function')) {
+            return;
+        }
+        var keys = Object.keys(obj);
+        for (var j = 0, jj = keys.length; j < jj; j++) {
+            var key = keys[j];
+            var src = obj[key];
+            if (deep && (typeof src === 'object')) {
+                if (src instanceof Date) {
+                    dest[key] = new Date(src.valueOf());
+                }
+                else {
+                    if (typeof dest[key] !== 'object')
+                        dest[key] = Array.isArray(src) ? [] : {};
+                    extend(dest[key], [src], true);
+                }
+            }
+            else {
+                dest[key] = src;
+            }
+        }
+        //}
+        setHashKey(dest, h);
+        return dest;
+    }
+    crystal.extend = extend;
 })(crystal || (crystal = {}));
 //# sourceMappingURL=crystal.js.map
