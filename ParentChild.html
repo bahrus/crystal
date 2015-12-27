@@ -6,14 +6,26 @@
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
+    <link rel="import" href="../xtal-elements/xtal-init.html" />
+    <link rel="import" href="../xtal-elements/xtal-dom-transformer.html" />
 
     <link rel="import" href="TestElements/MyParentElement.html" />
-    <link rel="import" href="../xtal-elements/xtal-init.html" />
+    
 </head>
 <body>
     <script is="xtal-init">
-        {myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney')}
+        { myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney') }
     </script>
-    <my-parent-element my-prop="42"></my-parent-element>
+    <script is="xtal-dom-transformer">
+        function(template, element){
+            debugger;
+        }
+    </script>
+    <my-parent-element my-prop="42">
+        <template>
+            This is a test, number ${el.myProp}
+        </template>
+        
+    </my-parent-element>
 </body>
 </html>

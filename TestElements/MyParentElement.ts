@@ -66,6 +66,7 @@ module TestElements {
             <div on-click="${c.incrementMyProp}">Increment myProp</div>
             <div>Employee name: [[${c.myEmployee_Name}]]</div>
             <div on-click="${c.changeEmployeeName}">Change Employee Name</div>
+            <content></content>
             <my-child-element></my-child-element>
         </div>
     `)
@@ -77,7 +78,9 @@ module TestElements {
         })
         onMyPropChange(newVal, oldVal) { }
 
-        //myEmployee = new EmployeeInfo('Sydney', '102 Wallaby Lane');
+        
+
+        
         
     }
 

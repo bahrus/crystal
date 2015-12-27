@@ -23,11 +23,7 @@ var crystal;
                 _super.apply(this, arguments);
             }
             XtalInit.prototype.attached = function () {
-                var inner = this.innerText.trim();
-                if (!inner['startsWith']('[')) {
-                    inner = '[' + inner + ']';
-                }
-                var actions = eval(inner);
+                var actions = evalInner(this);
                 var target = nextNonScriptSibling(this);
                 for (var i = 0, ii = actions.length; i < ii; i++) {
                     var action = actions[i];
@@ -60,6 +56,15 @@ var crystal;
             return nextElement;
         }
         elements.nextNonScriptSibling = nextNonScriptSibling;
+        function evalInner(element) {
+            var inner = element.innerText.trim();
+            if (!inner['startsWith']('[')) {
+                inner = '[' + inner + ']';
+            }
+            var actions = eval(inner);
+            return actions;
+        }
+        elements.evalInner = evalInner;
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
 //# sourceMappingURL=xtal-init.js.map

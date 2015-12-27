@@ -3,11 +3,7 @@
     @component('xtal-init', 'script')
     class XtalInit extends polymer.Base {
         attached(){
-            let inner  = this.innerText.trim();
-            if(!inner['startsWith']('[')){
-                inner = '[' + inner + ']';
-            }
-            const actions = <any[]> eval(inner);
+            const actions = evalInner(this);
             const target = <polymer.Base> nextNonScriptSibling(this);
             for(let i = 0, ii = actions.length; i < ii; i++){
                 const action = actions[i];
@@ -35,5 +31,13 @@
         return nextElement;
     }
 
+    export function evalInner(element: polymer.Base){
+        let inner  = element.innerText.trim();
+        if(!inner['startsWith']('[')){
+            inner = '[' + inner + ']';
+        }
+        const actions = <any[]> eval(inner);
+        return actions;
+    }
     
 }

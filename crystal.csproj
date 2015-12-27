@@ -31,6 +31,7 @@
     <Content Include="ParentChild.html" />
     <Content Include="TestElements\MyParentElement.html" />
     <Content Include="web.config" />
+    <Content Include="xtal-elements\xtal-dom-transformer.html" />
     <Content Include="xtal-elements\xtal-include.html" />
     <Content Include="xtal-elements\xtal-init.html" />
   </ItemGroup>
@@ -45,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="crystal.ts" />
+    <TypeScriptCompile Include="xtal-elements\xtal-dom-transformer.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-include.ts" />
     <TypeScriptCompile Include="TestElements\EmployeeInfo.ts" />
     <TypeScriptCompile Include="TestElements\MyChildElement.ts" />
