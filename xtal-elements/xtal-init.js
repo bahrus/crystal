@@ -23,24 +23,36 @@ var crystal;
                 _super.apply(this, arguments);
             }
             XtalInit.prototype.attached = function () {
-                var actions = evalInner(this);
-                var target = nextNonScriptSibling(this);
+                var actions = crystal.evalInner(this);
+                var target = crystal.nextNonScriptSibling(this);
+                if (this.innerTarget) {
+                    target = target.querySelector(this.innerTarget);
+                }
                 for (var i = 0, ii = actions.length; i < ii; i++) {
                     var action = actions[i];
                     for (var key in action) {
-                        var currVal = target.get(key);
-                        var newOrExtendedVal = action[key];
-                        if (!currVal) {
-                            target.set(key, newOrExtendedVal);
+                        if (target.get && target.set) {
+                            var currVal = target.get(key);
+                            var newOrExtendedVal = action[key];
+                            if (!currVal) {
+                                target.set(key, newOrExtendedVal);
+                            }
+                            else {
+                                //TODO:  untested condition
+                                crystal.extend(currVal, newOrExtendedVal, true);
+                                target.set(key, currVal);
+                            }
                         }
                         else {
-                            //TODO:  untested condition
-                            crystal.extend(currVal, newOrExtendedVal, true);
-                            target.set(key, currVal);
+                            target[key] = action[key];
                         }
                     }
                 }
             };
+            __decorate([
+                property(), 
+                __metadata('design:type', String)
+            ], XtalInit.prototype, "innerTarget", void 0);
             XtalInit = __decorate([
                 component('xtal-init', 'script'), 
                 __metadata('design:paramtypes', [])
@@ -48,23 +60,6 @@ var crystal;
             return XtalInit;
         })(polymer.Base);
         XtalInit.register();
-        function nextNonScriptSibling(el) {
-            var nextElement = el.nextElementSibling;
-            while (nextElement && nextElement.tagName === 'SCRIPT') {
-                nextElement = nextElement.nextElementSibling;
-            }
-            return nextElement;
-        }
-        elements.nextNonScriptSibling = nextNonScriptSibling;
-        function evalInner(element) {
-            var inner = element.innerText.trim();
-            if (!inner['startsWith']('[')) {
-                inner = '[' + inner + ']';
-            }
-            var actions = eval(inner);
-            return actions;
-        }
-        elements.evalInner = evalInner;
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
 //# sourceMappingURL=xtal-init.js.map

@@ -129,5 +129,24 @@ var crystal;
         return dest;
     }
     crystal.extend = extend;
+    //#endregion
+    //#region custom element helpers
+    function nextNonScriptSibling(el) {
+        var nextElement = el.nextElementSibling;
+        while (nextElement && nextElement.tagName === 'SCRIPT') {
+            nextElement = nextElement.nextElementSibling;
+        }
+        return nextElement;
+    }
+    crystal.nextNonScriptSibling = nextNonScriptSibling;
+    function evalInner(element) {
+        var inner = element.innerText.trim();
+        if (!inner['startsWith']('[')) {
+            inner = '[' + inner + ']';
+        }
+        var actions = eval(inner);
+        return actions;
+    }
+    crystal.evalInner = evalInner;
 })(crystal || (crystal = {}));
 //# sourceMappingURL=crystal.js.map

@@ -62,6 +62,7 @@ module TestElements {
     @component("my-parent-element")
     @template(`
         <div style="background-color:#cceeee">
+            <div>[[message]]</div>
             <div>myProp: [[${c.myProp}]]</div>
             <div on-click="${c.incrementMyProp}">Increment myProp</div>
             <div>Employee name: [[${c.myEmployee_Name}]]</div>

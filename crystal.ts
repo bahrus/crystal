@@ -167,4 +167,23 @@ module crystal {
 
     //#endregion
 
+    //#region custom element helpers
+    export function nextNonScriptSibling(el:HTMLElement):Element {
+        let nextElement = el.nextElementSibling;
+        while (nextElement && nextElement.tagName === 'SCRIPT') {
+            nextElement = nextElement.nextElementSibling;
+        }
+        return nextElement;
+    }
+
+    export function evalInner(element: polymer.Base){
+        let inner  = element.innerText.trim();
+        if(!inner['startsWith']('[')){
+            inner = '[' + inner + ']';
+        }
+        const actions = <any[]> eval(inner);
+        return actions;
+    }
+    //#endregion
+
 }

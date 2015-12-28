@@ -16,27 +16,23 @@ var crystal;
 (function (crystal) {
     var elements;
     (function (elements) {
-        //Put inner text of custom element into a property of element class #6 https://github.com/bahrus/crystal/issues/6
+        //Be able to specify a DOM serializer for inner content of custom element. #6 https://github.com/bahrus/crystal/issues/6
         var XtalDOMTransformer = (function (_super) {
             __extends(XtalDOMTransformer, _super);
             function XtalDOMTransformer() {
                 _super.apply(this, arguments);
             }
             XtalDOMTransformer.prototype.attached = function () {
-                var target = elements.nextNonScriptSibling(this);
-                var targetChildren = Polymer.dom(target)['getEffectiveChildNodes']();
-                for (var i = 0, ii = targetChildren.length; i < ii; i++) {
-                    var targetChild = targetChildren[i];
-                    if (targetChild.tagName === 'TEMPLATE') {
-                        console.log(this.innerText);
-                        var actions = elements.evalInner(this);
-                        for (var j = 0, jj = actions.length; j < jj; j++) {
-                            var action = actions[j];
-                            action(targetChild, target);
-                        }
-                        break;
+                var _this = this;
+                var target = crystal.nextNonScriptSibling(this);
+                this.async(function () {
+                    var targetChildren = Polymer.dom(target)['getEffectiveChildNodes']();
+                    var actions = crystal.evalInner(_this);
+                    for (var j = 0, jj = actions.length; j < jj; j++) {
+                        var action = actions[j];
+                        action(targetChildren, target);
                     }
-                }
+                }, 1);
             };
             XtalDOMTransformer = __decorate([
                 component('xtal-dom-transformer', 'script'), 

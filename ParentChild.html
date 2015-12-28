@@ -13,19 +13,22 @@
     
 </head>
 <body>
-    <script is="xtal-init">
-        { myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney') }
-    </script>
+    <script is="xtal-init">{ myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney') }</script>
     <script is="xtal-dom-transformer">
-        function(template, element){
-            debugger;
-        }
+        [function (nodes, element) {
+            //debugger;
+            element.message = 'Number of nodes: ' + nodes.length;
+        }]
     </script>
+    <script is="xtal-init" inner-target="template">{ myAutoBindTemplateValue: 'this is a test' }</script>
     <my-parent-element my-prop="42">
-        <template>
-            This is a test, number ${el.myProp}
+        <template is="dom-bind">
+            <div>myAutoBindTemplateValue:</div>
+            <span>[[myAutoBindTemplateValue]]</span>
         </template>
-        
     </my-parent-element>
+
+
+
 </body>
 </html>
