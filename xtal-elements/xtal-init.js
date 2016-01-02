@@ -28,26 +28,7 @@ var crystal;
                 if (this.innerTarget) {
                     target = target.querySelector(this.innerTarget);
                 }
-                for (var i = 0, ii = actions.length; i < ii; i++) {
-                    var action = actions[i];
-                    for (var key in action) {
-                        if (target.get && target.set) {
-                            var currVal = target.get(key);
-                            var newOrExtendedVal = action[key];
-                            if (!currVal) {
-                                target.set(key, newOrExtendedVal);
-                            }
-                            else {
-                                //TODO:  untested condition
-                                crystal.extend(currVal, newOrExtendedVal, true);
-                                target.set(key, currVal);
-                            }
-                        }
-                        else {
-                            target[key] = action[key];
-                        }
-                    }
-                }
+                crystal.performCustElActions(actions, target);
             };
             __decorate([
                 property(), 
@@ -59,6 +40,7 @@ var crystal;
             ], XtalInit);
             return XtalInit;
         })(polymer.Base);
+        //function performActions(
         XtalInit.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));

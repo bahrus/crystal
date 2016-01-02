@@ -4,18 +4,23 @@
     <title></title>
 	<meta charset="utf-8" />
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="crystal.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
     <link rel="import" href="../xtal-elements/xtal-init.html" />
     <link rel="import" href="../xtal-elements/xtal-dom-transformer.html" />
 
     <link rel="import" href="TestElements/MyParentElement.html" />
-    
+    <script>
+        function test123(){
+            console.log('iah');
+        }
+    </script>
 </head>
 <body>
     <script is="xtal-init">{ myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney') }</script>
     <script is="xtal-dom-transformer">
-        [function (nodes, element) {
+         xtal.set = [function (nodes, element) {
             //debugger;
             element.message = 'Number of nodes: ' + nodes.length;
         }]
@@ -25,10 +30,14 @@
         <template is="dom-bind">
             <div>myAutoBindTemplateValue:</div>
             <span>[[myAutoBindTemplateValue]]</span>
+            <script xtal-set>
+                function test() { }
+            </script>
+            <h3 on-click="test123">This is my title</h3>
         </template>
     </my-parent-element>
 
 
-
+    <button onclick="test123()">sanity check</button>
 </body>
 </html>

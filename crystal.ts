@@ -1,4 +1,8 @@
 ﻿/// <reference path="bower_components/polymer-ts/polymer-ts.d.ts" />
+class xtal{
+    public static get set() { return null;}
+    public static set set(val: any){}
+}
 
 module crystal {
     //#region Polyfills
@@ -30,6 +34,8 @@ module crystal {
         fnString = fnString.substr(iPosDot + 1);
         return fnString;
     }
+
+
 
     export function getName<T>(getter: IGetter<T>) {
         return getMemberName(getter.toString());
@@ -70,7 +76,16 @@ module crystal {
     //#region Be able to add declarative actions to method #4 https://github.com/bahrus/crystal/issues/4
     export interface IPolymerActionContext {
         element: polymer.Element;
-        action: IPolymerAction;
+        action?: IPolymerAction;
+    }
+
+    export interface ILightDOMElemenActionContext {
+        element: HTMLElement;
+        action?: LightDOMElementAction;
+    }
+
+    export interface IPolymerMethodDecoratorActionContext extends IPolymerActionContext {
+        action: IPolymerMethodDecoratorAction;
         methodName: string;
         methodDescriptor: TypedPropertyDescriptor<any>;
         isBeforeMethod?: boolean;
@@ -79,20 +94,70 @@ module crystal {
 
     export interface IPolymerAction {
         do?: (context: IPolymerActionContext) => void;
+    }
+
+    export interface LightDOMElementAction{
+        do?: (context: ILightDOMElemenActionContext) => void;
+    }
+
+    export interface IPolymerMethodDecoratorAction extends IPolymerAction {
+        
         before?: boolean;
         after?: boolean;
         skipMethodCall?: boolean;
 
     }
 
-    export function methodCallAction(action: IPolymerAction) {
+    export function performCustElActions(actions: any[], target: polymer.Base) {
+        let polymerContext: IPolymerActionContext;
+        for (let i = 0, ii = actions.length; i < ii; i++) {
+            const action = actions[i];
+            if (Array.isArray(action)) {
+                performCustElActions(action, target);
+                continue
+                ;
+            }
+            const doFn = action.do;
+            if (doFn && typeof (doFn === 'function')) {
+                const polymerAction = <IPolymerAction>action;
+                if (!polymerContext) {
+                    polymerContext = {
+                        element: target,
+                    };
+                }
+                polymerContext.action = action;
+                doFn(polymerContext);
+                continue;
+            }
+            //#region merge object into custom element
+            for (const key in action) {
+                if (target.get && target.set) {
+                    const currVal = target.get(key);
+                    const newOrExtendedVal = action[key];
+                    if (!currVal) {
+                        target.set(key, newOrExtendedVal);
+                    } else {
+                        //TODO:  untested condition
+                        extend(currVal, newOrExtendedVal, true);
+                        target.set(key, currVal);
+                    }
+                } else {
+                    //data-bind template, e.g.
+                    target[key] = action[key];
+                }
+            }
+            //#endregion
+        }
+    }
+
+    export function methodCallAction(action: IPolymerMethodDecoratorAction) {
         return function methodCallAction(target: polymer.Element, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) {
             if (!descriptor) {
                 descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
             }
             const originalMethod = descriptor.value;
 
-            const polymerContext: IPolymerActionContext = {
+            const polymerContext: IPolymerMethodDecoratorActionContext = {
                 element: target,
                 action: action,
                 methodName: propertyKey,
@@ -178,6 +243,7 @@ module crystal {
 
     export function evalInner(element: polymer.Base){
         let inner  = element.innerText.trim();
+        inner = inner.replace('xtal.set = ', '');
         if(!inner['startsWith']('[')){
             inner = '[' + inner + ']';
         }

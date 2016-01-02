@@ -1,4 +1,15 @@
 /// <reference path="bower_components/polymer-ts/polymer-ts.d.ts" />
+var xtal = (function () {
+    function xtal() {
+    }
+    Object.defineProperty(xtal, "set", {
+        get: function () { return null; },
+        set: function (val) { },
+        enumerable: true,
+        configurable: true
+    });
+    return xtal;
+})();
 var crystal;
 (function (crystal) {
     //#region Polyfills
@@ -51,6 +62,48 @@ var crystal;
         };
     }
     crystal.metaBind = metaBind;
+    function performCustElActions(actions, target) {
+        var polymerContext;
+        for (var i = 0, ii = actions.length; i < ii; i++) {
+            var action = actions[i];
+            if (Array.isArray(action)) {
+                performCustElActions(action, target);
+                continue;
+            }
+            var doFn = action.do;
+            if (doFn && typeof (doFn === 'function')) {
+                var polymerAction = action;
+                if (!polymerContext) {
+                    polymerContext = {
+                        element: target,
+                    };
+                }
+                polymerContext.action = action;
+                doFn(polymerContext);
+                continue;
+            }
+            //#region merge object into custom element
+            for (var key in action) {
+                if (target.get && target.set) {
+                    var currVal = target.get(key);
+                    var newOrExtendedVal = action[key];
+                    if (!currVal) {
+                        target.set(key, newOrExtendedVal);
+                    }
+                    else {
+                        //TODO:  untested condition
+                        extend(currVal, newOrExtendedVal, true);
+                        target.set(key, currVal);
+                    }
+                }
+                else {
+                    //data-bind template, e.g.
+                    target[key] = action[key];
+                }
+            }
+        }
+    }
+    crystal.performCustElActions = performCustElActions;
     function methodCallAction(action) {
         return function methodCallAction(target, propertyKey, descriptor) {
             if (!descriptor) {
@@ -141,6 +194,7 @@ var crystal;
     crystal.nextNonScriptSibling = nextNonScriptSibling;
     function evalInner(element) {
         var inner = element.innerText.trim();
+        inner = inner.replace('xtal.set = ', '');
         if (!inner['startsWith']('[')) {
             inner = '[' + inner + ']';
         }
