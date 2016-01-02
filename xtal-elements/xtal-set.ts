@@ -8,13 +8,17 @@
 
         attached() {
             const actions = evalInner(this);
-            let target = <HTMLElement>nextNonScriptSibling(this);
-            if (this.innerTarget) {
-                target = <HTMLElement>target.querySelector(this.innerTarget);
-            }
-            performLightDOMActions(actions, target);
+            this.async(() => {
+                let target = <HTMLElement>nextNonScriptSibling(this);
+                if (this.innerTarget) {
+                    target = <HTMLElement>target.querySelector(this.innerTarget);
+                }
+                performLightDOMActions(actions, target);
+            }, 1);
         }
     }
+
+    XtalSet.register();
 
     function performLightDOMActions(actions: any[], target: HTMLElement) {
         let domActionContext: ILightDOMElemenActionContext;
@@ -22,8 +26,7 @@
             const action = actions[i];
             if (Array.isArray(action)) {
                 performLightDOMActions(action, target);
-                continue
-                ;
+                continue;
             }
             const doFn = action.do;
             if (doFn && typeof (doFn === 'function')) {
@@ -39,11 +42,11 @@
             }
             //#region add attributes / event handlers to dom element
             for (const key in action) {
-                if (key.indexOf('on') === 0) {
-
-                } else {
+                //if (key.indexOf('on') === 0) {
+                //
+                //} else {
                     Polymer.dom(target).setAttribute(key, action[key]);
-                }
+               // }
             }
             //#endregion
         }

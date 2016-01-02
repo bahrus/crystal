@@ -23,12 +23,15 @@ var crystal;
                 _super.apply(this, arguments);
             }
             XtalSet.prototype.attached = function () {
+                var _this = this;
                 var actions = crystal.evalInner(this);
-                var target = crystal.nextNonScriptSibling(this);
-                if (this.innerTarget) {
-                    target = target.querySelector(this.innerTarget);
-                }
-                performLightDOMActions(actions, target);
+                this.async(function () {
+                    var target = crystal.nextNonScriptSibling(_this);
+                    if (_this.innerTarget) {
+                        target = target.querySelector(_this.innerTarget);
+                    }
+                    performLightDOMActions(actions, target);
+                }, 1);
             };
             __decorate([
                 property(), 
@@ -40,6 +43,7 @@ var crystal;
             ], XtalSet);
             return XtalSet;
         })(polymer.Base);
+        XtalSet.register();
         function performLightDOMActions(actions, target) {
             var domActionContext;
             for (var i = 0, ii = actions.length; i < ii; i++) {
@@ -62,11 +66,10 @@ var crystal;
                 }
                 //#region add attributes / event handlers to dom element
                 for (var key in action) {
-                    if (key.indexOf('on') === 0) {
-                    }
-                    else {
-                        Polymer.dom(target).setAttribute(key, action[key]);
-                    }
+                    //if (key.indexOf('on') === 0) {
+                    //
+                    //} else {
+                    Polymer.dom(target).setAttribute(key, action[key]);
                 }
             }
         }

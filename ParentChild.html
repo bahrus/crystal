@@ -4,16 +4,16 @@
     <title></title>
 	<meta charset="utf-8" />
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="crystal.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
-    <link rel="import" href="../xtal-elements/xtal-init.html" />
-    <link rel="import" href="../xtal-elements/xtal-dom-transformer.html" />
-
+    <link rel="import" href="xtal-elements/xtal-init.html" />
+    <link rel="import" href="xtal-elements/xtal-dom-transformer.html" />
     <link rel="import" href="TestElements/MyParentElement.html" />
+    <link rel="import" href="xtal-elements/xtal-set.html" />
+    
     <script>
-        function test123(){
-            console.log('iah');
+        function test123() {
+            debugger;
         }
     </script>
 </head>
@@ -26,18 +26,20 @@
         }]
     </script>
     <script is="xtal-init" inner-target="template">{ myAutoBindTemplateValue: 'this is a test' }</script>
+    
     <my-parent-element my-prop="42">
         <template is="dom-bind">
             <div>myAutoBindTemplateValue:</div>
             <span>[[myAutoBindTemplateValue]]</span>
-            <script xtal-set>
-                function test() { }
+            <script is="xtal-set">
+                xtal.set = {
+                    'onclick': 'test123()'
+                }
             </script>
-            <h3 on-click="test123">This is my title</h3>
+            <h3>This is my title</h3>
         </template>
     </my-parent-element>
 
 
-    <button onclick="test123()">sanity check</button>
 </body>
 </html>
