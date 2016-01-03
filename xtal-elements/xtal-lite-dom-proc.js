@@ -35,7 +35,7 @@ var crystal;
                 }, 1);
             };
             XtalDOMTransformer = __decorate([
-                component('xtal-dom-transformer', 'script'), 
+                component('xtal-lite-dom-proc', 'script'), 
                 __metadata('design:paramtypes', [])
             ], XtalDOMTransformer);
             return XtalDOMTransformer;
@@ -43,4 +43,4 @@ var crystal;
         XtalDOMTransformer.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
-//# sourceMappingURL=xtal-dom-transformer.js.map
+//# sourceMappingURL=xtal-lite-dom-proc.js.map

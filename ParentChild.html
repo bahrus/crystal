@@ -7,7 +7,7 @@
     <link rel="import" href="bower_components/polymer/polymer.html">
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
     <link rel="import" href="xtal-elements/xtal-init.html" />
-    <link rel="import" href="xtal-elements/xtal-dom-transformer.html" />
+    <link rel="import" href="xtal-elements/xtal-lite-dom-proc.html" />
     <link rel="import" href="TestElements/MyParentElement.html" />
     <link rel="import" href="xtal-elements/xtal-set.html" />
     
@@ -19,7 +19,7 @@
 </head>
 <body>
     <script is="xtal-init">{ myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney') }</script>
-    <script is="xtal-dom-transformer">
+    <script is="xtal-lite-dom-proc">
          xtal.set = [function (nodes, element) {
             //debugger;
             element.message = 'Number of nodes: ' + nodes.length;

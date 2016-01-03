@@ -1,6 +1,6 @@
 ﻿module crystal.elements {
     //Be able to specify a DOM serializer for inner content of custom element. #6 https://github.com/bahrus/crystal/issues/6
-    @component('xtal-dom-transformer', 'script')
+    @component('xtal-lite-dom-proc', 'script')
     class XtalDOMTransformer extends polymer.Base{
         
         attached(){

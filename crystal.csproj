@@ -24,6 +24,7 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AutoBindTest.html" />
     <Content Include="includeTests\HTML1.html" />
     <Content Include="includeTests\HTML2.html" />
     <Content Include="includeTests\index.html" />
@@ -32,7 +33,7 @@
     <Content Include="TestElements\MyParentElement.html" />
     <Content Include="web.config" />
     <Content Include="xtal-elements\xtal-set.html" />
-    <Content Include="xtal-elements\xtal-dom-transformer.html" />
+    <Content Include="xtal-elements\xtal-lite-dom-proc.html" />
     <Content Include="xtal-elements\xtal-include.html" />
     <Content Include="xtal-elements\xtal-init.html" />
   </ItemGroup>
@@ -48,7 +49,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="crystal.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-set.ts" />
-    <TypeScriptCompile Include="xtal-elements\xtal-dom-transformer.ts" />
+    <TypeScriptCompile Include="xtal-elements\xtal-lite-dom-proc.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-include.ts" />
     <TypeScriptCompile Include="TestElements\EmployeeInfo.ts" />
     <TypeScriptCompile Include="TestElements\MyChildElement.ts" />
