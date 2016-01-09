@@ -45,6 +45,7 @@ module crystal {
     //#region Support MetaBinding #2 https://github.com/bahrus/crystal/issues/2
     export interface IMetaBindInfo {
         elementSelector: string;
+        internalOnly?: boolean;
         setPath: string;
     }
 
@@ -60,7 +61,12 @@ module crystal {
             descriptor.value = function (...args: any[]) {
                 var result = originalMethod.apply(this, args);               // run and store the result
                 const htmlElement = <HTMLElement>this;
-                const targetEls = htmlElement.querySelectorAll(bindInfo.elementSelector);
+                let targetEls: NodeListOf<Element>;
+                if (bindInfo.internalOnly) {
+                    targetEls = htmlElement.querySelectorAll(bindInfo.elementSelector);
+                } else {
+                    targetEls = document.querySelectorAll(bindInfo.elementSelector);
+                }
                 for (let i = 0, n = targetEls.length; i < n; i++) {
                     let targetEl = <polymer.Base>targetEls[i];
                     targetEl.set(bindInfo.setPath, args[0])
@@ -73,13 +79,16 @@ module crystal {
     }
     //#endregion
 
+    //export type InitializationObject = Object | InitializationObject[];
+
+
     //#region Be able to add declarative actions to method #4 https://github.com/bahrus/crystal/issues/4
     export interface IPolymerActionContext {
         element: polymer.Element;
         action?: IPolymerAction;
     }
 
-    export interface ILightDOMElemenActionContext {
+    export interface ILightDOMElementActionContext {
         element: HTMLElement;
         action?: LightDOMElementAction;
     }
@@ -97,7 +106,7 @@ module crystal {
     }
 
     export interface LightDOMElementAction{
-        do?: (context: ILightDOMElemenActionContext) => void;
+        do?: (context: ILightDOMElementActionContext) => void;
     }
 
     export interface IPolymerMethodDecoratorAction extends IPolymerAction {

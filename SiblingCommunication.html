@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
+    <script src="TestElements/hogwarts-elements.js"></script>
+</head>
+<body>
+    <template is="dom-bind">
+        <ron-weasley girlfriend="{{girlfriend}}" ginny-boyfriend="{{boyfriend}}"></ron-weasley>
+        <template is="dom-bind" boyfriend="{{boyfriend}}">
+            <ron-weasley girlfriend="{{girlfriend}}" ginny-boyfriend="{{boyfriend}}"></ron-weasley>
+            <ginny-weasley boyfriend="{{boyfriend}}"></ginny-weasley>
+        </template>
+    </template>
+</body>
+</html>

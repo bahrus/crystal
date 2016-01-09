@@ -3,6 +3,15 @@
 
 module TestElements {
 
+    interface IMyParentModel {
+        myProp?: number;
+        incrementMyProp?: () => void;
+        onMyPropChange?: (newVal, oldVal) => void;
+        myEmployee?: EmployeeInfo;
+        changeEmployeeName?: (e?) => void;
+        message?: string
+    }
+
     //#region abbreviations
     function rn(getter: crystal.IGetter<IMyParentModel>) {
         return crystal.getName<IMyParentModel>(getter);
@@ -15,15 +24,12 @@ module TestElements {
         'myEmployee': rn(o => o.myEmployee),
         'changeEmployeeName': rn(o => o.changeEmployeeName),
         'myEmployee_Name': rn(o => o.myEmployee.Name),
+        'message': rn(o => o.message),
     }
 
-    interface IMyParentModel {
-        myProp?: number;
-        incrementMyProp?: () => void;
-        onMyPropChange?: (newVal, oldVal) => void;
-        myEmployee?: EmployeeInfo;
-        changeEmployeeName?: (e?) => void;
-    }
+    //#endregion
+
+    
 
     class MyParentModel implements IMyParentModel {
         @property({
@@ -62,7 +68,7 @@ module TestElements {
     @component("my-parent-element")
     @template(`
         <div style="background-color:#cceeee">
-            <div>[[message]]</div>
+            <div>[[${c.message}]]</div>
             <div>myProp: [[${c.myProp}]]</div>
             <div on-click="${c.incrementMyProp}">Increment myProp</div>
             <div>Employee name: [[${c.myEmployee_Name}]]</div>

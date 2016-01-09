@@ -21,7 +21,7 @@
     XtalSet.register();
 
     function performLightDOMActions(actions: any[], target: HTMLElement) {
-        let domActionContext: ILightDOMElemenActionContext;
+        let domActionContext: ILightDOMElementActionContext;
         for (let i = 0, ii = actions.length; i < ii; i++) {
             const action = actions[i];
             if (Array.isArray(action)) {

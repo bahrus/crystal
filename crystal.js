@@ -51,7 +51,13 @@ var crystal;
                 }
                 var result = originalMethod.apply(this, args); // run and store the result
                 var htmlElement = this;
-                var targetEls = htmlElement.querySelectorAll(bindInfo.elementSelector);
+                var targetEls;
+                if (bindInfo.internalOnly) {
+                    targetEls = htmlElement.querySelectorAll(bindInfo.elementSelector);
+                }
+                else {
+                    targetEls = document.querySelectorAll(bindInfo.elementSelector);
+                }
                 for (var i = 0, n = targetEls.length; i < n; i++) {
                     var targetEl = targetEls[i];
                     targetEl.set(bindInfo.setPath, args[0]);

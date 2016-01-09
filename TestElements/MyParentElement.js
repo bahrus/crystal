@@ -27,7 +27,9 @@ var TestElements;
         'myEmployee': rn(function (o) { return o.myEmployee; }),
         'changeEmployeeName': rn(function (o) { return o.changeEmployeeName; }),
         'myEmployee_Name': rn(function (o) { return o.myEmployee.Name; }),
+        'message': rn(function (o) { return o.message; }),
     };
+    //#endregion
     var MyParentModel = (function () {
         function MyParentModel() {
         }
@@ -85,7 +87,7 @@ var TestElements;
         MyParentElement = __decorate([
             behavior(MyParentModel),
             component("my-parent-element"),
-            template("\n        <div style=\"background-color:#cceeee\">\n            <div>[[message]]</div>\n            <div>myProp: [[" + c.myProp + "]]</div>\n            <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n            <div>Employee name: [[" + c.myEmployee_Name + "]]</div>\n            <div on-click=\"" + c.changeEmployeeName + "\">Change Employee Name</div>\n            <content></content>\n            <my-child-element></my-child-element>\n        </div>\n    "), 
+            template("\n        <div style=\"background-color:#cceeee\">\n            <div>[[" + c.message + "]]</div>\n            <div>myProp: [[" + c.myProp + "]]</div>\n            <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n            <div>Employee name: [[" + c.myEmployee_Name + "]]</div>\n            <div on-click=\"" + c.changeEmployeeName + "\">Change Employee Name</div>\n            <content></content>\n            <my-child-element></my-child-element>\n        </div>\n    "), 
             __metadata('design:paramtypes', [])
         ], MyParentElement);
         return MyParentElement;

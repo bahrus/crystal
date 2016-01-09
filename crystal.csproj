@@ -30,6 +30,8 @@
     <Content Include="includeTests\index.html" />
     <Content Include="index.html" />
     <Content Include="ParentChild.html" />
+    <Content Include="remoteCommunication.html" />
+    <Content Include="SiblingCommunication.html" />
     <Content Include="TestElements\MyParentElement.html" />
     <Content Include="web.config" />
     <Content Include="xtal-elements\xtal-set.html" />
@@ -48,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="crystal.ts" />
+    <TypeScriptCompile Include="TestElements\HogwartsConfig.ts" />
+    <TypeScriptCompile Include="TestElements\hogwarts-elements.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-set.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-lite-dom-proc.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-include.ts" />
