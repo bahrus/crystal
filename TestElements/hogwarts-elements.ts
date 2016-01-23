@@ -30,18 +30,37 @@ module TestElements {
 
     @component('harry-potter')
     @template(`
-        <input type='text' value="{{owlMessage::input}}"/>
+        <table>
+            <tr>
+                <td>Owl Message: </td>
+                <td>
+                    <input type='text' value="{{owlMessage::input}}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Floo Message: </td>
+                <td><input type='text' value="{{flooMessage::input}}"/></td>
+            </tr>
+        </table
     `)
     class HarryPotter extends polymer.Base {
         @property({
-            observer: 'onNewOwlMessage'
+            observer: 'onNewOwlMessage',
+            notify: true,
+            
         })
         owlMessage = 'Scar is hurting';
         @crystal.metaBind({
-            elementSelector: 'sirius-black',
+            elementSelector: 'siriusMessanger',
             setPath: 'messageFromHarry',
+            targetsMayAppearLater: true,
         })
         onNewOwlMessage(newVal: string, oldVal: string) { }
+
+        @property({
+            notify: true,
+        })
+        flooMessage = 'test';
             
     }
     HarryPotter.register();
@@ -55,5 +74,12 @@ module TestElements {
         messageFromHarry;
     }
     SiriusBlack.register();
+
+    export const sendFlooMessage: crystal.ICoordinateDataBetweenElementsAction = {
+        do: crystal.CoordinateDataBetweenElementsActionImpl,
+        watchPath: 'flooMessage',
+        transferDataActions: [
+        ]
+    }
 
 }

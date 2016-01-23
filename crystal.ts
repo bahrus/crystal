@@ -5,6 +5,9 @@ class xtal{
 }
 
 module crystal {
+
+    export const labelTagName = 'xtal-label';
+
     //#region Polyfills
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
     if (!String.prototype['startsWith']) {
@@ -46,8 +49,15 @@ module crystal {
     export interface IMetaBindInfo {
         elementSelector: string;
         internalOnly?: boolean;
+        targetsMayAppearLater?: boolean;
         setPath: string;
     }
+
+    export interface ISetObjectInfo {
+        path?: string;
+        val?: any;
+    }
+    export const cachedObjects: { [key: string] : ISetObjectInfo } = { };
 
     export function metaBind(bindInfo?: IMetaBindInfo) {
         return function metaBind(target: polymer.Element, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) {
@@ -61,15 +71,25 @@ module crystal {
             descriptor.value = function (...args: any[]) {
                 var result = originalMethod.apply(this, args);               // run and store the result
                 const htmlElement = <HTMLElement>this;
+                let elementSelector = bindInfo.elementSelector;
+                const valToSet = args[0];
+                if (bindInfo.targetsMayAppearLater) {
+                    cachedObjects[elementSelector] = {
+                        path: bindInfo.setPath,
+                        val: valToSet,
+                    };
+                    console.log(cachedObjects);
+                    elementSelector = `.${labelTagName}-${bindInfo.elementSelector}`;
+                }
                 let targetEls: NodeListOf<Element>;
                 if (bindInfo.internalOnly) {
-                    targetEls = htmlElement.querySelectorAll(bindInfo.elementSelector);
+                    targetEls = htmlElement.querySelectorAll(elementSelector);
                 } else {
-                    targetEls = document.querySelectorAll(bindInfo.elementSelector);
+                    targetEls = document.querySelectorAll(elementSelector);
                 }
-                for (let i = 0, n = targetEls.length; i < n; i++) {
+                for (let i = 0, ii = targetEls.length; i < ii; i++) {
                     let targetEl = <polymer.Base>targetEls[i];
-                    targetEl.set(bindInfo.setPath, args[0])
+                    targetEl.set(bindInfo.setPath, valToSet);
                 }
                 return result;                                               // return the result of the original method
             };
@@ -123,8 +143,7 @@ module crystal {
             const action = actions[i];
             if (Array.isArray(action)) {
                 performCustElActions(action, target);
-                continue
-                ;
+                continue;
             }
             const doFn = action.do;
             if (doFn && typeof (doFn === 'function')) {
@@ -258,6 +277,33 @@ module crystal {
         }
         const actions = <any[]> eval(inner);
         return actions;
+    }
+
+    export function readStringConstant(element: polymer.Base) {
+        return element.innerText.trim();
+    }
+    //#endregion
+
+    //#region Actions
+    export interface ITransferDataAction extends IMetaBindInfo, IPolymerAction {}
+    export interface ICoordinateDataBetweenElementsAction extends IPolymerAction {
+        watchPath?: string;
+        transferDataActions?: ITransferDataAction[];
+
+    }
+    
+
+    export function CoordinateDataBetweenElementsActionImpl(context: IPolymerActionContext) {
+        let coordinator = <ICoordinateDataBetweenElementsAction>context.action;
+        window.addEventListener('WebComponentsReady', e => {
+            // any code that depends on polymer here
+            const he = <HTMLElement>context.element;
+            const act = <ICoordinateDataBetweenElementsAction> context.action;
+            const watchPath = Polymer['CaseMap'].camelToDashCase(act.watchPath);
+            he.addEventListener(watchPath + '-changed', e => {
+                debugger;
+            });
+        });
     }
     //#endregion
 

@@ -7,11 +7,37 @@
     <link rel="import" href="bower_components/polymer/polymer.html">
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
     <script src="crystal.js"></script>
+    <link rel="import" href="xtal-elements/xtal-init.html" />
+    <link rel="import" href="xtal-elements/xtal-label.html"/>
+    
     <script src="TestElements/hogwarts-elements.js"></script>
+    
 </head>
 <body>
+    <script is="xtal-init">
+        [TestElements.sendFlooMessage]
+    </script>
     <harry-potter></harry-potter>
 
-    <sirius-black></sirius-black>
+    <script is="xtal-init">
+        xtal.set = {
+            clicked: false,
+            displaySiriusBlack() {
+                this.clicked = true;
+            }
+
+        }
+    </script>
+    <template is="dom-bind">
+        <button on-click="displaySiriusBlack">Show Sirius Black</button>
+        <template is="dom-if" if="{{clicked}}">
+            <script is="xtal-label">siriusMessanger</script>
+            <sirius-black></sirius-black>
+        </template>
+        
+    </template>
+    
+
+    
 </body>
 </html>

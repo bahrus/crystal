@@ -34,6 +34,7 @@
     <Content Include="SiblingCommunication.html" />
     <Content Include="TestElements\MyParentElement.html" />
     <Content Include="web.config" />
+    <Content Include="xtal-elements\xtal-label.html" />
     <Content Include="xtal-elements\xtal-set.html" />
     <Content Include="xtal-elements\xtal-lite-dom-proc.html" />
     <Content Include="xtal-elements\xtal-include.html" />
@@ -52,6 +53,8 @@
     <TypeScriptCompile Include="crystal.ts" />
     <TypeScriptCompile Include="TestElements\HogwartsConfig.ts" />
     <TypeScriptCompile Include="TestElements\hogwarts-elements.ts" />
+    <TypeScriptCompile Include="xtal-elements\xtal-label.ts" />
+    <TypeScriptCompile Include="xtal-elements\xtal-location.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-set.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-lite-dom-proc.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-include.ts" />

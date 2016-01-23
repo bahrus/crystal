@@ -6,7 +6,7 @@
         @property()
         innerTarget: string;
 
-        attached(){
+        attached() {
             const actions = evalInner(this);
             let target = <polymer.Base>nextNonScriptSibling(this);
             if (this.innerTarget) {

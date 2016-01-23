@@ -61,26 +61,35 @@ var TestElements;
         function HarryPotter() {
             _super.apply(this, arguments);
             this.owlMessage = 'Scar is hurting';
+            this.flooMessage = 'test';
         }
         HarryPotter.prototype.onNewOwlMessage = function (newVal, oldVal) { };
         __decorate([
             property({
-                observer: 'onNewOwlMessage'
+                observer: 'onNewOwlMessage',
+                notify: true,
             }), 
             __metadata('design:type', Object)
         ], HarryPotter.prototype, "owlMessage", void 0);
         __decorate([
             crystal.metaBind({
-                elementSelector: 'sirius-black',
+                elementSelector: 'siriusMessanger',
                 setPath: 'messageFromHarry',
+                targetsMayAppearLater: true,
             }), 
             __metadata('design:type', Function), 
             __metadata('design:paramtypes', [String, String]), 
             __metadata('design:returntype', void 0)
         ], HarryPotter.prototype, "onNewOwlMessage", null);
+        __decorate([
+            property({
+                notify: true,
+            }), 
+            __metadata('design:type', Object)
+        ], HarryPotter.prototype, "flooMessage", void 0);
         HarryPotter = __decorate([
             component('harry-potter'),
-            template("\n        <input type='text' value=\"{{owlMessage::input}}\"/>\n    "), 
+            template("\n        <table>\n            <tr>\n                <td>Owl Message: </td>\n                <td>\n                    <input type='text' value=\"{{owlMessage::input}}\"/>\n                </td>\n            </tr>\n            <tr>\n                <td>Floo Message: </td>\n                <td><input type='text' value=\"{{flooMessage::input}}\"/></td>\n            </tr>\n        </table\n    "), 
             __metadata('design:paramtypes', [])
         ], HarryPotter);
         return HarryPotter;
@@ -103,5 +112,10 @@ var TestElements;
         return SiriusBlack;
     })(polymer.Base);
     SiriusBlack.register();
+    TestElements.sendFlooMessage = {
+        do: crystal.CoordinateDataBetweenElementsActionImpl,
+        watchPath: 'flooMessage',
+        transferDataActions: []
+    };
 })(TestElements || (TestElements = {}));
 //# sourceMappingURL=hogwarts-elements.js.map

@@ -12,6 +12,7 @@ var xtal = (function () {
 })();
 var crystal;
 (function (crystal) {
+    crystal.labelTagName = 'xtal-label';
     //#region Polyfills
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
     if (!String.prototype['startsWith']) {
@@ -36,6 +37,7 @@ var crystal;
         return getMemberName(getter.toString());
     }
     crystal.getName = getName;
+    crystal.cachedObjects = {};
     function metaBind(bindInfo) {
         return function metaBind(target, propertyKey, descriptor) {
             if (!descriptor) {
@@ -51,16 +53,26 @@ var crystal;
                 }
                 var result = originalMethod.apply(this, args); // run and store the result
                 var htmlElement = this;
+                var elementSelector = bindInfo.elementSelector;
+                var valToSet = args[0];
+                if (bindInfo.targetsMayAppearLater) {
+                    crystal.cachedObjects[elementSelector] = {
+                        path: bindInfo.setPath,
+                        val: valToSet,
+                    };
+                    console.log(crystal.cachedObjects);
+                    elementSelector = "." + crystal.labelTagName + "-" + bindInfo.elementSelector;
+                }
                 var targetEls;
                 if (bindInfo.internalOnly) {
-                    targetEls = htmlElement.querySelectorAll(bindInfo.elementSelector);
+                    targetEls = htmlElement.querySelectorAll(elementSelector);
                 }
                 else {
-                    targetEls = document.querySelectorAll(bindInfo.elementSelector);
+                    targetEls = document.querySelectorAll(elementSelector);
                 }
-                for (var i = 0, n = targetEls.length; i < n; i++) {
+                for (var i = 0, ii = targetEls.length; i < ii; i++) {
                     var targetEl = targetEls[i];
-                    targetEl.set(bindInfo.setPath, args[0]);
+                    targetEl.set(bindInfo.setPath, valToSet);
                 }
                 return result; // return the result of the original method
             };
@@ -208,5 +220,22 @@ var crystal;
         return actions;
     }
     crystal.evalInner = evalInner;
+    function readStringConstant(element) {
+        return element.innerText.trim();
+    }
+    crystal.readStringConstant = readStringConstant;
+    function CoordinateDataBetweenElementsActionImpl(context) {
+        var coordinator = context.action;
+        window.addEventListener('WebComponentsReady', function (e) {
+            // any code that depends on polymer here
+            var he = context.element;
+            var act = context.action;
+            var watchPath = Polymer['CaseMap'].camelToDashCase(act.watchPath);
+            he.addEventListener(watchPath + '-changed', function (e) {
+                debugger;
+            });
+        });
+    }
+    crystal.CoordinateDataBetweenElementsActionImpl = CoordinateDataBetweenElementsActionImpl;
 })(crystal || (crystal = {}));
 //# sourceMappingURL=crystal.js.map
