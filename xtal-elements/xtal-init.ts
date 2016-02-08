@@ -1,4 +1,7 @@
-﻿module crystal.elements {
+﻿///<reference path="../bower_components/polymer-ts/polymer-ts.d.ts"/>
+///<reference path="../crystal.ts"/>
+
+module crystal.elements {
     //Merge Properties / Methods via html tag decorator #5 https://github.com/bahrus/crystal/issues/5
     @component('xtal-init', 'script')
     class XtalInit extends polymer.Base {

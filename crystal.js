@@ -9,7 +9,7 @@ var xtal = (function () {
         configurable: true
     });
     return xtal;
-})();
+}());
 var crystal;
 (function (crystal) {
     crystal.labelTagName = 'xtal-label';
