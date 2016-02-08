@@ -1,4 +1,7 @@
-﻿module crystal.elements {
+﻿///<reference path="../bower_components/polymer-ts/polymer-ts.d.ts"/>
+///<reference path="../crystal.ts"/>
+
+module crystal.elements {
     //Add client side include element #3 https://github.com/bahrus/crystal/issues/3
     //region abbreviations
     //#region abbreviations

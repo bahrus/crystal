@@ -1,4 +1,7 @@
-﻿module crystal.elements {
+﻿///<reference path="../bower_components/polymer-ts/polymer-ts.d.ts"/>
+///<reference path="../crystal.ts"/>
+
+module crystal.elements {
 
     @component('xtal-location')
     class XtalLocation<TValues> extends polymer.Base  {

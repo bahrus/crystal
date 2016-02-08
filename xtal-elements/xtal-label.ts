@@ -1,4 +1,7 @@
-﻿module crystal.elements {
+﻿///<reference path="../bower_components/polymer-ts/polymer-ts.d.ts"/>
+///<reference path="../crystal.ts"/>
+
+module crystal.elements {
     
     @component(crystal.labelTagName, 'script')
     class XtalLabel extends polymer.Base {

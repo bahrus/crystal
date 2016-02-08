@@ -1,4 +1,7 @@
-﻿module crystal.elements {
+﻿///<reference path="../bower_components/polymer-ts/polymer-ts.d.ts"/>
+///<reference path="../crystal.ts"/>
+
+module crystal.elements {
     //Be able to specify a DOM serializer for inner content of custom element. #6 https://github.com/bahrus/crystal/issues/6
     @component('xtal-lite-dom-proc', 'script')
     class XtalDOMTransformer extends polymer.Base{
