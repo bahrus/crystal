@@ -20,7 +20,11 @@ module crystal.elements{
                 }else{
                     targets = <NodeListOf<Element>> <any> [ nextNonScriptSibling(this)];
                 }
-                
+                for(let i = 0, ii = targets.length; i < ii; i++){
+                    for(let j = 0, jj = this.eventTypes.length; j < jj; j++){
+                        
+                    }
+                }
 
             }, 1);
         }
