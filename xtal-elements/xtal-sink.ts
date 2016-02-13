@@ -11,7 +11,7 @@ module crystal.elements{
         eventTypes =['click'];
 
         attached(){
-
+            const targetTemplate = <polymer.Base> nextNonScriptSibling(this);
 
             this.async(() => {
                 let targets : NodeListOf<Element>;
@@ -20,14 +20,29 @@ module crystal.elements{
                 }else{
                     targets = <NodeListOf<Element>> <any> [ nextNonScriptSibling(this)];
                 }
-                debugger;
                 for(let i = 0, ii = targets.length; i < ii; i++){
                     const target = targets[i];
                     for(let j = 0, jj = this.eventTypes.length; j < jj; j++){
                         const eventType = this.eventTypes[j];
-                        target.addEventListener(eventType, () =>{
-                            debugger;
-                        })
+                        const attribKey = `when-${eventType}-copy`;
+                        const copies = target.querySelectorAll(`[${attribKey}]`);
+                        for(let k = 0, kk = copies.length; k < kk; k++){
+                            const copy = copies[k];
+                            copy.addEventListener(eventType, (ev) =>{
+                                const copyInfo = copy.getAttribute(attribKey);
+                                //TODO:  traverse up parent tofind attribute
+                                const tokens = copyInfo.split('-');
+                                let valToSet;
+                                switch(tokens[0]){
+                                    case 'text':
+                                        valToSet = target.textContent;
+                                        break;
+                                }
+                                let path = tokens[2];
+                                targetTemplate.set(path, valToSet)
+                            })
+                        }
+
                     }
                 }
 

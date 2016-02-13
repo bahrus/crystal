@@ -11,7 +11,7 @@ module crystal.elements {
 
         attached() {
             const actions = evalInner(this);
-            let target = <polymer.Base>nextNonScriptSibling(this);
+            let target = nextNonScriptSibling(this);
             if (this.innerTarget) {
                 target = <polymer.Base> target.querySelector(this.innerTarget);
             }

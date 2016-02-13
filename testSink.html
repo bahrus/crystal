@@ -25,11 +25,11 @@
 <template is="dom-bind" my-attrib="test"><div>
     <h1>&lt;template is="dom-bind"&gt; Demo [[myAttrib]]</h1>
     <template is="dom-if" if="{{clicked}}">
-        <p>You last clicked on {{lastClicked}}.</p>
+        <p >You last clicked on {{lastClicked}}.</p>
     </template>
     <template is="dom-repeat" items="{{numbers}}">
         <p>
-        <div number="[[item]]" odd="[[isNumberOdd(item)]]" on-click="handleClick">[[item]]</div>
+        <div when-click-copy="text-to-myAttrib" number="[[item]]" odd="[[isNumberOdd(item)]]" on-click="handleClick">[[item]]</div>
         <template is="dom-if" if="{{isNumberOdd(item)}}">
             (By the way, I'm odd.)
         </template>

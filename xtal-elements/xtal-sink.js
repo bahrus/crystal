@@ -23,6 +23,7 @@ var crystal;
             }
             XtalSink.prototype.attached = function () {
                 var _this = this;
+                var targetTemplate = crystal.nextNonScriptSibling(this);
                 this.async(function () {
                     var targets;
                     if (_this.regionSelector) {
@@ -31,15 +32,38 @@ var crystal;
                     else {
                         targets = [crystal.nextNonScriptSibling(_this)];
                     }
-                    debugger;
-                    for (var i = 0, ii = targets.length; i < ii; i++) {
+                    var _loop_1 = function(i, ii) {
                         var target = targets[i];
-                        for (var j = 0, jj = _this.eventTypes.length; j < jj; j++) {
+                        var _loop_2 = function(j, jj) {
                             var eventType = _this.eventTypes[j];
-                            target.addEventListener(eventType, function () {
-                                debugger;
-                            });
+                            var attribKey = "when-" + eventType + "-copy";
+                            var copies = target.querySelectorAll("[" + attribKey + "]");
+                            var _loop_3 = function(k, kk) {
+                                var copy = copies[k];
+                                copy.addEventListener(eventType, function (ev) {
+                                    var copyInfo = copy.getAttribute(attribKey);
+                                    //TODO:  traverse up parent tofind attribute
+                                    var tokens = copyInfo.split('-');
+                                    var valToSet;
+                                    switch (tokens[0]) {
+                                        case 'text':
+                                            valToSet = target.textContent;
+                                            break;
+                                    }
+                                    var path = tokens[2];
+                                    targetTemplate.set(path, valToSet);
+                                });
+                            };
+                            for (var k = 0, kk = copies.length; k < kk; k++) {
+                                _loop_3(k, kk);
+                            }
+                        };
+                        for (var j = 0, jj = _this.eventTypes.length; j < jj; j++) {
+                            _loop_2(j, jj);
                         }
+                    };
+                    for (var i = 0, ii = targets.length; i < ii; i++) {
+                        _loop_1(i, ii);
                     }
                 }, 1);
             };
