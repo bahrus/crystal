@@ -11,18 +11,16 @@ module crystal.elements{
         eventHandlerList: string[] =['click'];
 
         attached(){
-            let targets : NodeListOf<Element>;
-            if(this.regionSelector){
-                targets = document.querySelectorAll(this.regionSelector);
-            }else{
-                targets = <NodeListOf<Element>> <any> [ nextNonScriptSibling(this)];
-            }
+
 
             this.async(() => {
-                for(let i = 0, ii = targets.length; i < ii; i++){
-                    const target = <HTMLElement> targets[i];
-                    const targetChildren = <HTMLElement[]>Polymer.dom(target)['getEffectiveChildNodes']();
+                let targets : NodeListOf<Element>;
+                if(this.regionSelector){
+                    targets = document.querySelectorAll(this.regionSelector);
+                }else{
+                    targets = <NodeListOf<Element>> <any> [ nextNonScriptSibling(this)];
                 }
+                
 
             }, 1);
         }

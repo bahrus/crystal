@@ -1,0 +1,43 @@
+<html>
+<head>
+    <title>DOM Bind Test</title>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
+    <link rel="import" href="xtal-elements/xtal-init.html" />
+    <link rel="import" href="xtal-elements/xtal-sink.html" />
+</head>
+<body>
+<xtal-sink></xtal-sink>
+<script is="xtal-init">
+    xtal.set = {
+        isNumberOdd : function (i) {
+            return i % 2 === 1;
+        },
+        numbers: [0, 1, 2, 3],
+        clicked: false,
+        handleClick: function (e) {
+            this.lastClicked = e.target.number;
+            this.clicked = true;
+        }
+    }
+</script>
+<template is="dom-bind" my-attrib="test"><div>
+    <h1>&lt;template is="dom-bind"&gt; Demo [[myAttrib]]</h1>
+    <template is="dom-if" if="{{clicked}}">
+        <p>You last clicked on {{lastClicked}}.</p>
+    </template>
+    <template is="dom-repeat" items="{{numbers}}">
+        <p>
+        <div number="[[item]]" odd="[[isNumberOdd(item)]]" on-click="handleClick">[[item]]</div>
+        <template is="dom-if" if="{{isNumberOdd(item)}}">
+            (By the way, I'm odd.)
+        </template>
+        </p>
+    </template>
+</div></template>
+
+
+
+</body>
+</html>
