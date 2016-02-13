@@ -8,7 +8,7 @@ module crystal.elements{
         regionSelector: string;
 
         @property()
-        eventHandlerList: string[] =['click'];
+        eventTypes =['click'];
 
         attached(){
 
