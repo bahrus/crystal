@@ -20,9 +20,14 @@ module crystal.elements{
                 }else{
                     targets = <NodeListOf<Element>> <any> [ nextNonScriptSibling(this)];
                 }
+                debugger;
                 for(let i = 0, ii = targets.length; i < ii; i++){
+                    const target = targets[i];
                     for(let j = 0, jj = this.eventTypes.length; j < jj; j++){
-                        
+                        const eventType = this.eventTypes[j];
+                        target.addEventListener(eventType, () =>{
+                            debugger;
+                        })
                     }
                 }
 

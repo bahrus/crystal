@@ -19,20 +19,27 @@ var crystal;
             __extends(XtalSink, _super);
             function XtalSink() {
                 _super.apply(this, arguments);
-                this.eventHandlerList = ['click'];
+                this.eventTypes = ['click'];
             }
             XtalSink.prototype.attached = function () {
-                var targets;
-                if (this.regionSelector) {
-                    targets = document.querySelectorAll(this.regionSelector);
-                }
-                else {
-                    targets = [crystal.nextNonScriptSibling(this)];
-                }
+                var _this = this;
                 this.async(function () {
+                    var targets;
+                    if (_this.regionSelector) {
+                        targets = document.querySelectorAll(_this.regionSelector);
+                    }
+                    else {
+                        targets = [crystal.nextNonScriptSibling(_this)];
+                    }
+                    debugger;
                     for (var i = 0, ii = targets.length; i < ii; i++) {
                         var target = targets[i];
-                        var targetChildren = Polymer.dom(target)['getEffectiveChildNodes']();
+                        for (var j = 0, jj = _this.eventTypes.length; j < jj; j++) {
+                            var eventType = _this.eventTypes[j];
+                            target.addEventListener(eventType, function () {
+                                debugger;
+                            });
+                        }
                     }
                 }, 1);
             };
@@ -41,7 +48,7 @@ var crystal;
             ], XtalSink.prototype, "regionSelector", void 0);
             __decorate([
                 property()
-            ], XtalSink.prototype, "eventHandlerList", void 0);
+            ], XtalSink.prototype, "eventTypes", void 0);
             XtalSink = __decorate([
                 component('xtal-sink')
             ], XtalSink);
