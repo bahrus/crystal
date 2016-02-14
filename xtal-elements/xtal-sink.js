@@ -21,6 +21,19 @@ var crystal;
                 _super.apply(this, arguments);
                 this.eventTypes = ['click'];
             }
+            XtalSink.prototype.doCopy = function (copy, attribKey, targetTemplate) {
+                var copyInfo = copy.getAttribute(attribKey);
+                //TODO:  traverse up parent tofind attribute
+                var tokens = copyInfo.split('-to-');
+                var valToSet;
+                switch (tokens[0]) {
+                    case 'text':
+                        valToSet = copy.textContent;
+                        break;
+                }
+                var path = tokens[2];
+                targetTemplate.set(path, valToSet);
+            };
             XtalSink.prototype.attached = function () {
                 var _this = this;
                 var targetTemplate = crystal.nextNonScriptSibling(this);
@@ -32,38 +45,35 @@ var crystal;
                     else {
                         targets = [crystal.nextNonScriptSibling(_this)];
                     }
-                    var _loop_1 = function(i, ii) {
+                    for (var i = 0, ii = targets.length; i < ii; i++) {
                         var target = targets[i];
-                        var _loop_2 = function(j, jj) {
+                        var _loop_1 = function(j, jj) {
                             var eventType = _this.eventTypes[j];
-                            var attribKey = "when-" + eventType + "-copy";
-                            var copies = target.querySelectorAll("[" + attribKey + "]");
-                            var _loop_3 = function(k, kk) {
-                                var copy = copies[k];
-                                copy.addEventListener(eventType, function (ev) {
-                                    var copyInfo = copy.getAttribute(attribKey);
-                                    //TODO:  traverse up parent tofind attribute
-                                    var tokens = copyInfo.split('-');
-                                    var valToSet;
-                                    switch (tokens[0]) {
-                                        case 'text':
-                                            valToSet = target.textContent;
-                                            break;
-                                    }
-                                    var path = tokens[2];
-                                    targetTemplate.set(path, valToSet);
-                                });
-                            };
-                            for (var k = 0, kk = copies.length; k < kk; k++) {
-                                _loop_3(k, kk);
+                            if (eventType === 'init') {
+                                var attribKey = 'xtal-copy';
+                                var copies = target.querySelectorAll("[" + attribKey + "]");
+                                for (var k = 0, kk = copies.length; k < kk; k++) {
+                                    var copy = copies[k];
+                                    _this.doCopy(copy, attribKey, targetTemplate);
+                                }
+                            }
+                            else {
+                                var attribKey_1 = "when-" + eventType + "-copy";
+                                var copies = target.querySelectorAll("[" + attribKey_1 + "]");
+                                var _loop_2 = function(k, kk) {
+                                    var copy = copies[k];
+                                    copy.addEventListener(eventType, function (ev) {
+                                        _this.doCopy(copy, attribKey_1, targetTemplate);
+                                    });
+                                };
+                                for (var k = 0, kk = copies.length; k < kk; k++) {
+                                    _loop_2(k, kk);
+                                }
                             }
                         };
                         for (var j = 0, jj = _this.eventTypes.length; j < jj; j++) {
-                            _loop_2(j, jj);
+                            _loop_1(j, jj);
                         }
-                    };
-                    for (var i = 0, ii = targets.length; i < ii; i++) {
-                        _loop_1(i, ii);
                     }
                 }, 1);
             };

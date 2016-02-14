@@ -10,6 +10,19 @@ module crystal.elements{
         @property()
         eventTypes =['click'];
 
+        doCopy(copy: Element, attribKey:string, targetTemplate: polymer.Base){
+            const copyInfo = copy.getAttribute(attribKey);
+            //TODO:  traverse up parent tofind attribute
+            const tokens = copyInfo.split('-to-');
+            let valToSet;
+            switch(tokens[0]){
+                case 'text':
+                    valToSet = copy.textContent;
+                    break;
+            }
+            let path = tokens[2];
+            targetTemplate.set(path, valToSet)
+        }
         attached(){
             const targetTemplate = <polymer.Base> nextNonScriptSibling(this);
 
@@ -24,24 +37,24 @@ module crystal.elements{
                     const target = targets[i];
                     for(let j = 0, jj = this.eventTypes.length; j < jj; j++){
                         const eventType = this.eventTypes[j];
-                        const attribKey = `when-${eventType}-copy`;
-                        const copies = target.querySelectorAll(`[${attribKey}]`);
-                        for(let k = 0, kk = copies.length; k < kk; k++){
-                            const copy = copies[k];
-                            copy.addEventListener(eventType, (ev) =>{
-                                const copyInfo = copy.getAttribute(attribKey);
-                                //TODO:  traverse up parent tofind attribute
-                                const tokens = copyInfo.split('-');
-                                let valToSet;
-                                switch(tokens[0]){
-                                    case 'text':
-                                        valToSet = target.textContent;
-                                        break;
-                                }
-                                let path = tokens[2];
-                                targetTemplate.set(path, valToSet)
-                            })
+                        if(eventType === 'init'){
+                            const attribKey = 'xtal-copy'
+                            const copies = target.querySelectorAll(`[${attribKey}]`);
+                            for(let k=0, kk = copies.length; k < kk; k++){
+                                const copy = copies[k];
+                                this.doCopy(copy, attribKey, targetTemplate);
+                            }
+                        }else{
+                            const attribKey = `when-${eventType}-copy`;
+                            const copies = target.querySelectorAll(`[${attribKey}]`);
+                            for(let k = 0, kk = copies.length; k < kk; k++){
+                                const copy = copies[k];
+                                copy.addEventListener(eventType, (ev) =>{
+                                    this.doCopy(copy, attribKey, targetTemplate);
+                                })
+                            }
                         }
+
 
                     }
                 }
