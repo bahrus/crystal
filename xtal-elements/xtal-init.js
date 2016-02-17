@@ -22,8 +22,23 @@ var crystal;
                 _super.apply(this, arguments);
             }
             XtalInit.prototype.attached = function () {
+                var _this = this;
                 var actions = crystal.evalInner(this);
                 var target = crystal.nextNonScriptSibling(this);
+                if (target && target.set) {
+                    console.log('found target');
+                    console.log(target['outerHTML']);
+                    this.processTarget(target, actions);
+                }
+                else {
+                    this.async(function () {
+                        target = crystal.nextDomBindElement(_this);
+                        debugger;
+                        _this.processTarget(target, actions);
+                    }, 1);
+                }
+            };
+            XtalInit.prototype.processTarget = function (target, actions) {
                 if (this.innerTarget) {
                     target = target.querySelector(this.innerTarget);
                 }

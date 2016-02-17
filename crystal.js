@@ -210,6 +210,18 @@ var crystal;
         return nextElement;
     }
     crystal.nextNonScriptSibling = nextNonScriptSibling;
+    function nextDomBindElement(el) {
+        var nextElement = el.nextElementSibling;
+        while (nextElement) {
+            var isAttr = nextElement.getAttribute('is');
+            if (isAttr && (isAttr == 'dom-bind')) {
+                break;
+            }
+            nextElement = nextElement.nextElementSibling;
+        }
+        return nextElement;
+    }
+    crystal.nextDomBindElement = nextDomBindElement;
     function evalInner(element) {
         var inner = element.innerText.trim();
         inner = inner.replace('xtal.set = ', '');

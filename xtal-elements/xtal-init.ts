@@ -12,10 +12,29 @@ module crystal.elements {
         attached() {
             const actions = evalInner(this);
             let target = nextNonScriptSibling(this);
+            if(target && target.set){
+                console.log('found target');
+                console.log(target['outerHTML']);
+                this.processTarget(target, actions);
+            }else{
+                this.async(() => {
+                    target = nextDomBindElement(this);
+                    debugger;
+                    this.processTarget(target, actions);
+                }, 1);
+
+
+            }
+
+
+
+        }
+
+        processTarget(target: Element, actions){
             if (this.innerTarget) {
                 target = <polymer.Base> target.querySelector(this.innerTarget);
             }
-            performCustElActions(actions, target);
+            performCustElActions(actions, <polymer.Base> target);
         }
     }
 

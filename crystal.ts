@@ -269,6 +269,18 @@ module crystal {
         return nextElement;
     }
 
+    export function nextDomBindElement(el: HTMLElement) : Element {
+        let nextElement = el.nextElementSibling;
+        while (nextElement) {
+            const isAttr = nextElement.getAttribute('is');
+            if(isAttr && (isAttr == 'dom-bind')){
+                break;
+            }
+            nextElement = nextElement.nextElementSibling;
+        }
+        return nextElement;
+    }
+
     export function evalInner(element: polymer.Base){
         let inner  = element.innerText.trim();
         inner = inner.replace('xtal.set = ', '');
