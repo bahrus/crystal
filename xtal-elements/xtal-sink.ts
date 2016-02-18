@@ -20,7 +20,7 @@ module crystal.elements{
                     valToSet = copy.textContent;
                     break;
             }
-            let path = tokens[2];
+            let path = tokens[1];
             targetTemplate.set(path, valToSet)
         }
         attached(){

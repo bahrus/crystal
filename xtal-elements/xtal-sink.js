@@ -31,7 +31,7 @@ var crystal;
                         valToSet = copy.textContent;
                         break;
                 }
-                var path = tokens[2];
+                var path = tokens[1];
                 targetTemplate.set(path, valToSet);
             };
             XtalSink.prototype.attached = function () {

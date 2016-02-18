@@ -6,13 +6,28 @@
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html" />
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html" />
+    <!--<link rel="import" href="bower_components/paper-input/paper-input.html" />-->
+    <!--<link rel="import" href="bower_components/paper-icon/paper-icon.html" />-->
+    <link rel="import" href="bower_components/paper-card/paper-card.html" />
+    <link rel="import" href="bower_components/paper-button/paper-button.html"/>
+    <link rel="import" href="xtal-elements/xtal-sink.html" />
 </head>
 <body>
-<paper-tabs selected="0">
-    <paper-tab>ITEM ONE</paper-tab>
-    <paper-tab>ITEM TWO</paper-tab>
-    <paper-tab>ITEM THREE</paper-tab>
-</paper-tabs>
+<xtal-sink></xtal-sink>
+
+<paper-card heading="Card Title">
+    <div class="card-content">
+        <ul>
+            <li when-click-copy="text-to-heading">
+                I am here
+            </li>
+        </ul>
+    </div>
+    <div class="card-actions">
+        <paper-button>Some action</paper-button>
+    </div>
+</paper-card>
+
 
 
 </body>
