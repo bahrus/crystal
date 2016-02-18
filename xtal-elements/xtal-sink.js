@@ -36,8 +36,8 @@ var crystal;
             };
             XtalSink.prototype.attached = function () {
                 var _this = this;
-                var targetTemplate = crystal.nextNonScriptSibling(this);
                 this.async(function () {
+                    var targetTemplate = crystal.nextNonScriptSibling(_this);
                     var targets;
                     if (_this.regionSelector) {
                         targets = document.querySelectorAll(_this.regionSelector);

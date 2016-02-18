@@ -24,9 +24,10 @@ module crystal.elements{
             targetTemplate.set(path, valToSet)
         }
         attached(){
-            const targetTemplate = <polymer.Base> nextNonScriptSibling(this);
+
 
             this.async(() => {
+                const targetTemplate = <polymer.Base> nextNonScriptSibling(this);
                 let targets : NodeListOf<Element>;
                 if(this.regionSelector){
                     targets = document.querySelectorAll(this.regionSelector);
