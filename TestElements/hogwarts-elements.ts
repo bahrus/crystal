@@ -41,7 +41,7 @@ module TestElements {
                 <td>Floo Message: </td>
                 <td><input type='text' value="{{flooMessage::input}}"/></td>
             </tr>
-        </table
+        </table>
     `)
     class HarryPotter extends polymer.Base {
         @property({
