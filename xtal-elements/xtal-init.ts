@@ -12,14 +12,11 @@ module crystal.elements {
         attached() {
             const actions = evalInner(this);
             let target = nextNonScriptSibling(this);
-            if(target && target.set){
-                console.log('found target');
-                console.log(target['outerHTML']);
+            if(target && target['set']){
                 this.processTarget(target, actions);
             }else{
                 this.async(() => {
                     target = nextDomBindElement(this);
-                    debugger;
                     this.processTarget(target, actions);
                 }, 1);
 

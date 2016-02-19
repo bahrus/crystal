@@ -6,7 +6,13 @@
 		"experimentalDecorators": true
 	},
 	"files": [
-    	"crystal.ts"
+    	"crystal.ts",
+		"xtal-elements/xtal-include.ts",
+		"xtal-elements/xtal-init.ts",
+		"xtal-elements/xtal-label.ts",
+		"xtal-elements/xtal-litedom-proc.ts",
+		"xtal-elements/xtal-set.ts",
+		"xtal-elements/xtal-sink.ts"
 
   	]
 }

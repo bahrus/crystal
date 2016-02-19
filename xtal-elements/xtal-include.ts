@@ -21,6 +21,11 @@ module crystal.elements {
             observer: c.onHrefChange
         })
         href: string;
+        
+        @property({
+            type: Boolean
+        })
+        showUrl: boolean;
 
         onHrefChange(newVal: string, oldVal: string) {
             const link = this.importHref(this.href,
@@ -31,6 +36,12 @@ module crystal.elements {
                             Polymer.dom(this).removeChild(this.firstChild);
                         }
                         const children = [];
+                        if(this.showUrl){
+                            const directURL = document.createElement("a");
+                            directURL.setAttribute("href", this.href);
+                            directURL.innerText = this.href;
+                            children.push(directURL);
+                        }
                         let child = link.import.body.firstChild;
                         while (child) {
                             children.push(child);

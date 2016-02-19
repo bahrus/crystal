@@ -60,7 +60,6 @@ var crystal;
                         path: bindInfo.setPath,
                         val: valToSet,
                     };
-                    console.log(crystal.cachedObjects);
                     elementSelector = "." + crystal.labelTagName + "-" + bindInfo.elementSelector;
                 }
                 var targetEls;

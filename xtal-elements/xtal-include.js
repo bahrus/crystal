@@ -41,6 +41,12 @@ var crystal;
                             Polymer.dom(_this).removeChild(_this.firstChild);
                         }
                         var children = [];
+                        if (_this.showUrl) {
+                            var directURL = document.createElement("a");
+                            directURL.setAttribute("href", _this.href);
+                            directURL.innerText = _this.href;
+                            children.push(directURL);
+                        }
                         var child = link.import.body.firstChild;
                         while (child) {
                             children.push(child);
@@ -61,6 +67,11 @@ var crystal;
                     observer: c.onHrefChange
                 })
             ], XtalInclude.prototype, "href", void 0);
+            __decorate([
+                property({
+                    type: Boolean
+                })
+            ], XtalInclude.prototype, "showUrl", void 0);
             XtalInclude = __decorate([
                 component('xtal-include', 'link')
             ], XtalInclude);

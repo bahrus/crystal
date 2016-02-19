@@ -25,15 +25,12 @@ var crystal;
                 var _this = this;
                 var actions = crystal.evalInner(this);
                 var target = crystal.nextNonScriptSibling(this);
-                if (target && target.set) {
-                    console.log('found target');
-                    console.log(target['outerHTML']);
+                if (target && target['set']) {
                     this.processTarget(target, actions);
                 }
                 else {
                     this.async(function () {
                         target = crystal.nextDomBindElement(_this);
-                        debugger;
                         _this.processTarget(target, actions);
                     }, 1);
                 }

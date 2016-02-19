@@ -78,7 +78,6 @@ module crystal {
                         path: bindInfo.setPath,
                         val: valToSet,
                     };
-                    console.log(cachedObjects);
                     elementSelector = `.${labelTagName}-${bindInfo.elementSelector}`;
                 }
                 let targetEls: NodeListOf<Element>;
