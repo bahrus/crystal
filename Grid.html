@@ -41,19 +41,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             data.push(item);
         }
     </script>
-    <script is="xtal-init">
-        xtal.set = {
-            data: data
-        }
-    </script>
-    <template is="dom-bind">
+    <div>
+        <script is="xtal-init">
+            xtal.set = {
+                data: data
+            }
+        </script>
+        <template is="dom-bind" >
 
-        <iron-list items="[[data]]" as="item">
-            <template>
-                <div>
-                    Name: [[item.name]]
-                </div>
-            </template>
-        </iron-list>
-    </template>
+            <iron-list items="[[data]]" as="item" style="overflow:auto; height:200px">
+                <template>
+                    <div>
+                        Name: [[item.name]]
+                    </div>
+                </template>
+            </iron-list>
+        </template>
+    </div>
+
 </html>
