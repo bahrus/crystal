@@ -24,17 +24,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <link rel="import" href="bower_components/polymer/polymer.html">
 
-    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+    <!--<link rel="import" href="bower_components/iron-ajax/iron-ajax.html">-->
 
 
     <link rel="import" href="bower_components/iron-list/iron-list.html">
-
-
+    <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
+    <link rel="import" href="xtal-elements/xtal-init.html">
 
 </body>
-
+    <script>
+        var data = [];
+        for(var i = 0; i < 1000; i++){
+            var item = {
+                name: 'row '+ i
+            };
+            data.push(item);
+        }
+    </script>
+    <script is="xtal-init">
+        xtal.set = {
+            data: data
+        }
+    </script>
     <template is="dom-bind">
-        <iron-ajax url="data.json" last-response="{{data}}" auto></iron-ajax>
+
         <iron-list items="[[data]]" as="item">
             <template>
                 <div>
