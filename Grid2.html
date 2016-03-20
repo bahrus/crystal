@@ -28,6 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
+    <link rel="import" href="xtal-elements/xtal-init.html">
     <link rel="import" href="xtal-elements/xtal-grid.html">
 
 </head>
@@ -43,6 +44,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
     </script>
     <div>
+        <script is="xtal-init">
+            xtal.set = {
+                data: data
+            }
+        </script>
         <xtal-grid></xtal-grid>
     </div>
 </body>

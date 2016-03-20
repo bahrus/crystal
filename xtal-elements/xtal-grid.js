@@ -19,7 +19,6 @@ var crystal;
             __extends(XtalGrid, _super);
             function XtalGrid() {
                 _super.apply(this, arguments);
-                this.data = window['data'];
             }
             XtalGrid = __decorate([
                 template("\n    <iron-list items=\"[[data]]\" as=\"item\" style=\"overflow:auto; height:200px\">\n        <template>\n            <div>\n                <span>{{item.col0}}</span>\n                <span>{{item.col1}}</span>\n                <span>{{item.col2}}</span>\n                <!--<span>{{item.col3}}</span>-->\n                <!--<span>{{item.col4}}</span>-->\n                <!--<span>{{item.col5}}</span>-->\n                <!--<span>{{item.col6}}</span>-->\n                <!--<span>{{item.col7}}</span>-->\n                <!--<span>{{item.col8}}</span>-->\n                <!--<span>{{item.col9}}</span>-->\n                <!--<span>{{item.col10}}</span>-->\n                <!--<span>{{item.col11}}</span>-->\n                <!--<span>{{item.col12}}</span>-->\n                <!--<span>{{item.col13}}</span>-->\n                <!--<span>{{item.col14}}</span>-->\n                <!--<span>{{item.col15}}</span>-->\n                <!--<span>{{item.col16}}</span>-->\n                <!--<span>{{item.col17}}</span>-->\n                <!--<span>{{item.col18}}</span>-->\n                <!--<span>{{item.col19}}</span>-->\n\n            </div>\n        </template>\n     </iron-list>\n    "),

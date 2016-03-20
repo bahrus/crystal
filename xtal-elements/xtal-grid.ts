@@ -35,7 +35,7 @@ module crystal.elements{
     )
     @component('xtal-grid')
     class XtalGrid extends polymer.Base{
-        data = window['data'];
+        //data = window['data'];
     }
     XtalGrid.register();
 }
