@@ -34,7 +34,7 @@ var crystal;
                 component(crystal.labelTagName, 'script')
             ], XtalLabel);
             return XtalLabel;
-        }(polymer.Base));
+        })(polymer.Base);
         XtalLabel.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));

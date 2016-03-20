@@ -76,7 +76,7 @@ var crystal;
                 component('xtal-include', 'link')
             ], XtalInclude);
             return XtalInclude;
-        }(polymer.Base));
+        })(polymer.Base);
         XtalInclude.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));

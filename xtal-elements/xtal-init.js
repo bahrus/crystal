@@ -48,7 +48,7 @@ var crystal;
                 component('xtal-init', 'script')
             ], XtalInit);
             return XtalInit;
-        }(polymer.Base));
+        })(polymer.Base);
         //function performActions(
         XtalInit.register();
     })(elements = crystal.elements || (crystal.elements = {}));

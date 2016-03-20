@@ -47,7 +47,7 @@ var crystal;
                     }
                     for (var i = 0, ii = targets.length; i < ii; i++) {
                         var target = targets[i];
-                        var _loop_1 = function(j, jj) {
+                        for (var j = 0, jj = _this.eventTypes.length; j < jj; j++) {
                             var eventType = _this.eventTypes[j];
                             if (eventType === 'init') {
                                 var attribKey = 'xtal-copy';
@@ -58,21 +58,15 @@ var crystal;
                                 }
                             }
                             else {
-                                var attribKey_1 = "when-" + eventType + "-copy";
-                                var copies = target.querySelectorAll("[" + attribKey_1 + "]");
-                                var _loop_2 = function(k, kk) {
+                                var attribKey = "when-" + eventType + "-copy";
+                                var copies = target.querySelectorAll("[" + attribKey + "]");
+                                for (var k = 0, kk = copies.length; k < kk; k++) {
                                     var copy = copies[k];
                                     copy.addEventListener(eventType, function (ev) {
-                                        _this.doCopy(copy, attribKey_1, targetTemplate);
+                                        _this.doCopy(copy, attribKey, targetTemplate);
                                     });
-                                };
-                                for (var k = 0, kk = copies.length; k < kk; k++) {
-                                    _loop_2(k, kk);
                                 }
                             }
-                        };
-                        for (var j = 0, jj = _this.eventTypes.length; j < jj; j++) {
-                            _loop_1(j, jj);
                         }
                     }
                 }, 1);
@@ -87,7 +81,7 @@ var crystal;
                 component('xtal-sink')
             ], XtalSink);
             return XtalSink;
-        }(polymer.Base));
+        })(polymer.Base);
         XtalSink.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
