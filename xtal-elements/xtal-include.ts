@@ -27,6 +27,11 @@ module crystal.elements {
         })
         showUrl: boolean;
 
+        @property({
+            type:  Boolean
+        })
+        asyncOpt: boolean;
+
         onHrefChange(newVal: string, oldVal: string) {
             const link = this.importHref(this.href,
                 () => { //success
@@ -57,7 +62,7 @@ module crystal.elements {
                 () => { //failure
                     console.log("error loading " + this.href);
                 },
-                true
+                this.asyncOpt
             );
         }
     }

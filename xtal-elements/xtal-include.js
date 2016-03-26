@@ -60,7 +60,7 @@ var crystal;
                     }, 1);
                 }, function () {
                     console.log("error loading " + _this.href);
-                }, true);
+                }, this.asyncOpt);
             };
             __decorate([
                 property({
@@ -72,6 +72,11 @@ var crystal;
                     type: Boolean
                 })
             ], XtalInclude.prototype, "showUrl", void 0);
+            __decorate([
+                property({
+                    type: Boolean
+                })
+            ], XtalInclude.prototype, "asyncOpt", void 0);
             XtalInclude = __decorate([
                 component('xtal-include', 'link')
             ], XtalInclude);
