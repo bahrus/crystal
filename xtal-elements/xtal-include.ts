@@ -56,7 +56,8 @@ module crystal.elements {
                 },
                 () => { //failure
                     console.log("error loading " + this.href);
-                }
+                },
+                true
             );
         }
     }

@@ -60,7 +60,7 @@ var crystal;
                     }, 1);
                 }, function () {
                     console.log("error loading " + _this.href);
-                });
+                }, true);
             };
             __decorate([
                 property({
