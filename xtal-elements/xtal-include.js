@@ -36,8 +36,6 @@ var crystal;
                 var _this = this;
                 var link = this.importHref(this.href, function () {
                     _this.async(function () {
-                        console.log(_this.asyncOpt);
-                        console.log(_this.href);
                         _this.style.display = 'inline-block';
                         while (_this.childElementCount > 0) {
                             Polymer.dom(_this).removeChild(_this.firstChild);
@@ -49,18 +47,11 @@ var crystal;
                             directURL.innerText = _this.href;
                             children.push(directURL);
                         }
-                        //let child = link.import.body.firstChild;
                         var importHTML = link.import.body.innerHTML;
-                        //debugger;
-                        //while (child) {
-                        //    children.push(child);
-                        //    //Polymer.dom(this).appendChild(child);
-                        //    child = child.nextElementSibling;
-                        //}
-                        //for (let i = 0, n = children.length; i < n; i++) {
-                        //    child = children[i];
-                        //    Polymer.dom(this).appendChild(child);
-                        //}
+                        if (_this.transformer) {
+                            var transformerFn = eval(_this.transformer); //TODO: safety check
+                            importHTML = transformerFn(importHTML, _this);
+                        }
                         Polymer.dom(_this).innerHTML = importHTML;
                     }, 1);
                 }, function () {
@@ -84,7 +75,7 @@ var crystal;
             ], XtalInclude.prototype, "asyncOpt", void 0);
             __decorate([
                 property({
-                    type: Function
+                    type: String
                 })
             ], XtalInclude.prototype, "transformer", void 0);
             XtalInclude = __decorate([

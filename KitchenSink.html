@@ -7,6 +7,12 @@
     <link rel="import" href="bower_components/polymer/polymer.html" />
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html" />
     <link rel="import" href="xtal-elements/xtal-include.html"/>
+    <script>
+        function test(inString){
+            var outString = inString.replace('Testing 1, 2,', 'Splat');
+            return outString;
+        }
+    </script>
 </head>
 <body>
     <hr>
@@ -15,7 +21,7 @@
     <link is="xtal-include" href="SiblingCommunication.html" show-url="true" async-opt="true">
     <hr>
 
-    <link is="xtal-include"href="remoteCommunication.html" show-url="true" async-opt="true">
+    <link is="xtal-include"href="remoteCommunication.html" show-url="true" async-opt="true" transformer="test">
     <hr>
     <link is="xtal-include" href="PaperClick.html" show-url="true" async-opt="true">
 </body>
