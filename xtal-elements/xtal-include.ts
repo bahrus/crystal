@@ -32,10 +32,18 @@ module crystal.elements {
         })
         asyncOpt: boolean;
 
+        @property({
+            type: Function
+        })
+        transformer: Function;
+
         onHrefChange(newVal: string, oldVal: string) {
+
             const link = this.importHref(this.href,
                 () => { //success
                     this.async(() => {
+                        console.log(this.asyncOpt);
+                        console.log(this.href);
                         this.style.display = 'inline-block';
                         while (this.childElementCount > 0) {
                             Polymer.dom(this).removeChild(this.firstChild);
@@ -47,22 +55,26 @@ module crystal.elements {
                             directURL.innerText = this.href;
                             children.push(directURL);
                         }
-                        let child = link.import.body.firstChild;
-                        while (child) {
-                            children.push(child);
-                            //Polymer.dom(this).appendChild(child);
-                            child = child.nextElementSibling;
-                        }
-                        for (let i = 0, n = children.length; i < n; i++) {
-                            child = children[i];
-                            Polymer.dom(this).appendChild(child);
-                        }
+                        //let child = link.import.body.firstChild;
+                        let importHTML = link.import.body.innerHTML;
+                        //debugger;
+                        //while (child) {
+                        //    children.push(child);
+                        //    //Polymer.dom(this).appendChild(child);
+                        //    child = child.nextElementSibling;
+                        //}
+                        //for (let i = 0, n = children.length; i < n; i++) {
+                        //    child = children[i];
+                        //    Polymer.dom(this).appendChild(child);
+                        //}
+                        Polymer.dom(this).innerHTML = importHTML;
                     }, 1);
                 },
                 () => { //failure
                     console.log("error loading " + this.href);
                 },
                 this.asyncOpt
+                //true
             );
         }
     }
