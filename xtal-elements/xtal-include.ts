@@ -37,6 +37,14 @@ module crystal.elements {
         })
         transformer: string;
 
+        processTransformerTag(el: HTMLElement, importHTML: string, link) : string{
+            if(!el) return importHTML;
+            if(el.tagName === 'SCRIPT' && el.hasAttribute('xtal-include-transformer')){
+                const transformerFn = eval(el.innerHTML);
+                return transformerFn(importHTML, link, this);
+            }
+            return importHTML
+        }
         onHrefChange(newVal: string, oldVal: string) {
 
             const link = this.importHref(this.href,
@@ -54,10 +62,13 @@ module crystal.elements {
                             children.push(directURL);
                         }
                         let importHTML = link.import.body.innerHTML;
+                        const firstHeadElement = link.import.head.firstElementChild;
+                        importHTML = this.processTransformerTag(firstHeadElement, importHTML, link);
                         if(this.transformer){
                             const transformerFn = eval(this.transformer);//TODO: safety check
-                            importHTML = transformerFn(importHTML, this);
+                            importHTML = transformerFn(importHTML, link, this);
                         }
+                        //const lastBodyElement = link.import.body.lastElementChild;
                         Polymer.dom(this).innerHTML = importHTML;
                     }, 1);
                 },
