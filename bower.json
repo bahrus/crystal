@@ -18,7 +18,8 @@
     "polymer-ts": "~0.1.21",
     "paper-tabs": "PolymerElements/paper-tabs#^1.3.5",
     "paper-input": "PolymerElements/paper-input#^1.1.6",
-    "paper-card": "PolymerElements/paper-card#^1.1.1"
+    "paper-card": "PolymerElements/paper-card#^1.1.1",
+    "carbon-route": "PolymerElements/carbon-route#~0.8.4"
   },
   "resolutions": {
     "polymer": "^1.2.4"

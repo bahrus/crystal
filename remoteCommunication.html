@@ -18,6 +18,7 @@
     <script is="xtal-init">
         [TestElements.sendFlooMessage]
     </script>
+
     <harry-potter></harry-potter>
 
     <script is="xtal-init">
@@ -32,7 +33,7 @@
     <template is="dom-bind">
         <button on-click="displaySiriusBlack">Show Sirius Black</button>
         <template is="dom-if" if="{{clicked}}">
-            <script is="xtal-label">siriusMessanger</script>
+            <script is="xtal-label">'siriusMessanger'</script>
             <sirius-black></sirius-black>
         </template>
         

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Carbon Routing</title>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="bower_components/carbon-route/carbon-location.html">
+    <link rel="import" href="bower_components/carbon-route/carbon-route.html">
+    <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
+    <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+    <!--<link rel="import" href="bower_components/neon-animation/neon-animated-pages.html">-->
+    <!--<link rel="import" href="bower_components/neon-animation/neon-animatable.html">-->
+</head>
+<body>
+    <template is="dom-bind">
+
+        <carbon-location route="{{route}}"></carbon-location>
+        <carbon-route route="{{route}}" pattern="/tabs/:tabName" data="{{data}}"></carbon-route>
+
+        <paper-tabs selected="{{data.tabName}}" attr-for-selected="key">
+            <paper-tab key="foo">Foo</paper-tab>
+            <paper-tab key="bar">Bar</paper-tab>
+            <paper-tab key="baz">Baz!</paper-tab>
+        </paper-tabs>
+
+        <iron-pages selected="{{data.tabName}}"
+                             attr-for-selected="key"
+                             entry-animation="slide-from-left-animation"
+                             exit-animation="slide-right-animation">
+            <div key="foo">Foo Page Here</div>
+            <div key="bar">Bar Page Goes Here</div>
+            <div key="baz">Baz Page, the Best One of the Three</div>
+        </iron-pages>
+    </template>
+</body>
+</html>
