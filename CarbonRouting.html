@@ -52,11 +52,18 @@
                 <!-- Two routes, one for the home page, and one for the tabs page. -->
                 <carbon-route route="{{route}}" pattern="/tabs" tail="{{tabsRoute}}" active="{{tabsActive}}"></carbon-route>
                 <carbon-route route="{{route}}" pattern="/" active="{{homeActive}}"></carbon-route>
-
                 <div hidden$="{{!homeActive}}">
                     Main page!<br><br>
                     <a href="#/tabs/">Tabs page</a>
                 </div>
+                <script type="text/typescript">
+                    const t: number = 75;
+                    const u: string = 'hello';
+                    function test(a: number, b: number){
+                        return a + b;
+                    }
+                    test(t, u);
+                </script>
                 <div hidden$="{{!tabsActive}}">
                     <a href="#/">Back to main page</a>
                     <!-- tabs-page is an element that handles routing within itself.
@@ -64,6 +71,7 @@
                       -->
                     <tabs-page route="{{tabsRoute}}"></tabs-page>
                 </div>
+                <span on-click="changeRoute">Change Route</span>
             </template>
             <script>
                 Polymer({
@@ -75,6 +83,9 @@
                                 this.set('route.path', '/');
                             }
                         });
+                    },
+                    changeRoute: function(evt) {
+                        this.set('route.path', '/12345');
                     }
                 });
             </script>

@@ -15,30 +15,33 @@ var crystal;
 (function (crystal) {
     var elements;
     (function (elements) {
-        //Be able to specify a DOM serializer for inner content of custom element. #6 https://github.com/bahrus/crystal/issues/6
-        var XtalDOMTransformer = (function (_super) {
-            __extends(XtalDOMTransformer, _super);
-            function XtalDOMTransformer() {
+        var XtalPropertyGrid = (function (_super) {
+            __extends(XtalPropertyGrid, _super);
+            function XtalPropertyGrid() {
                 _super.apply(this, arguments);
             }
-            XtalDOMTransformer.prototype.attached = function () {
-                var _this = this;
-                var target = crystal.nextNonScriptSibling(this);
-                this.async(function () {
-                    var targetChildren = Polymer.dom(target)['getEffectiveChildNodes']();
-                    var actions = crystal.evalInner(_this);
-                    for (var j = 0, jj = actions.length; j < jj; j++) {
-                        var action = actions[j];
-                        action(targetChildren, target);
-                    }
-                }, 1);
+            XtalPropertyGrid.prototype.onSelectedObjectChange = function () {
+                debugger;
+                var typeOfObj = typeof this.selectedObject;
+                switch (typeOfObj) {
+                    case 'string':
+                        this.selectedObjectIsPrimitive = true;
+                        break;
+                }
+                this.selectedObjectType = typeOfObj;
             };
-            XtalDOMTransformer = __decorate([
-                component('xtal-lite-dom-proc', 'script')
-            ], XtalDOMTransformer);
-            return XtalDOMTransformer;
+            __decorate([
+                property({
+                    observer: 'onSelectedObjectChange'
+                })
+            ], XtalPropertyGrid.prototype, "selectedObject", void 0);
+            XtalPropertyGrid = __decorate([
+                component('xtal-property-grid'),
+                template("<div>\n            <template is=\"dom-if\" if=\"{{selectedObjectIsPrimitive}}\">\n                I am here [[selectedObject]]\n            </template>\n         </div>")
+            ], XtalPropertyGrid);
+            return XtalPropertyGrid;
         })(polymer.Base);
-        XtalDOMTransformer.register();
+        XtalPropertyGrid.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
-//# sourceMappingURL=xtal-lite-dom-proc.js.map
+//# sourceMappingURL=xtal-property-grid.js.map

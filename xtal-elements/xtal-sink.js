@@ -50,11 +50,11 @@ var crystal;
                         for (var j = 0, jj = _this.eventTypes.length; j < jj; j++) {
                             var eventType = _this.eventTypes[j];
                             if (eventType === 'init') {
-                                var attribKey = 'xtal-copy';
-                                var copies = target.querySelectorAll("[" + attribKey + "]");
+                                var attribKey_1 = 'xtal-copy';
+                                var copies = target.querySelectorAll("[" + attribKey_1 + "]");
                                 for (var k = 0, kk = copies.length; k < kk; k++) {
-                                    var copy = copies[k];
-                                    _this.doCopy(copy, attribKey, targetTemplate);
+                                    var copy_1 = copies[k];
+                                    _this.doCopy(copy_1, attribKey_1, targetTemplate);
                                 }
                             }
                             else {

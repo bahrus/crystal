@@ -46,10 +46,10 @@ module crystal.elements{
                                 this.doCopy(copy, attribKey, targetTemplate);
                             }
                         }else{
-                            const attribKey = `when-${eventType}-copy`;
+                            var attribKey = `when-${eventType}-copy`;
                             const copies = target.querySelectorAll(`[${attribKey}]`);
                             for(let k = 0, kk = copies.length; k < kk; k++){
-                                const copy = copies[k];
+                                var copy = copies[k];
                                 copy.addEventListener(eventType, (ev) =>{
                                     this.doCopy(copy, attribKey, targetTemplate);
                                 })
