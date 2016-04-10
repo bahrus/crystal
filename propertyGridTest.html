@@ -12,11 +12,14 @@
 </head>
 <body>
     <script is="xtal-init">
-        {
+        [{
           selectedObject: {
-              test: 'hello'
+              test: 'hello',
+              subObject: {
+                  childTest: 'world'
+              }
           }
-        }
+        }]
     </script>
     <xtal-property-grid></xtal-property-grid>
 </body>

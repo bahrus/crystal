@@ -20,15 +20,21 @@ var crystal;
             function XtalPropertyGrid() {
                 _super.apply(this, arguments);
             }
+            //selectedObjectIsPrimitive: boolean;
+            //selectedObjectIsObject: boolean;
+            //selectedObjectType: string;
+            //subProperties: IProperty[];
             XtalPropertyGrid.prototype.onSelectedObjectChange = function () {
                 var typeOfObj = typeof this.selectedObject;
+                var selectedObjectInfo = {};
                 switch (typeOfObj) {
                     case 'string':
-                        this.selectedObjectIsPrimitive = true;
+                        selectedObjectInfo.isPrimitive = true;
+                        selectedObjectInfo.val = this.selectedObject;
                         break;
                     case 'object':
-                        this.selectedObjectIsObject = true;
-                        this.subProperties = [];
+                        selectedObjectInfo.isObject = true;
+                        selectedObjectInfo.subProperties = [];
                         for (var key in this.selectedObject) {
                             var val = this.selectedObject[key];
                             var prop = {
@@ -36,11 +42,12 @@ var crystal;
                                 name: key,
                                 val: val,
                             };
-                            this.subProperties.push(prop);
+                            selectedObjectInfo.subProperties.push(prop);
                         }
-                        console.log(this.subProperties);
                 }
-                this.selectedObjectType = typeOfObj;
+                selectedObjectInfo.type = typeOfObj;
+                this.set('selectedObjectInfo', selectedObjectInfo);
+                //console.log(this);
             };
             __decorate([
                 property({
@@ -51,7 +58,7 @@ var crystal;
             ], XtalPropertyGrid.prototype, "selectedObject", void 0);
             XtalPropertyGrid = __decorate([
                 component('xtal-property-grid'),
-                template("<div>\n            <template is=\"dom-if\" if=\"{{selectedObjectIsPrimitive}}\">\n                [[selectedObject]]\n            </template>\n            <template is=\"dom-if\" if=\"{{selectedObjectIsObject}}\">\n                <table>\n                    <template is=\"dom-repeat\" items=\"{{subProperties}}\">\n                    <tr>\n                        <td>{{item.name}}</td>\n                    </tr>\n                    </template>\n                </table>\n            </template>\n         </div>")
+                template("<div>\n            <template is=\"dom-if\" if=\"{{selectedObjectInfo.isPrimitive}}\">\n                [[selectedObjectInfo.val]]\n            </template>\n            <template is=\"dom-if\" if=\"{{selectedObjectInfo.isObject}}\">\n                i am here\n                <table>\n                    <template is=\"dom-repeat\" items=\"{{selectedObjectInfo.subProperties}}\">\n                    <tr>\n                        <td>{{item.name}}</td>\n\n                    </tr>\n                    </template>\n                </table>\n            </template>\n         </div>")
             ], XtalPropertyGrid);
             return XtalPropertyGrid;
         })(polymer.Base);

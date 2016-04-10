@@ -6,14 +6,16 @@ module crystal.elements {
     @component('xtal-property-grid')
     @template(
         `<div>
-            <template is="dom-if" if="{{selectedObjectIsPrimitive}}">
-                [[selectedObject]]
+            <template is="dom-if" if="{{selectedObjectInfo.isPrimitive}}">
+                [[selectedObjectInfo.val]]
             </template>
-            <template is="dom-if" if="{{selectedObjectIsObject}}">
+            <template is="dom-if" if="{{selectedObjectInfo.isObject}}">
+                i am here
                 <table>
-                    <template is="dom-repeat" items="{{subProperties}}">
+                    <template is="dom-repeat" items="{{selectedObjectInfo.subProperties}}">
                     <tr>
                         <td>{{item.name}}</td>
+
                     </tr>
                     </template>
                 </table>
@@ -29,22 +31,27 @@ module crystal.elements {
         })
         selectedObject;
 
+        //@property({
+        //    type: Object,
+        //})
+        selectedObjectInfo: IProperty;
 
-
-        selectedObjectIsPrimitive: boolean;
-        selectedObjectIsObject: boolean;
-        selectedObjectType: string;
-        subProperties: IProperty[];
+        //selectedObjectIsPrimitive: boolean;
+        //selectedObjectIsObject: boolean;
+        //selectedObjectType: string;
+        //subProperties: IProperty[];
 
         onSelectedObjectChange(){
             const typeOfObj = typeof this.selectedObject;
+            const selectedObjectInfo : IProperty = {};
             switch(typeOfObj){
                 case 'string':
-                    this.selectedObjectIsPrimitive = true;
+                    selectedObjectInfo.isPrimitive = true;
+                    selectedObjectInfo.val = this.selectedObject;
                     break;
                 case 'object':
-                    this.selectedObjectIsObject = true;
-                    this.subProperties = [];
+                    selectedObjectInfo.isObject = true;
+                    selectedObjectInfo.subProperties = [];
                     for(const key in this.selectedObject){
                         const val = this.selectedObject[key];
                         const prop : IProperty = {
@@ -52,11 +59,12 @@ module crystal.elements {
                             name: key,
                             val: val,
                         };
-                        this.subProperties.push(prop);
+                        selectedObjectInfo.subProperties.push(prop);
                     }
-                    console.log(this.subProperties);
             }
-            this.selectedObjectType = typeOfObj;
+            selectedObjectInfo.type = typeOfObj;
+            this.set('selectedObjectInfo', selectedObjectInfo);
+            //console.log(this);
         }
 
 
@@ -64,8 +72,11 @@ module crystal.elements {
     XtalPropertyGrid.register();
 
     interface IProperty{
-        type: string;
-        name: string;
-        val: any;
+        type?: string;
+        name?: string;
+        val?: any;
+        isPrimitive?: boolean;
+        isObject?: boolean;
+        subProperties?: IProperty[];
     }
 }
