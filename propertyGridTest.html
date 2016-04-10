@@ -6,10 +6,18 @@
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
     <link rel="import" href="bower_components/polymer-ts/polymer-ts.html">
+    <link rel="import" href="xtal-elements/xtal-init.html">
     <link rel="import" href="xtal-elements/xtal-property-grid.html">
+
 </head>
 <body>
-    <!--<xtal-property-grid selected-objected="{test: 'hello'}"></xtal-property-grid>-->
-    <xtal-property-grid  selected-object="{test: 'hello'}"></xtal-property-grid>
+    <script is="xtal-init">
+        {
+          selectedObject: {
+              test: 'hello'
+          }
+        }
+    </script>
+    <xtal-property-grid></xtal-property-grid>
 </body>
 </html>

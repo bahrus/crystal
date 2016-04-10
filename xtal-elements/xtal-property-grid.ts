@@ -7,43 +7,65 @@ module crystal.elements {
     @template(
         `<div>
             <template is="dom-if" if="{{selectedObjectIsPrimitive}}">
-                I am here [[selectedObject]]
+                [[selectedObject]]
+            </template>
+            <template is="dom-if" if="{{selectedObjectIsObject}}">
+                <table>
+                    <template is="dom-repeat" items="{{subProperties}}">
+                    <tr>
+                        <td>{{item.name}}</td>
+                    </tr>
+                    </template>
+                </table>
             </template>
          </div>`
     )
     class XtalPropertyGrid extends polymer.Base {
 
-        _selectedObject: Object;
-//
         @property({
-            observer: 'onSelectedObjectChange'
+            observer: 'onSelectedObjectChange',
+            reflectToAttribute: true,
+            type: Object,
         })
         selectedObject;
-        //get selectedObject(){
-        //    return this._selectedObject;
-        //}
-        //set selectedObject(obj: any){
 
-        //}
+
 
         selectedObjectIsPrimitive: boolean;
+        selectedObjectIsObject: boolean;
         selectedObjectType: string;
-
+        subProperties: IProperty[];
 
         onSelectedObjectChange(){
-                debugger;
-                const typeOfObj = typeof this.selectedObject;
-                switch(typeOfObj){
-                    case 'string':
-                        this.selectedObjectIsPrimitive = true;
-                        break;
-                }
-                this.selectedObjectType = typeOfObj;
+            const typeOfObj = typeof this.selectedObject;
+            switch(typeOfObj){
+                case 'string':
+                    this.selectedObjectIsPrimitive = true;
+                    break;
+                case 'object':
+                    this.selectedObjectIsObject = true;
+                    this.subProperties = [];
+                    for(const key in this.selectedObject){
+                        const val = this.selectedObject[key];
+                        const prop : IProperty = {
+                            type: typeof val,
+                            name: key,
+                            val: val,
+                        };
+                        this.subProperties.push(prop);
+                    }
+                    console.log(this.subProperties);
+            }
+            this.selectedObjectType = typeOfObj;
         }
+
+
     }
     XtalPropertyGrid.register();
 
     interface IProperty{
         type: string;
+        name: string;
+        val: any;
     }
 }

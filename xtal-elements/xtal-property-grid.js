@@ -21,23 +21,37 @@ var crystal;
                 _super.apply(this, arguments);
             }
             XtalPropertyGrid.prototype.onSelectedObjectChange = function () {
-                debugger;
                 var typeOfObj = typeof this.selectedObject;
                 switch (typeOfObj) {
                     case 'string':
                         this.selectedObjectIsPrimitive = true;
                         break;
+                    case 'object':
+                        this.selectedObjectIsObject = true;
+                        this.subProperties = [];
+                        for (var key in this.selectedObject) {
+                            var val = this.selectedObject[key];
+                            var prop = {
+                                type: typeof val,
+                                name: key,
+                                val: val,
+                            };
+                            this.subProperties.push(prop);
+                        }
+                        console.log(this.subProperties);
                 }
                 this.selectedObjectType = typeOfObj;
             };
             __decorate([
                 property({
-                    observer: 'onSelectedObjectChange'
+                    observer: 'onSelectedObjectChange',
+                    reflectToAttribute: true,
+                    type: Object,
                 })
             ], XtalPropertyGrid.prototype, "selectedObject", void 0);
             XtalPropertyGrid = __decorate([
                 component('xtal-property-grid'),
-                template("<div>\n            <template is=\"dom-if\" if=\"{{selectedObjectIsPrimitive}}\">\n                I am here [[selectedObject]]\n            </template>\n         </div>")
+                template("<div>\n            <template is=\"dom-if\" if=\"{{selectedObjectIsPrimitive}}\">\n                [[selectedObject]]\n            </template>\n            <template is=\"dom-if\" if=\"{{selectedObjectIsObject}}\">\n                <table>\n                    <template is=\"dom-repeat\" items=\"{{subProperties}}\">\n                    <tr>\n                        <td>{{item.name}}</td>\n                    </tr>\n                    </template>\n                </table>\n            </template>\n         </div>")
             ], XtalPropertyGrid);
             return XtalPropertyGrid;
         })(polymer.Base);
