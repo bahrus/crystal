@@ -11,7 +11,6 @@ module crystal.elements {
         innerTarget: string;
 
         attached() {
-            debugger;
             const actions = evalInner(this);
             let target = nextNonScriptSibling(this);
             if(target && target['set']){

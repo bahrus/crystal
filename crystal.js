@@ -232,6 +232,8 @@ var crystal;
             element: element,
         };
         var actions = actionGetter(context);
+        if (!actions.length)
+            actions = [actions];
         return actions;
     }
     crystal.evalInner = evalInner;

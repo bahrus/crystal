@@ -23,7 +23,6 @@ var crystal;
             }
             JSXtalInit.prototype.attached = function () {
                 var _this = this;
-                debugger;
                 var actions = crystal.evalInner(this);
                 var target = crystal.nextNonScriptSibling(this);
                 if (target && target['set']) {

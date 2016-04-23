@@ -299,7 +299,8 @@ module crystal {
         const context: IPolymerContext = {
             element: element,
         };
-        const actions = actionGetter(context);
+        let actions = actionGetter(context);
+        if(!actions.length) actions = [actions];
         return actions;
     }
 
