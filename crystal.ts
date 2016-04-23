@@ -300,7 +300,7 @@ module crystal {
             element: element,
         };
         let actions = actionGetter(context);
-        if(!actions.length) actions = [actions];
+        if(!Array.isArray(actions)) actions = [actions];
         return actions;
     }
 
