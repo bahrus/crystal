@@ -45,7 +45,7 @@ var crystal;
                 property()
             ], JSXtalInit.prototype, "innerTarget", void 0);
             JSXtalInit = __decorate([
-                component('js-xtal-init'),
+                component(crystal.jsXtaInitTagName),
                 template("<span style=\"display: none\">iah</span>")
             ], JSXtalInit);
             return JSXtalInit;

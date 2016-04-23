@@ -13,6 +13,7 @@ var xtal = (function () {
 var crystal;
 (function (crystal) {
     crystal.labelTagName = 'xtal-label';
+    crystal.jsXtaInitTagName = 'js-xtal-init';
     //#region Polyfills
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
     if (!String.prototype['startsWith']) {
@@ -203,8 +204,19 @@ var crystal;
     //#region custom element helpers
     function nextNonScriptSibling(el) {
         var nextElement = el.nextElementSibling;
-        while (nextElement && nextElement.tagName === 'SCRIPT') {
+        var tagName = nextElement.tagName;
+        while (nextElement) {
+            //let bKeepGoing = false
+            switch (tagName) {
+                case 'SCRIPT':
+                case crystal.jsXtaInitTagName:
+                    //bKeepGoing = true;
+                    break;
+                default:
+                    return nextElement;
+            }
             nextElement = nextElement.nextElementSibling;
+            tagName = nextElement.tagName;
         }
         return nextElement;
     }

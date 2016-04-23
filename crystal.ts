@@ -7,6 +7,7 @@ class xtal{
 module crystal {
 
     export const labelTagName = 'xtal-label';
+    export const jsXtaInitTagName = 'js-xtal-init';
 
     //#region Polyfills
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
@@ -271,8 +272,20 @@ module crystal {
     //#region custom element helpers
     export function nextNonScriptSibling(el:HTMLElement):Element {
         let nextElement = el.nextElementSibling;
-        while (nextElement && nextElement.tagName === 'SCRIPT') {
+        let tagName = nextElement.tagName;
+        while (nextElement){
+            //let bKeepGoing = false
+            switch(tagName){
+                case 'SCRIPT':
+                case jsXtaInitTagName:
+                    //bKeepGoing = true;
+                    break;
+                default:
+                    return nextElement;
+            }
+
             nextElement = nextElement.nextElementSibling;
+            tagName = nextElement.tagName;
         }
         return nextElement;
     }

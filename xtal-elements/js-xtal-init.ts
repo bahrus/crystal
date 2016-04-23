@@ -3,7 +3,7 @@
 
 module crystal.elements {
     //Merge Properties / Methods via html tag decorator #5 https://github.com/bahrus/crystal/issues/5
-    @component('js-xtal-init')
+    @component(crystal.jsXtaInitTagName)
     @template(`<span style="display: none">iah</span>`)
     class JSXtalInit extends polymer.Base {
 
