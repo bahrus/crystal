@@ -16,13 +16,14 @@ var crystal;
     var elements;
     (function (elements) {
         //Merge Properties / Methods via html tag decorator #5 https://github.com/bahrus/crystal/issues/5
-        var XtalInit = (function (_super) {
-            __extends(XtalInit, _super);
-            function XtalInit() {
+        var JSXtalInit = (function (_super) {
+            __extends(JSXtalInit, _super);
+            function JSXtalInit() {
                 _super.apply(this, arguments);
             }
-            XtalInit.prototype.attached = function () {
+            JSXtalInit.prototype.attached = function () {
                 var _this = this;
+                debugger;
                 var actions = crystal.evalInner(this);
                 var target = crystal.nextNonScriptSibling(this);
                 if (target && target['set']) {
@@ -35,7 +36,7 @@ var crystal;
                     }, 1);
                 }
             };
-            XtalInit.prototype.processTarget = function (target, actions) {
+            JSXtalInit.prototype.processTarget = function (target, actions) {
                 if (this.innerTarget) {
                     target = target.querySelector(this.innerTarget);
                 }
@@ -43,14 +44,15 @@ var crystal;
             };
             __decorate([
                 property()
-            ], XtalInit.prototype, "innerTarget", void 0);
-            XtalInit = __decorate([
-                component('xtal-init', 'script')
-            ], XtalInit);
-            return XtalInit;
-        })(polymer.Base);
+            ], JSXtalInit.prototype, "innerTarget", void 0);
+            JSXtalInit = __decorate([
+                component('js-xtal-init'),
+                template("<span style=\"display: none\">iah</span>")
+            ], JSXtalInit);
+            return JSXtalInit;
+        }(polymer.Base));
         //function performActions(
-        XtalInit.register();
+        JSXtalInit.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
-//# sourceMappingURL=xtal-init.js.map
+//# sourceMappingURL=js-xtal-init.js.map

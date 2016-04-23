@@ -37,7 +37,7 @@ var crystal;
                 component('xtal-lite-dom-proc', 'script')
             ], XtalDOMTransformer);
             return XtalDOMTransformer;
-        })(polymer.Base);
+        }(polymer.Base));
         XtalDOMTransformer.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));

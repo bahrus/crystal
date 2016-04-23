@@ -9,7 +9,7 @@ var xtal = (function () {
         configurable: true
     });
     return xtal;
-})();
+}());
 var crystal;
 (function (crystal) {
     crystal.labelTagName = 'xtal-label';
@@ -222,12 +222,16 @@ var crystal;
     }
     crystal.nextDomBindElement = nextDomBindElement;
     function evalInner(element) {
-        var inner = element.innerText.trim();
-        inner = inner.replace('xtal.set = ', '');
-        if (!inner['startsWith']('[')) {
-            inner = '[' + inner + ']';
-        }
-        var actions = eval(inner);
+        //let inner  = element.innerText.trim();
+        var inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
+        // if(!inner['startsWith']('[')){
+        //     inner = '[' + inner + ']';
+        // }
+        var actionGetter = eval(inner);
+        var context = {
+            element: element,
+        };
+        var actions = actionGetter(context);
         return actions;
     }
     crystal.evalInner = evalInner;

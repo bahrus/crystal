@@ -23,6 +23,11 @@ module crystal {
         (obj: T): any;
     };
 
+    export interface IPolymerContext {
+        element: polymer.Base;
+    }
+
+
     const fnSignature = 'return ';
 
 
@@ -57,6 +62,10 @@ module crystal {
         path?: string;
         val?: any;
     }
+
+    
+
+
     export const cachedObjects: { [key: string] : ISetObjectInfo } = { };
 
     export function metaBind(bindInfo?: IMetaBindInfo) {
@@ -281,12 +290,16 @@ module crystal {
     }
 
     export function evalInner(element: polymer.Base){
-        let inner  = element.innerText.trim();
-        inner = inner.replace('xtal.set = ', '');
-        if(!inner['startsWith']('[')){
-            inner = '[' + inner + ']';
-        }
-        const actions = <any[]> eval(inner);
+        //let inner  = element.innerText.trim();
+        let inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
+        // if(!inner['startsWith']('[')){
+        //     inner = '[' + inner + ']';
+        // }
+        const actionGetter = eval(inner);
+        const context: IPolymerContext = {
+            element: element,
+        };
+        const actions = actionGetter(context);
         return actions;
     }
 

@@ -61,7 +61,7 @@
     <TypeScriptCompile Include="TestElements\EmployeeInfo.ts" />
     <TypeScriptCompile Include="TestElements\MyChildElement.ts" />
     <TypeScriptCompile Include="TestElements\MyParentElement.ts" />
-    <TypeScriptCompile Include="xtal-elements\xtal-init.ts" />
+    <TypeScriptCompile Include="xtal-elements\js-xtal-init.ts" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

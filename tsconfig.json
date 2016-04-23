@@ -8,7 +8,7 @@
 	"files": [
     	"crystal.ts",
 		"xtal-elements/xtal-include.ts",
-		"xtal-elements/xtal-init.ts",
+		"xtal-elements/js-xtal-init.ts",
 		"xtal-elements/xtal-label.ts",
 		"xtal-elements/xtal-litedom-proc.ts",
 		"xtal-elements/xtal-set.ts",

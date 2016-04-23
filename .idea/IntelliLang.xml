@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LanguageInjectionConfiguration">
+    <injection language="ECMAScript 6" injector-id="xml">
+      <display-name>js-*</display-name>
+      <place><![CDATA[xmlTag().withLocalName(string().matches("(^js-[a-zA-Z_-][a-zA-Z0-9_-]*)"))]]></place>
+    </injection>
+  </component>
+</project>
