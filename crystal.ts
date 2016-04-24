@@ -154,6 +154,9 @@ module crystal {
                 performCustElActions(action, target);
                 continue;
             }
+            if(action.debug) {
+                debugger;
+            }
             const doFn = action.do;
             if (doFn && typeof (doFn === 'function')) {
                 const polymerAction = <IPolymerAction>action;
@@ -180,6 +183,7 @@ module crystal {
                     }
                 } else {
                     //data-bind template, e.g.
+                    console.log('key', key);
                     target[key] = action[key];
                 }
             }
@@ -309,10 +313,16 @@ module crystal {
         //     inner = '[' + inner + ']';
         // }
         const actionGetter = eval(inner);
-        const context: IPolymerContext = {
-            element: element,
-        };
-        let actions = actionGetter(context);
+        let actions : any;
+        if(typeof actionGetter === 'function'){
+            const context: IPolymerContext = {
+                element: element,
+            };
+            actions = actionGetter(context);
+        }else{
+            actions = actionGetter;
+        }
+
         if(!Array.isArray(actions)) actions = [actions];
         return actions;
     }

@@ -39,7 +39,7 @@ var crystal;
                 component('xtal-set', 'script')
             ], XtalSet);
             return XtalSet;
-        })(polymer.Base);
+        }(polymer.Base));
         XtalSet.register();
         function performLightDOMActions(actions, target) {
             var domActionContext;
@@ -72,4 +72,4 @@ var crystal;
         }
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
-//# sourceMappingURL=xtal-set.js.map
+//# sourceMappingURL=js-xtal-set.js.js.map

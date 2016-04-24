@@ -22,7 +22,7 @@ var TestElements;
             template("\n        <div style=\"background-color:#eeee77;left:30px;position:relative;width:500px\">\n            <div>My Child component</div>\n            <div>myProp: [[myProp]]</div>\n        </div>\n    ")
         ], MyChildElement);
         return MyChildElement;
-    })(polymer.Base);
+    }(polymer.Base));
     MyChildElement.register();
 })(TestElements || (TestElements = {}));
 //# sourceMappingURL=MyChildElement.js.map

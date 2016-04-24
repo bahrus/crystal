@@ -55,7 +55,7 @@
     <TypeScriptCompile Include="TestElements\hogwarts-elements.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-label.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-location.ts" />
-    <TypeScriptCompile Include="xtal-elements\xtal-set.ts" />
+    <TypeScriptCompile Include="xtal-elements\js-xtal-set.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-lite-dom-proc.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-include.ts" />
     <TypeScriptCompile Include="TestElements\EmployeeInfo.ts" />

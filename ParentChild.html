@@ -9,34 +9,45 @@
     <link rel="import" href="xtal-elements/xtal-init.html" />
     <link rel="import" href="xtal-elements/xtal-lite-dom-proc.html" />
     <link rel="import" href="TestElements/MyParentElement.html" />
-    <link rel="import" href="xtal-elements/xtal-set.html" />
+    <link rel="import" href="xtal-elements/js-xtal-set.html" />
     
     <script>
         function test123() {
-            debugger;
+            alert('iah');
         }
     </script>
 </head>
 <body>
-    <script is="xtal-init">{ myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney') }</script>
-    <script is="xtal-lite-dom-proc">
-         xtal.set = [function (nodes, element) {
-            //debugger;
-            element.message = 'Number of nodes: ' + nodes.length;
-        }]
-    </script>
-    <script is="xtal-init" inner-target="template">{ myAutoBindTemplateValue: 'this is a test' }</script>
-    
+    <!--<script is="xtal-init"></script>-->
+    <js-xtal-init>
+        context =>{
+            return { myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney') }
+        }
+    </js-xtal-init>
+    <!--<script is="xtal-lite-dom-proc">-->
+         <!--xtal.set = [function (nodes, element) {-->
+            <!--//debugger;-->
+            <!--element.message = 'Number of nodes: ' + nodes.length;-->
+        <!--}]-->
+    <!--</script>-->
+    <js-xtal-init inner-target="template">
+        context =>{
+            return { myAutoBindTemplateValue: 'this is a test' }
+        }
+    </js-xtal-init>
     <my-parent-element my-prop="42">
         <template is="dom-bind">
             <div>myAutoBindTemplateValue:</div>
             <span>[[myAutoBindTemplateValue]]</span>
-            <script is="xtal-set">
-                xtal.set = {
-                    'onclick': 'test123()'
+            <js-xtal-init wait-before-finding-target="true">
+                context =>{
+                    return {
+                        debug: true,
+                        'onclick': 'test123()'
+                    }
                 }
-            </script>
-            <h3>This is my title</h3>
+            </js-xtal-init>
+            <h3 onclick="test123()">This is my title</h3>
         </template>
     </my-parent-element>
 

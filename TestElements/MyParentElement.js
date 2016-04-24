@@ -1,5 +1,6 @@
 /// <reference path="../bower_components/polymer-ts/polymer-ts.d.ts" />
 /// <reference path="../crystal.ts"/>
+/// <reference path="EmployeeInfo.ts"/>
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -60,7 +61,7 @@ var TestElements;
             })
         ], MyParentModel.prototype, "onMyEmployeeChange", null);
         return MyParentModel;
-    })();
+    }());
     var MyParentElement = (function (_super) {
         __extends(MyParentElement, _super);
         function MyParentElement() {
@@ -79,7 +80,7 @@ var TestElements;
             template("\n        <div style=\"background-color:#cceeee\">\n            <div>[[" + c.message + "]]</div>\n            <div>myProp: [[" + c.myProp + "]]</div>\n            <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n            <div>Employee name: [[" + c.myEmployee_Name + "]]</div>\n            <div on-click=\"" + c.changeEmployeeName + "\">Change Employee Name</div>\n            <content></content>\n            <my-child-element></my-child-element>\n        </div>\n    ")
         ], MyParentElement);
         return MyParentElement;
-    })(polymer.Base);
+    }(polymer.Base));
     MyParentElement.register();
 })(TestElements || (TestElements = {}));
 //# sourceMappingURL=MyParentElement.js.map

@@ -88,6 +88,9 @@ var crystal;
                 performCustElActions(action, target);
                 continue;
             }
+            if (action.debug) {
+                debugger;
+            }
             var doFn = action.do;
             if (doFn && typeof (doFn === 'function')) {
                 var polymerAction = action;
@@ -116,6 +119,7 @@ var crystal;
                 }
                 else {
                     //data-bind template, e.g.
+                    console.log('key', key);
                     target[key] = action[key];
                 }
             }
@@ -240,10 +244,16 @@ var crystal;
         //     inner = '[' + inner + ']';
         // }
         var actionGetter = eval(inner);
-        var context = {
-            element: element,
-        };
-        var actions = actionGetter(context);
+        var actions;
+        if (typeof actionGetter === 'function') {
+            var context = {
+                element: element,
+            };
+            actions = actionGetter(context);
+        }
+        else {
+            actions = actionGetter;
+        }
         if (!Array.isArray(actions))
             actions = [actions];
         return actions;

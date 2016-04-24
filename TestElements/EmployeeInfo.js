@@ -6,7 +6,7 @@ var TestElements;
             this.Address = Address;
         }
         return EmployeeInfo;
-    })();
+    }());
     TestElements.EmployeeInfo = EmployeeInfo;
 })(TestElements || (TestElements = {}));
 //# sourceMappingURL=EmployeeInfo.js.map

@@ -8,20 +8,20 @@
 </head>
 <body>
     <js-xtal-init>
-        context => {
-            return {
-                isNumberOdd: function (i) {
+         [{
+            isNumberOdd: function (i) {
 
-                },
-                numbers: [0, 1, 2, 3],
-                clicked: false,
-                handleClick: function (e) {
-                    this.lastClicked = e.target.number;
-                    this.clicked = true;
-                },
-            }
-        }
+            },
+            numbers: [0, 1, 2, 3],
+            clicked: false,
+            handleClick: function (e) {
+                this.lastClicked = e.target.number;
+                this.clicked = true;
+            },
+
+        }]
     </js-xtal-init>
+
     <template is="dom-bind">
         <h1>&lt;template is="dom-bind"&gt; Demo</h1>
         <template is="dom-if" if="{{clicked}}">
@@ -36,9 +36,9 @@
             </p>
         </template>
     </template>
-    
 
-    
+
+
 </body>
 </html>
 
