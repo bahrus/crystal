@@ -36,7 +36,7 @@ var crystal;
                 property()
             ], XtalSet.prototype, "innerTarget", void 0);
             XtalSet = __decorate([
-                component('xtal-set', 'script')
+                component('js-xtal-set')
             ], XtalSet);
             return XtalSet;
         }(polymer.Base));
@@ -72,4 +72,4 @@ var crystal;
         }
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
-//# sourceMappingURL=js-xtal-set.js.js.map
+//# sourceMappingURL=js-xtal-set.js.map

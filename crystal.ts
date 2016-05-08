@@ -1,13 +1,15 @@
 ﻿/// <reference path="bower_components/polymer-ts/polymer-ts.d.ts" />
-class xtal{
-    public static get set() { return null;}
-    public static set set(val: any){}
-}
+// class xtal{
+//     public static get set() { return null;}
+//     public static set set(val: any){}
+// }
 
 module crystal {
 
+    //import multiSplit = crystal.util.multiSplit;
     export const labelTagName = 'xtal-label';
     export const jsXtaInitTagName = 'js-xtal-init';
+    export const tsXtalInitTagName = 'ts-xtal-init';
 
     //#region Polyfills
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
@@ -17,7 +19,7 @@ module crystal {
             return this.indexOf(searchString, position) === position;
         };
     }
-    //#endregion
+    //endregion
 
     //#region Add Name Resolver #1 https://github.com/bahrus/crystal/issues/1
     export interface IGetter<T> {
@@ -306,12 +308,11 @@ module crystal {
         return nextElement;
     }
 
-    export function evalInner(element: polymer.Base){
-        //let inner  = element.innerText.trim();
+    export function evalInner(element: polymer.Base, isTS?: boolean){
         let inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
-        // if(!inner['startsWith']('[')){
-        //     inner = '[' + inner + ']';
-        // }
+        if(isTS){
+            inner = util.stripTypings(inner);
+        }
         const actionGetter = eval(inner);
         let actions : any;
         if(typeof actionGetter === 'function'){
@@ -326,10 +327,14 @@ module crystal {
         if(!Array.isArray(actions)) actions = [actions];
         return actions;
     }
+    
+    
 
     export function readStringConstant(element: polymer.Base) {
         return element.innerText.trim();
     }
+
+
     //#endregion
 
     //#region Actions
@@ -354,5 +359,79 @@ module crystal {
         });
     }
     //#endregion
+    export module util{
 
+
+        export function stripTypings(text: string){
+            //const tokenArray = multiSplit(text, [';', ','])
+            const tokenArray = text.split(' ');
+            for(let i = 0, ii = tokenArray.length; i < ii; i++){
+                const token = tokenArray[i];
+                switch(token){
+                    case 'const':
+                        if(i + 2 < ii){
+                            const nextToken = tokenArray[i + 1];
+                            if(nextToken.indexOf(':') > -1){
+                                tokenArray[i + 1] = nextToken.replace(':', '');
+                                tokenArray[i + 2] = ''
+                            }
+
+                        }
+                        continue;
+                }
+
+            }
+            const text2 = tokenArray.join(' ');
+            const tokenArray2 = splitPairs(text2, {lhs: '(', rhs: ')'});
+            for(let i = 0, ii = tokenArray2.length; i < ii; i++){
+                const token = tokenArray2[i];
+                if(token === '(' && i + 2 < ii){
+                    if(tokenArray2[i + 2] != ')'){
+                        throw "Invalid expression"
+                    }
+                    const args = tokenArray2[i + 1].split(',');
+                    const newArgs = args.map(s => substringBefore(s, ';'));
+                    tokenArray2[i + 1] = newArgs.join(',');
+
+                }
+            }
+            return tokenArray2.join('');
+
+        }
+
+        export interface IPair{
+            lhs: string;
+            rhs: string;
+        }
+
+        function splitPairs(text: string, pair: IPair): string[]{
+            const returnObj: string[] = [];
+            let region: string[] = [];
+            for(let i = 0, ii = text.length; i < ii; i++){
+                const chr = text[i];
+                switch(chr){
+                    case pair.rhs:
+                    case pair.lhs:
+                        returnObj.push(region.join(''));
+                        returnObj.push(chr);
+                        region = [];
+                        break;
+                    //case pair.rhs
+                    default:
+                        region.push(chr);
+                }
+
+            }
+            if(region.length > 0){
+                returnObj.push(region.join(''));
+            }
+            return returnObj;
+        }
+
+        export function substringBefore(value: string, search: string){
+            const iPos = value.indexOf(search);
+            if(iPos < -1) return value;
+            return value.substr(0, iPos);
+        }
+    }
 }

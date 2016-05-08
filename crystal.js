@@ -1,19 +1,14 @@
 /// <reference path="bower_components/polymer-ts/polymer-ts.d.ts" />
-var xtal = (function () {
-    function xtal() {
-    }
-    Object.defineProperty(xtal, "set", {
-        get: function () { return null; },
-        set: function (val) { },
-        enumerable: true,
-        configurable: true
-    });
-    return xtal;
-}());
+// class xtal{
+//     public static get set() { return null;}
+//     public static set set(val: any){}
+// }
 var crystal;
 (function (crystal) {
+    //import multiSplit = crystal.util.multiSplit;
     crystal.labelTagName = 'xtal-label';
     crystal.jsXtaInitTagName = 'js-xtal-init';
+    crystal.tsXtalInitTagName = 'ts-xtal-init';
     //#region Polyfills
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
     if (!String.prototype['startsWith']) {
@@ -237,12 +232,11 @@ var crystal;
         return nextElement;
     }
     crystal.nextDomBindElement = nextDomBindElement;
-    function evalInner(element) {
-        //let inner  = element.innerText.trim();
+    function evalInner(element, isTS) {
         var inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
-        // if(!inner['startsWith']('[')){
-        //     inner = '[' + inner + ']';
-        // }
+        if (isTS) {
+            inner = util.stripTypings(inner);
+        }
         var actionGetter = eval(inner);
         var actions;
         if (typeof actionGetter === 'function') {
@@ -276,5 +270,71 @@ var crystal;
         });
     }
     crystal.CoordinateDataBetweenElementsActionImpl = CoordinateDataBetweenElementsActionImpl;
+    //#endregion
+    var util;
+    (function (util) {
+        function stripTypings(text) {
+            //const tokenArray = multiSplit(text, [';', ','])
+            var tokenArray = text.split(' ');
+            for (var i = 0, ii = tokenArray.length; i < ii; i++) {
+                var token = tokenArray[i];
+                switch (token) {
+                    case 'const':
+                        if (i + 2 < ii) {
+                            var nextToken = tokenArray[i + 1];
+                            if (nextToken.indexOf(':') > -1) {
+                                tokenArray[i + 1] = nextToken.replace(':', '');
+                                tokenArray[i + 2] = '';
+                            }
+                        }
+                        continue;
+                }
+            }
+            var text2 = tokenArray.join(' ');
+            var tokenArray2 = splitPairs(text2, { lhs: '(', rhs: ')' });
+            for (var i = 0, ii = tokenArray2.length; i < ii; i++) {
+                var token = tokenArray2[i];
+                if (token === '(' && i + 2 < ii) {
+                    if (tokenArray2[i + 2] != ')') {
+                        throw "Invalid expression";
+                    }
+                    var args = tokenArray2[i + 1].split(',');
+                    var newArgs = args.map(function (s) { return substringBefore(s, ';'); });
+                    tokenArray2[i + 1] = newArgs.join(',');
+                }
+            }
+            return tokenArray2.join('');
+        }
+        util.stripTypings = stripTypings;
+        function splitPairs(text, pair) {
+            var returnObj = [];
+            var region = [];
+            for (var i = 0, ii = text.length; i < ii; i++) {
+                var chr = text[i];
+                switch (chr) {
+                    case pair.rhs:
+                    case pair.lhs:
+                        returnObj.push(region.join(''));
+                        returnObj.push(chr);
+                        region = [];
+                        break;
+                    //case pair.rhs
+                    default:
+                        region.push(chr);
+                }
+            }
+            if (region.length > 0) {
+                returnObj.push(region.join(''));
+            }
+            return returnObj;
+        }
+        function substringBefore(value, search) {
+            var iPos = value.indexOf(search);
+            if (iPos < -1)
+                return value;
+            return value.substr(0, iPos);
+        }
+        util.substringBefore = substringBefore;
+    })(util = crystal.util || (crystal.util = {}));
 })(crystal || (crystal = {}));
 //# sourceMappingURL=crystal.js.map

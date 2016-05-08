@@ -18,35 +18,22 @@
     </script>
 </head>
 <body>
-    <!--<script is="xtal-init"></script>-->
     <js-xtal-init>
-        context =>{
-            return { myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney') }
-        }
+        [{ myEmployee: new TestElements.EmployeeInfo('P Sherman', '42 Wallaby Way, Sidney') }]
     </js-xtal-init>
-    <!--<script is="xtal-lite-dom-proc">-->
-         <!--xtal.set = [function (nodes, element) {-->
-            <!--//debugger;-->
-            <!--element.message = 'Number of nodes: ' + nodes.length;-->
-        <!--}]-->
-    <!--</script>-->
+
     <js-xtal-init inner-target="template">
-        context =>{
-            return { myAutoBindTemplateValue: 'this is a test' }
-        }
+        [{ myAutoBindTemplateValue: 'this is a test'}]
     </js-xtal-init>
     <my-parent-element my-prop="42">
         <template is="dom-bind">
             <div>myAutoBindTemplateValue:</div>
             <span>[[myAutoBindTemplateValue]]</span>
-            <js-xtal-init wait-before-finding-target="true">
-                context =>{
-                    return {
-                        debug: true,
-                        'onclick': 'test123()'
-                    }
-                }
-            </js-xtal-init>
+            <js-xtal-set>
+                [{
+                    'onclick': 'test123()'
+                }]
+            </js-xtal-set>
             <h3 onclick="test123()">This is my title</h3>
         </template>
     </my-parent-element>

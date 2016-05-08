@@ -61,7 +61,7 @@ var crystal;
                 template("<div>\n            <template is=\"dom-if\" if=\"{{selectedObjectInfo.isPrimitive}}\">\n                [[selectedObjectInfo.val]]\n            </template>\n            <template is=\"dom-if\" if=\"{{selectedObjectInfo.isObject}}\">\n                i am here\n                <table>\n                    <template is=\"dom-repeat\" items=\"{{selectedObjectInfo.subProperties}}\">\n                    <tr>\n                        <td>{{item.name}}</td>\n\n                    </tr>\n                    </template>\n                </table>\n            </template>\n         </div>")
             ], XtalPropertyGrid);
             return XtalPropertyGrid;
-        })(polymer.Base);
+        }(polymer.Base));
         XtalPropertyGrid.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));

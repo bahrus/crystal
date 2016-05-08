@@ -24,8 +24,6 @@ module crystal.elements {
 
             }
 
-
-
         }
 
         processTarget(target: Element, actions){

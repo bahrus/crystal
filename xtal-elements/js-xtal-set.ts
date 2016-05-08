@@ -4,7 +4,7 @@
 module crystal.elements {
     // Allow a DOM element inside light dom to set value in custom element #8 https://github.com/bahrus/crystal/issues/8
 
-    @component('xtal-set', 'script')
+    @component('js-xtal-set')
     class XtalSet extends polymer.Base {
         @property()
         innerTarget: string;
