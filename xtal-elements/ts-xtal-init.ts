@@ -4,9 +4,12 @@
 module crystal.elements{
     @component(crystal.tsXtalInitTagName)
     @template(`<span style="display: none">iah</span>`)
-    class TSXtalInit extends polymer.Base {
+    class TSXtalInit extends polymer.Base implements crystal.IDecorator {
         @property()
         innerTarget: string;
+        
+        @property()
+        isDecoratorElement = true;
 
         attached() {
             const actions = evalInner(this, true);

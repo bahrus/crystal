@@ -148,6 +148,10 @@ module crystal {
 
     }
 
+    export interface IDecorator{
+        isDecoratorElement: boolean;
+    }
+
     export function performCustElActions(actions: any[], target: polymer.Base) {
         let polymerContext: IPolymerActionContext;
         for (let i = 0, ii = actions.length; i < ii; i++) {

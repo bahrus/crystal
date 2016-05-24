@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>1.7</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
     <TypeScriptExperimentalDecorators>true</TypeScriptExperimentalDecorators>
     <TypeScriptEmitDecoratorMetadata>true</TypeScriptEmitDecoratorMetadata>
     <UseIISExpress>true</UseIISExpress>
@@ -54,7 +54,6 @@
     <TypeScriptCompile Include="TestElements\HogwartsConfig.ts" />
     <TypeScriptCompile Include="TestElements\hogwarts-elements.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-label.ts" />
-    <TypeScriptCompile Include="xtal-elements\xtal-location.ts" />
     <TypeScriptCompile Include="xtal-elements\js-xtal-set.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-lite-dom-proc.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-include.ts" />
@@ -97,7 +96,7 @@
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <TypeScriptOutFile />
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>

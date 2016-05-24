@@ -4,6 +4,7 @@
 
 module TestElements {
 
+
     interface IMyParentModel {
         myProp?: number;
         incrementMyProp?: () => void;

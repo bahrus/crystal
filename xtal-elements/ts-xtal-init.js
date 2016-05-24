@@ -19,6 +19,7 @@ var crystal;
             __extends(TSXtalInit, _super);
             function TSXtalInit() {
                 _super.apply(this, arguments);
+                this.isDecoratorElement = true;
             }
             TSXtalInit.prototype.attached = function () {
                 var _this = this;
@@ -43,6 +44,9 @@ var crystal;
             __decorate([
                 property()
             ], TSXtalInit.prototype, "innerTarget", void 0);
+            __decorate([
+                property()
+            ], TSXtalInit.prototype, "isDecoratorElement", void 0);
             TSXtalInit = __decorate([
                 component(crystal.tsXtalInitTagName),
                 template("<span style=\"display: none\">iah</span>")

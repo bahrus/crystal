@@ -10,6 +10,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 var TestElements;
 (function (TestElements) {
     var MyChildElement = (function (_super) {
@@ -19,7 +22,8 @@ var TestElements;
         }
         MyChildElement = __decorate([
             component("my-child-element"),
-            template("\n        <div style=\"background-color:#eeee77;left:30px;position:relative;width:500px\">\n            <div>My Child component</div>\n            <div>myProp: [[myProp]]</div>\n        </div>\n    ")
+            template("\n        <div style=\"background-color:#eeee77;left:30px;position:relative;width:500px\">\n            <div>My Child component</div>\n            <div>myProp: [[myProp]]</div>\n        </div>\n    "), 
+            __metadata('design:paramtypes', [])
         ], MyChildElement);
         return MyChildElement;
     }(polymer.Base));

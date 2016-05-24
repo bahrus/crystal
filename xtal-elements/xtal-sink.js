@@ -81,7 +81,7 @@ var crystal;
                 component('xtal-sink')
             ], XtalSink);
             return XtalSink;
-        })(polymer.Base);
+        }(polymer.Base));
         XtalSink.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));

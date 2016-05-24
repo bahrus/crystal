@@ -12,6 +12,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 var TestElements;
 (function (TestElements) {
     //#region abbreviations
@@ -46,10 +49,12 @@ var TestElements;
         __decorate([
             property({
                 observer: c.onMyPropChange
-            })
+            }), 
+            __metadata('design:type', Number)
         ], MyParentModel.prototype, "myProp", void 0);
         __decorate([
-            property()
+            property(), 
+            __metadata('design:type', TestElements.EmployeeInfo)
         ], MyParentModel.prototype, "myEmployee", void 0);
         __decorate([
             observe(c.myEmployee + '.*'),
@@ -58,7 +63,10 @@ var TestElements;
                     console.log(pc);
                 },
                 before: true
-            })
+            }), 
+            __metadata('design:type', Function), 
+            __metadata('design:paramtypes', [Object, Object]), 
+            __metadata('design:returntype', void 0)
         ], MyParentModel.prototype, "onMyEmployeeChange", null);
         return MyParentModel;
     }());
@@ -72,12 +80,16 @@ var TestElements;
             crystal.metaBind({
                 elementSelector: 'my-child-element',
                 setPath: c.myProp
-            })
+            }), 
+            __metadata('design:type', Function), 
+            __metadata('design:paramtypes', [Object, Object]), 
+            __metadata('design:returntype', void 0)
         ], MyParentElement.prototype, "onMyPropChange", null);
         MyParentElement = __decorate([
             behavior(MyParentModel),
             component("my-parent-element"),
-            template("\n        <div style=\"background-color:#cceeee\">\n            <div>[[" + c.message + "]]</div>\n            <div>myProp: [[" + c.myProp + "]]</div>\n            <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n            <div>Employee name: [[" + c.myEmployee_Name + "]]</div>\n            <div on-click=\"" + c.changeEmployeeName + "\">Change Employee Name</div>\n            <content></content>\n            <my-child-element></my-child-element>\n        </div>\n    ")
+            template("\n        <div style=\"background-color:#cceeee\">\n            <div>[[" + c.message + "]]</div>\n            <div>myProp: [[" + c.myProp + "]]</div>\n            <div on-click=\"" + c.incrementMyProp + "\">Increment myProp</div>\n            <div>Employee name: [[" + c.myEmployee_Name + "]]</div>\n            <div on-click=\"" + c.changeEmployeeName + "\">Change Employee Name</div>\n            <content></content>\n            <my-child-element></my-child-element>\n        </div>\n    "), 
+            __metadata('design:paramtypes', [])
         ], MyParentElement);
         return MyParentElement;
     }(polymer.Base));
