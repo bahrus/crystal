@@ -1,5 +1,6 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
+///<reference path='../../bower_components/jquery/jquery.d.ts'/>
 var crystal;
 (function (crystal) {
     var elements;
@@ -9,34 +10,41 @@ var crystal;
             attached: function () {
                 //debugger;
             },
+            data: null,
+            columns: null,
+            options: null,
+            grid: null,
+            gridDiv: null,
+            properties: {
+                height: {
+                    type: String,
+                    value: '500px',
+                },
+                width: {
+                    type: String,
+                    value: '600px'
+                },
+            },
             ready: function () {
-                var grid;
-                var columns = [
-                    { id: "title", name: "Title", field: "title" },
-                    { id: "duration", name: "Duration", field: "duration" },
-                    { id: "%", name: "% Complete", field: "percentComplete" },
-                    { id: "start", name: "Start", field: "start" },
-                    { id: "finish", name: "Finish", field: "finish" },
-                    { id: "effort-driven", name: "Effort Driven", field: "effortDriven" }
-                ];
-                var options = {
-                    enableCellNavigation: true,
-                    enableColumnReorder: false
-                };
-                $(function () {
-                    var data = [];
-                    for (var i = 0; i < 500; i++) {
-                        data[i] = {
-                            title: "Task " + i,
-                            duration: "5 days",
-                            percentComplete: Math.round(Math.random() * 100),
-                            start: "01/01/2009",
-                            finish: "01/05/2009",
-                            effortDriven: (i % 5 == 0)
-                        };
-                    }
-                    grid = new Slick.Grid("#myGrid", data, columns, options);
-                });
+                //var grid;
+                var thisGrid = this.$$('#grid');
+                var $thisGrid = $(thisGrid);
+                $thisGrid
+                    .css('height', this.height)
+                    .css('width', this.width);
+                this.gridDiv = $thisGrid;
+                // $(function () {
+                //
+                //     //var myGrid = document.querySelector('#myGrid');
+                //     //var $myGrid = $(myGrid);
+                //     //const thisGrid = Polymer.dom(this.root).querySelector('#grid');
+                //     //const $thisGrid = $(thisGrid);
+                //     //debugger;
+                //     grid = new Slick.Grid($thisGrid, data, columns, options);
+                // })
+            },
+            setInitialData: function (data, columns, gridOptions) {
+                this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
             }
         });
     })(elements = crystal.elements || (crystal.elements = {}));
