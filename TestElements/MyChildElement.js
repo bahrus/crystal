@@ -1,9 +1,4 @@
 /// <reference path="../bower_components/polymer-ts/polymer-ts.d.ts" />
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -15,18 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var TestElements;
 (function (TestElements) {
-    var MyChildElement = (function (_super) {
-        __extends(MyChildElement, _super);
-        function MyChildElement() {
-            _super.apply(this, arguments);
-        }
-        MyChildElement = __decorate([
-            component("my-child-element"),
-            template("\n        <div style=\"background-color:#eeee77;left:30px;position:relative;width:500px\">\n            <div>My Child component</div>\n            <div>myProp: [[myProp]]</div>\n        </div>\n    "), 
-            __metadata('design:paramtypes', [])
-        ], MyChildElement);
-        return MyChildElement;
-    }(polymer.Base));
+    let MyChildElement = class MyChildElement extends polymer.Base {
+    };
+    MyChildElement = __decorate([
+        component("my-child-element"),
+        template(`
+        <div style="background-color:#eeee77;left:30px;position:relative;width:500px">
+            <div>My Child component</div>
+            <div>myProp: [[myProp]]</div>
+        </div>
+    `), 
+        __metadata('design:paramtypes', [])
+    ], MyChildElement);
     MyChildElement.register();
 })(TestElements || (TestElements = {}));
 //# sourceMappingURL=MyChildElement.js.map

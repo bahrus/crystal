@@ -29,7 +29,7 @@ var polymer;
         function copyMembers(dest, source) {
             if (source === undefined || source === null)
                 return;
-            Object.keys(source).map(function (member) {
+            Object.keys(source).map((member) => {
                 // copy only if has not been defined
                 if (!dest.hasOwnProperty(member))
                     dest[member] = source[member];
@@ -135,9 +135,9 @@ var polymer;
         domModule.id = proto.is;
         var html = "";
         if (proto.style !== undefined)
-            html += "<style>" + proto.style + "</style>";
+            html += `<style>${proto.style}</style>`;
         if (proto.template !== undefined)
-            html += "<template>" + proto.template + "</template>";
+            html += `<template>${proto.template}</template>`;
         domModule.innerHTML = html;
         domModule.createdCallback();
     }
@@ -224,31 +224,31 @@ function component(tagname, extendsTag) {
 }
 // @extend decorator
 function extend(tagname) {
-    return function (target) {
+    return (target) => {
         target.prototype["extends"] = tagname;
     };
 }
 // @template decorator
 function template(templateString) {
-    return function (target) {
+    return (target) => {
         target.prototype["template"] = templateString;
     };
 }
 // @style decorator
 function style(styleString) {
-    return function (target) {
+    return (target) => {
         target.prototype["style"] = styleString;
     };
 }
 // @hostAttributes decorator
 function hostAttributes(attributes) {
-    return function (target) {
+    return (target) => {
         target.prototype["hostAttributes"] = attributes;
     };
 }
 // @property decorator with automatic name for computed props
 function property(ob) {
-    return function (target, propertyKey) {
+    return (target, propertyKey) => {
         target.properties = target.properties || {};
         if (typeof (target[propertyKey]) === "function") {
             // property is function, treat it as a computed property
@@ -266,7 +266,7 @@ function property(ob) {
 }
 // @computed decorator
 function computed(ob) {
-    return function (target, computedFuncName) {
+    return (target, computedFuncName) => {
         target.properties = target.properties || {};
         var propOb = ob || {};
         var getterName = "get_computed_" + computedFuncName;
@@ -281,24 +281,24 @@ function computed(ob) {
 }
 // @listen decorator
 function listen(eventName) {
-    return function (target, propertyKey) {
+    return (target, propertyKey) => {
         target.listeners = target.listeners || {};
         target.listeners[eventName] = propertyKey;
     };
 }
 // @behavior decorator
 function behavior(behaviorObject) {
-    return function (target) {
+    return (target) => {
         if (typeof (target) === "function") {
             // decorator applied externally, target is the class object
             target.prototype["behaviors"] = target.prototype["behaviors"] || [];
-            var beObject = behaviorObject.prototype === undefined ? behaviorObject : behaviorObject.prototype;
+            let beObject = behaviorObject.prototype === undefined ? behaviorObject : behaviorObject.prototype;
             target.prototype["behaviors"].push(beObject);
         }
         else {
             // decorator applied internally, target is class.prototype
             target.behaviors = target.behaviors || [];
-            var beObject = behaviorObject.prototype === undefined ? behaviorObject : behaviorObject.prototype;
+            let beObject = behaviorObject.prototype === undefined ? behaviorObject : behaviorObject.prototype;
             target.behaviors.push(beObject);
         }
     };
@@ -307,14 +307,14 @@ function behavior(behaviorObject) {
 function observe(observedProps) {
     if (observedProps.indexOf(",") > 0 || observedProps.indexOf(".") > 0) {
         // observing multiple properties or path
-        return function (target, observerFuncName) {
+        return (target, observerFuncName) => {
             target.observers = target.observers || [];
             target.observers.push(observerFuncName + "(" + observedProps + ")");
         };
     }
     else {
         // observing single property
-        return function (target, observerName) {
+        return (target, observerName) => {
             target.properties = target.properties || {};
             target.properties[observedProps] = target.properties[observedProps] || {};
             target.properties[observedProps].observer = observerName;

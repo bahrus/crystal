@@ -1,10 +1,5 @@
 ///<reference path="../bower_components/polymer-ts/polymer-ts.d.ts"/>
 ///<reference path="../crystal.ts"/>
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,85 +19,79 @@ var crystal;
         function rn(getter) {
             return crystal.getName(getter);
         }
-        var c = {
-            'href': rn(function (o) { return o.href; }),
-            'onHrefChange': rn(function (o) { return o.onHrefChange; }),
+        const c = {
+            'href': rn(o => o.href),
+            'onHrefChange': rn(o => o.onHrefChange),
         };
         //#endregion
         //endregion
-        var XtalInclude = (function (_super) {
-            __extends(XtalInclude, _super);
-            function XtalInclude() {
-                _super.apply(this, arguments);
-            }
-            XtalInclude.prototype.processTransformerTag = function (el, importHTML, link) {
+        let XtalInclude = class XtalInclude extends polymer.Base {
+            processTransformerTag(el, importHTML, link) {
                 if (!el)
                     return importHTML;
                 if (el.tagName === 'SCRIPT' && el.hasAttribute('xtal-include-transformer')) {
-                    var transformerFn = eval(el.innerHTML);
+                    const transformerFn = eval(el.innerHTML);
                     return transformerFn(importHTML, link, this);
                 }
                 return importHTML;
-            };
-            XtalInclude.prototype.onHrefChange = function (newVal, oldVal) {
-                var _this = this;
-                var link = this.importHref(this.href, function () {
-                    _this.async(function () {
-                        _this.style.display = 'inline-block';
-                        while (_this.childElementCount > 0) {
-                            Polymer.dom(_this).removeChild(_this.firstChild);
+            }
+            onHrefChange(newVal, oldVal) {
+                const link = this.importHref(this.href, () => {
+                    this.async(() => {
+                        this.style.display = 'inline-block';
+                        while (this.childElementCount > 0) {
+                            Polymer.dom(this).removeChild(this.firstChild);
                         }
-                        var children = [];
-                        if (_this.showUrl) {
-                            var directURL = document.createElement("a");
-                            directURL.setAttribute("href", _this.href);
-                            directURL.innerText = _this.href;
+                        const children = [];
+                        if (this.showUrl) {
+                            const directURL = document.createElement("a");
+                            directURL.setAttribute("href", this.href);
+                            directURL.innerText = this.href;
                             children.push(directURL);
                         }
-                        var importHTML = link.import.body.innerHTML;
-                        var firstHeadElement = link.import.head.firstElementChild;
-                        importHTML = _this.processTransformerTag(firstHeadElement, importHTML, link);
-                        if (_this.transformer) {
-                            var transformerFn = eval(_this.transformer); //TODO: safety check
-                            importHTML = transformerFn(importHTML, link, _this);
+                        let importHTML = link.import.body.innerHTML;
+                        const firstHeadElement = link.import.head.firstElementChild;
+                        importHTML = this.processTransformerTag(firstHeadElement, importHTML, link);
+                        if (this.transformer) {
+                            const transformerFn = eval(this.transformer); //TODO: safety check
+                            importHTML = transformerFn(importHTML, link, this);
                         }
                         //const lastBodyElement = link.import.body.lastElementChild;
-                        Polymer.dom(_this).innerHTML = importHTML;
+                        Polymer.dom(this).innerHTML = importHTML;
                     }, 1);
-                }, function () {
-                    console.log("error loading " + _this.href);
+                }, () => {
+                    console.log("error loading " + this.href);
                 }, this.asyncOpt);
-            };
-            __decorate([
-                property({
-                    observer: c.onHrefChange
-                }), 
-                __metadata('design:type', String)
-            ], XtalInclude.prototype, "href", void 0);
-            __decorate([
-                property({
-                    type: Boolean
-                }), 
-                __metadata('design:type', Boolean)
-            ], XtalInclude.prototype, "showUrl", void 0);
-            __decorate([
-                property({
-                    type: Boolean
-                }), 
-                __metadata('design:type', Boolean)
-            ], XtalInclude.prototype, "asyncOpt", void 0);
-            __decorate([
-                property({
-                    type: String
-                }), 
-                __metadata('design:type', String)
-            ], XtalInclude.prototype, "transformer", void 0);
-            XtalInclude = __decorate([
-                component('xtal-include', 'link'), 
-                __metadata('design:paramtypes', [])
-            ], XtalInclude);
-            return XtalInclude;
-        }(polymer.Base));
+            }
+        };
+        __decorate([
+            property({
+                observer: c.onHrefChange
+            }), 
+            __metadata('design:type', String)
+        ], XtalInclude.prototype, "href", void 0);
+        __decorate([
+            property({
+                type: Boolean
+            }), 
+            __metadata('design:type', Boolean)
+        ], XtalInclude.prototype, "showUrl", void 0);
+        __decorate([
+            property({
+                type: Boolean
+            }), 
+            __metadata('design:type', Boolean)
+        ], XtalInclude.prototype, "asyncOpt", void 0);
+        __decorate([
+            property({
+                type: String
+            }), 
+            __metadata('design:type', String)
+        ], XtalInclude.prototype, "transformer", void 0);
+        XtalInclude = __decorate([
+            component('xtal-include', 'link'), 
+            __metadata('design:paramtypes', [])
+        ], XtalInclude);
         XtalInclude.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));

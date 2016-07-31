@@ -65,4 +65,37 @@ module crystal.elements{
     }
 
     XtalSink.register();
+
+    const tes = (x: XtalSink) => `
+        <ts-xtal-init>
+    context =>{
+        const props: test.TSInitTest.ITBD = {
+            isNumberOdd: i => i % 2 === 1,
+            numbers: [0, 1, 2, 3],
+            clicked: false,
+            handleClick: function(e: Event){
+                this['lastClicked'] = e.target['number'];
+                this['clicked'] = true;
+            }
+        };
+        return props;
+    }
+</ts-xtal-init>
+
+<template is="dom-bind">
+    <h1>&lt;template is="dom-bind"&gt; Demo</h1>
+    <template is="dom-if" if="{{clicked}}">
+        <p>You last clicked on {{lastClicked}}.</p>
+    </template>
+    <template is="dom-repeat" items="{{numbers}}">
+        <p>
+        <div number="[[item]]" odd="[[isNumberOdd(item)]]" on-click="handleClick">[[item]]</div>
+        <template is="dom-if" if="{{isNumberOdd(item)}}">
+            (By the way, I'm odd.)
+        </template>
+        </p>
+    </template>
+</template>
+        
+    `
 }

@@ -83,6 +83,7 @@ var crystal;
             return XtalSink;
         }(polymer.Base));
         XtalSink.register();
+        var tes = function (x) { return "\n        <ts-xtal-init>\n    context =>{\n        const props: test.TSInitTest.ITBD = {\n            isNumberOdd: i => i % 2 === 1,\n            numbers: [0, 1, 2, 3],\n            clicked: false,\n            handleClick: function(e: Event){\n                this['lastClicked'] = e.target['number'];\n                this['clicked'] = true;\n            }\n        };\n        return props;\n    }\n</ts-xtal-init>\n\n<template is=\"dom-bind\">\n    <h1>&lt;template is=\"dom-bind\"&gt; Demo</h1>\n    <template is=\"dom-if\" if=\"{{clicked}}\">\n        <p>You last clicked on {{lastClicked}}.</p>\n    </template>\n    <template is=\"dom-repeat\" items=\"{{numbers}}\">\n        <p>\n        <div number=\"[[item]]\" odd=\"[[isNumberOdd(item)]]\" on-click=\"handleClick\">[[item]]</div>\n        <template is=\"dom-if\" if=\"{{isNumberOdd(item)}}\">\n            (By the way, I'm odd.)\n        </template>\n        </p>\n    </template>\n</template>\n        \n    "; };
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
 //# sourceMappingURL=xtal-sink.js.map

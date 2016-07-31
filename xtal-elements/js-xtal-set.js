@@ -1,10 +1,5 @@
 ///<reference path="../bower_components/polymer-ts/polymer-ts.d.ts"/>
 ///<reference path="../crystal.ts"/>
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -19,44 +14,38 @@ var crystal;
     var elements;
     (function (elements) {
         // Allow a DOM element inside light dom to set value in custom element #8 https://github.com/bahrus/crystal/issues/8
-        var XtalSet = (function (_super) {
-            __extends(XtalSet, _super);
-            function XtalSet() {
-                _super.apply(this, arguments);
-            }
-            XtalSet.prototype.attached = function () {
-                var _this = this;
-                var actions = crystal.evalInner(this);
-                this.async(function () {
-                    var target = crystal.nextNonScriptSibling(_this);
-                    if (_this.innerTarget) {
-                        target = target.querySelector(_this.innerTarget);
+        let XtalSet = class XtalSet extends polymer.Base {
+            attached() {
+                const actions = crystal.evalInner(this);
+                this.async(() => {
+                    let target = crystal.nextNonScriptSibling(this);
+                    if (this.innerTarget) {
+                        target = target.querySelector(this.innerTarget);
                     }
                     performLightDOMActions(actions, target);
                 }, 1);
-            };
-            __decorate([
-                property(), 
-                __metadata('design:type', String)
-            ], XtalSet.prototype, "innerTarget", void 0);
-            XtalSet = __decorate([
-                component('js-xtal-set'), 
-                __metadata('design:paramtypes', [])
-            ], XtalSet);
-            return XtalSet;
-        }(polymer.Base));
+            }
+        };
+        __decorate([
+            property(), 
+            __metadata('design:type', String)
+        ], XtalSet.prototype, "innerTarget", void 0);
+        XtalSet = __decorate([
+            component('js-xtal-set'), 
+            __metadata('design:paramtypes', [])
+        ], XtalSet);
         XtalSet.register();
         function performLightDOMActions(actions, target) {
-            var domActionContext;
-            for (var i = 0, ii = actions.length; i < ii; i++) {
-                var action = actions[i];
+            let domActionContext;
+            for (let i = 0, ii = actions.length; i < ii; i++) {
+                const action = actions[i];
                 if (Array.isArray(action)) {
                     performLightDOMActions(action, target);
                     continue;
                 }
-                var doFn = action.do;
+                const doFn = action.do;
                 if (doFn && typeof (doFn === 'function')) {
-                    var domElementAction = action;
+                    const domElementAction = action;
                     if (!domActionContext) {
                         domActionContext = {
                             element: target,
@@ -67,7 +56,7 @@ var crystal;
                     continue;
                 }
                 //#region add attributes / event handlers to dom element
-                for (var key in action) {
+                for (const key in action) {
                     //if (key.indexOf('on') === 0) {
                     //
                     //} else {

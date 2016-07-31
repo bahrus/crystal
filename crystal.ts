@@ -66,7 +66,17 @@ module crystal {
         val?: any;
     }
 
+    const test = x => 
+    `
+    <div>
+    ${
+        x => {
+            
+        }
+    }
     
+    </div>
+    `
 
 
     export const cachedObjects: { [key: string] : ISetObjectInfo } = { };

@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.9</TypeScriptToolsVersion>
     <TypeScriptExperimentalDecorators>true</TypeScriptExperimentalDecorators>
     <TypeScriptEmitDecoratorMetadata>true</TypeScriptEmitDecoratorMetadata>
     <UseIISExpress>true</UseIISExpress>
@@ -33,6 +33,7 @@
     <Content Include="remoteCommunication.html" />
     <Content Include="SiblingCommunication.html" />
     <Content Include="TestElements\MyParentElement.html" />
+    <Content Include="testScroll.html" />
     <Content Include="web.config" />
     <Content Include="xtal-elements\xtal-label.html" />
     <Content Include="xtal-elements\xtal-set.html" />
@@ -50,17 +51,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="AppDrawer.ts" />
     <TypeScriptCompile Include="crystal.ts" />
+    <TypeScriptCompile Include="TestElements\EmployeeInfo.ts" />
     <TypeScriptCompile Include="TestElements\HogwartsConfig.ts" />
-    <TypeScriptCompile Include="TestElements\hogwarts-elements.ts" />
+    <TypeScriptCompile Include="TestElements\MyChildElement.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-label.ts" />
     <TypeScriptCompile Include="xtal-elements\js-xtal-set.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-lite-dom-proc.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-include.ts" />
-    <TypeScriptCompile Include="TestElements\EmployeeInfo.ts" />
-    <TypeScriptCompile Include="TestElements\MyChildElement.ts" />
-    <TypeScriptCompile Include="TestElements\MyParentElement.ts" />
     <TypeScriptCompile Include="xtal-elements\js-xtal-init.ts" />
+    <TypeScriptCompile Include="xtal-elements\xtal-vscroll.ts" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
@@ -92,7 +93,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
