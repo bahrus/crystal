@@ -7,12 +7,10 @@ var crystal;
     (function (elements) {
         Polymer({
             is: 'xtal-xslick',
-            attached: function () {
-                //debugger;
-            },
             data: null,
             columns: null,
-            options: null,
+            gridOptions: null,
+            wcOptions: null,
             grid: null,
             gridDiv: null,
             properties: {
@@ -24,27 +22,34 @@ var crystal;
                     type: String,
                     value: '600px'
                 },
+                renderCount: {
+                    type: Number,
+                    value: 0,
+                    notify: true,
+                    reflectToAttribute: true,
+                }
             },
             ready: function () {
-                //var grid;
                 var thisGrid = this.$$('#grid');
                 var $thisGrid = $(thisGrid);
                 $thisGrid
                     .css('height', this.height)
                     .css('width', this.width);
                 this.gridDiv = $thisGrid;
-                // $(function () {
-                //
-                //     //var myGrid = document.querySelector('#myGrid');
-                //     //var $myGrid = $(myGrid);
-                //     //const thisGrid = Polymer.dom(this.root).querySelector('#grid');
-                //     //const $thisGrid = $(thisGrid);
-                //     //debugger;
-                //     grid = new Slick.Grid($thisGrid, data, columns, options);
-                // })
             },
-            setInitialData: function (data, columns, gridOptions) {
+            setInitialData: function (data, columns, gridOptions, wcOptions) {
+                this.data = data;
+                this.columns = columns;
+                this.gridOptions = gridOptions;
                 this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+                this.renderCount++;
+                return this.grid;
+            },
+            getGrid: function () {
+                return this.grid;
+            },
+            getGridDiv: function () {
+                return this.gridDiv;
             }
         });
     })(elements = crystal.elements || (crystal.elements = {}));
