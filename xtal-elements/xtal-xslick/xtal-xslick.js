@@ -27,6 +27,18 @@ var crystal;
                     value: 0,
                     notify: true,
                     reflectToAttribute: true,
+                },
+                clickedCellIndex: {
+                    type: Number,
+                    value: -1,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                clickedRowIndex: {
+                    type: Number,
+                    value: -1,
+                    notify: true,
+                    reflectToAttribute: true
                 }
             },
             ready: function () {
@@ -38,12 +50,28 @@ var crystal;
                 this.gridDiv = $thisGrid;
             },
             setInitialData: function (data, columns, gridOptions, wcOptions) {
+                var _this = this;
                 this.data = data;
                 this.columns = columns;
                 this.gridOptions = gridOptions;
                 this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+                var grid = this.grid;
+                if (wcOptions) {
+                    if (wcOptions.trackCurrentRow) {
+                        grid.onClick.subscribe(function (e) {
+                            var cell = grid.getCellFromEvent(e);
+                            _this.clickedCellIndex = cell.cell;
+                            _this.clickedRowIndex = cell.row;
+                        });
+                    }
+                }
                 this.renderCount++;
-                return this.grid;
+                return grid;
+            },
+            getSelectedRow: function () {
+                if (this.clickedRowIndex === -1)
+                    return null;
+                return this.data[this.clickedRowIndex];
             },
             getGrid: function () {
                 return this.grid;

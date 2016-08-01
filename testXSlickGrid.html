@@ -30,6 +30,9 @@
             enableCellNavigation: true,
             enableColumnReorder: false
         };
+        var wcOptions = {
+            trackCurrentRow: true,
+        };
         var data = [];
         for (var i = 0; i < 500; i++) {
             data[i] = {
@@ -41,7 +44,7 @@
                 effortDriven: (i % 5 == 0)
             };
         }
-        xslick.setInitialData(data, columns, options);
+        xslick.setInitialData(data, columns, options, wcOptions);
     </script>
 </body>
 </html>

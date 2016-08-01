@@ -4,7 +4,7 @@
 
 module crystal.elements {
     export interface IXtalXSlickOptions{
-
+        trackCurrentRow?:boolean;
     }
     Polymer({
         is: 'xtal-xslick',
@@ -28,6 +28,18 @@ module crystal.elements {
                 value: 0,
                 notify: true,
                 reflectToAttribute: true,
+            },
+            clickedCellIndex:{
+                type: Number,
+                value: -1,
+                notify: true,
+                reflectToAttribute: true
+            },
+            clickedRowIndex:{
+                type: Number,
+                value: -1,
+                notify: true,
+                reflectToAttribute: true
             }
         },
         ready: function() {
@@ -38,13 +50,27 @@ module crystal.elements {
                 .css('width', this.width);
             this.gridDiv = $thisGrid;
         },
-        setInitialData(data: any[], columns: Slick.Column<any>[], gridOptions: Slick.GridOptions<any>,  wcOptions?: IXtalXSlickOptions){
+        setInitialData(data: any[], columns: Slick.Column<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXtalXSlickOptions){
             this.data = data;
             this.columns = columns;
             this.gridOptions = gridOptions;
             this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+            const grid = this.grid;
+            if(wcOptions){
+                if(wcOptions.trackCurrentRow){
+                    grid.onClick.subscribe(e => {
+                        var cell = grid.getCellFromEvent(e);
+                        this.clickedCellIndex = cell.cell;
+                        this.clickedRowIndex = cell.row;
+                    });
+                }
+            }
             this.renderCount++;
-            return this.grid;
+            return grid;
+        },
+        getSelectedRow(){
+            if(this.clickedRowIndex === -1) return null;
+            return this.data[this.clickedRowIndex];
         },
         getGrid: function(){
             return this.grid;
