@@ -69,43 +69,41 @@ var crystal;
                     .css('width', this.width);
                 this.gridDiv = $thisGrid;
                 console.log(this.fillContainer);
-                if (this.fillContainerHeight) {
+                if (this.fillContainerWidth || this.fillContainerHeight) {
                     window.addEventListener('resize', function (e) {
-                        _this.debounce('fillContainerHeight', _this.fillContainerHeightImpl, 500);
+                        if (_this.fillContainerWidth && _this.fillContainerHeight) {
+                            _this.debounce('fillContainerBothDim', _this.fillContainerBothDimImpl, 500);
+                        }
+                        else if (_this.fillContainerHeight) {
+                            _this.debounce('fillContainerHeight', _this.fillContainerHeightImpl, 500);
+                        }
+                        else {
+                            _this.debounce('fillContainerWidth', _this.fillContainerWidthImpl, 500);
+                        }
                     });
                 }
-                if (this.fillContainerWidth) {
-                    window.addEventListener('resize', function (e) {
-                        _this.debounce('fillContainerWidth', _this.fillContainerWidthImpl, 500);
-                    });
-                }
+            },
+            fillContainerBothDimImpl: function () {
+                this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
+                this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
             },
             fillContainerHeightImpl: function () {
-                // console.log('in resize');
-                // const thisGrid = this.$$('#grid');
-                // const $thisGrid = $(thisGrid);
-                // const offsetTop = this.offsetTop;
-                // const containerHeight = this.parentElement.clientHeight;
-                // const thisHeight = containerHeight - offsetTop;
-                // if(thisHeight > 0){
-                //     $thisGrid.css('height', thisHeight);
-                //     this.grid.resizeCanvas();
-                // }
-                this.fillContainerXImpl('offsetTop', 'clientHeight', 'height');
+                this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', true);
             },
             fillContainerWidthImpl: function () {
-                this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width');
+                this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
             },
-            fillContainerXImpl: function (offsetDim, clientDim, cssDim) {
+            fillContainerXImpl: function (offsetDim, clientDim, cssDim, resize) {
                 var thisGrid = this.$$('#grid');
                 var $thisGrid = $(thisGrid);
                 var offset = this[offsetDim];
                 var containerLength = this.parentElement[clientDim];
                 var thisLength = containerLength - offset;
-                console.log(thisLength);
                 if (thisLength > 0) {
                     $thisGrid.css(cssDim, thisLength);
-                    this.grid.resizeCanvas();
+                    if (resize) {
+                        this.grid.resizeCanvas();
+                    }
                 }
             },
             setInitialData: function (data, columns, gridOptions, wcOptions) {

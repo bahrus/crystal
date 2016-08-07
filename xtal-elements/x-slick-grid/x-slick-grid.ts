@@ -71,44 +71,42 @@ module crystal.elements {
                 .css('width', this.width);
             this.gridDiv = $thisGrid;
             console.log(this.fillContainer);
-            if(this.fillContainerHeight){
-                window.addEventListener('resize', e =>{
-                    this.debounce('fillContainerHeight', this.fillContainerHeightImpl, 500);
+            if(this.fillContainerWidth || this.fillContainerHeight){
+                window.addEventListener('resize', e => {
+                    if(this.fillContainerWidth && this.fillContainerHeight) {
+                        this.debounce('fillContainerBothDim', this.fillContainerBothDimImpl, 500);
+                    }else if(this.fillContainerHeight){
+                        this.debounce('fillContainerHeight', this.fillContainerHeightImpl, 500);
+                    }else{ //width only
+                        this.debounce('fillContainerWidth', this.fillContainerWidthImpl, 500);
+                    }
                 });
+
             }
-            if(this.fillContainerWidth){
-                window.addEventListener('resize', e =>{
-                    this.debounce('fillContainerWidth', this.fillContainerWidthImpl, 500);
-                });
-            }
+
+        },
+        fillContainerBothDimImpl: function(){
+            this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
+            this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
         },
         fillContainerHeightImpl: function(){
-            // console.log('in resize');
-            // const thisGrid = this.$$('#grid');
-            // const $thisGrid = $(thisGrid);
-            // const offsetTop = this.offsetTop;
-            // const containerHeight = this.parentElement.clientHeight;
-            // const thisHeight = containerHeight - offsetTop;
-            // if(thisHeight > 0){
-            //     $thisGrid.css('height', thisHeight);
-            //     this.grid.resizeCanvas();
-            // }
-            this.fillContainerXImpl('offsetTop', 'clientHeight', 'height');
+            this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', true);
         },
         fillContainerWidthImpl: function(){
-            this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width');
+            this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
         },
-        fillContainerXImpl: function(offsetDim: string, clientDim: string , cssDim: string){
+        fillContainerXImpl: function(offsetDim: string, clientDim: string , cssDim: string, resize: boolean){
             const thisGrid = this.$$('#grid');
             const $thisGrid = $(thisGrid);
             const offset = this[offsetDim];
             const containerLength = this.parentElement[clientDim];
             const thisLength = containerLength - offset;
-            console.log(thisLength);
             if(thisLength > 0){
-
                 $thisGrid.css(cssDim, thisLength);
-                this.grid.resizeCanvas();
+                if(resize){
+                    this.grid.resizeCanvas();
+                }
+
             }
         },
         setInitialData(data: any[], columns: Slick.Column<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
