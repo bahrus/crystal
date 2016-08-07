@@ -3,17 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>XSlickGrid Test</title>
-    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <!--<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
 
     <!--<link rel="import" href="bower_components/polymer-ts/polymer-ts.html">-->
     <!--<script src="bower_components/jquery/jquery.min.js"></script>-->
     <!--<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>-->
     <!--<script src="bower_components/jquery.event/event.drag/jquery.event.drag.js"></script>-->
-    <link rel="import" href="bower_components/polymer/polymer.html">
-    <link rel="import" href="xtal-elements/x-slick-grid/x-slick-grid.html" />
+
 
 </head>
 <body>
+    <script>
+        (function() {
+            if ('registerElement' in document
+                    && 'import' in document.createElement('link')
+                    && 'content' in document.createElement('template')) {
+                // platform is good!
+            } else {
+                // polyfill the platform!
+                var e = document.createElement('script');
+                e.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+                document.body.appendChild(e);
+            }
+        })();
+
+    </script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="xtal-elements/x-slick-grid/x-slick-grid.html" />
 <!--<div id="myGrid" style="width:600px;height:500px;"></div>-->
     <x-slick-grid width="900px"></x-slick-grid>
     <script>
