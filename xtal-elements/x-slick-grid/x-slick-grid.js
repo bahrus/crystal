@@ -6,7 +6,7 @@ var crystal;
     var elements;
     (function (elements) {
         Polymer({
-            is: 'xtal-xslick',
+            is: 'x-slick-grid',
             data: null,
             //columns: null,
             get columns() {
@@ -105,4 +105,4 @@ var crystal;
         });
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
-//# sourceMappingURL=xtal-xslick.js.map
+//# sourceMappingURL=x-slick-grid.js.map

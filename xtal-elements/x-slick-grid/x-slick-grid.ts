@@ -3,12 +3,12 @@
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
 
 module crystal.elements {
-    export interface IXtalXSlickOptions{
+    export interface IXSlickGridOptions{
         trackCurrentRow?:boolean;
         trackColumnChanges?: boolean;
     }
     Polymer({
-        is: 'xtal-xslick',
+        is: 'x-slick-grid',
         data: null,
         //columns: null,
         get columns(){
@@ -63,7 +63,7 @@ module crystal.elements {
                 .css('width', this.width);
             this.gridDiv = $thisGrid;
         },
-        setInitialData(data: any[], columns: Slick.Column<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXtalXSlickOptions){
+        setInitialData(data: any[], columns: Slick.Column<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
             this.data = data;
             this.columns = columns;
             this.gridOptions = gridOptions;

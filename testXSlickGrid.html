@@ -10,15 +10,15 @@
     <!--<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>-->
     <!--<script src="bower_components/jquery.event/event.drag/jquery.event.drag.js"></script>-->
     <link rel="import" href="bower_components/polymer/polymer.html">
-    <link rel="import" href="xtal-elements/xtal-xslick/xtal-xslick.html" />
+    <link rel="import" href="xtal-elements/x-slick-grid/x-slick-grid.html" />
 
 </head>
 <body>
 <!--<div id="myGrid" style="width:600px;height:500px;"></div>-->
-    <xtal-xslick width="900px"></xtal-xslick>
+    <x-slick-grid width="900px"></x-slick-grid>
     <script>
         window.addEventListener('WebComponentsReady', function(e){
-            var xslick = document.querySelector('xtal-xslick');
+            var xslick = document.querySelector('x-slick-grid');
             var columns = [
                 {id: "title", name: "Title", field: "title"},
                 {id: "duration", name: "Duration", field: "duration"},
