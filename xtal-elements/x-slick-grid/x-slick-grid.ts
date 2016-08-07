@@ -27,7 +27,11 @@ module crystal.elements {
                 type: String,
                 value: '600px'
             },
-            fillContainer:{
+            fillContainerHeight:{
+                type: Boolean,
+                value: false
+            },
+            fillContainerWidth:{
                 type: Boolean,
                 value: false
             },
@@ -67,23 +71,44 @@ module crystal.elements {
                 .css('width', this.width);
             this.gridDiv = $thisGrid;
             console.log(this.fillContainer);
-            if(this.fillContainer){
-                console.log('add listener');
+            if(this.fillContainerHeight){
                 window.addEventListener('resize', e =>{
-                    this.debounce('fillContainer', () => {
-                        console.log('in resize');
-                        const offsetTop = this.offsetTop;
-                        const containerHeight = this.parentElement.clientHeight;
-                        const thisHeight = containerHeight - offsetTop;
-                        if(thisHeight > 0){
-                            $thisGrid.css('height', thisHeight);
-                            this.grid.resizeCanvas();
-                        }
-                    }, 500);
-
-
-
+                    this.debounce('fillContainerHeight', this.fillContainerHeightImpl, 500);
                 });
+            }
+            if(this.fillContainerWidth){
+                window.addEventListener('resize', e =>{
+                    this.debounce('fillContainerWidth', this.fillContainerWidthImpl, 500);
+                });
+            }
+        },
+        fillContainerHeightImpl: function(){
+            // console.log('in resize');
+            // const thisGrid = this.$$('#grid');
+            // const $thisGrid = $(thisGrid);
+            // const offsetTop = this.offsetTop;
+            // const containerHeight = this.parentElement.clientHeight;
+            // const thisHeight = containerHeight - offsetTop;
+            // if(thisHeight > 0){
+            //     $thisGrid.css('height', thisHeight);
+            //     this.grid.resizeCanvas();
+            // }
+            this.fillContainerXImpl('offsetTop', 'clientHeight', 'height');
+        },
+        fillContainerWidthImpl: function(){
+            this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width');
+        },
+        fillContainerXImpl: function(offsetDim: string, clientDim: string , cssDim: string){
+            const thisGrid = this.$$('#grid');
+            const $thisGrid = $(thisGrid);
+            const offset = this[offsetDim];
+            const containerLength = this.parentElement[clientDim];
+            const thisLength = containerLength - offset;
+            console.log(thisLength);
+            if(thisLength > 0){
+
+                $thisGrid.css(cssDim, thisLength);
+                this.grid.resizeCanvas();
             }
         },
         setInitialData(data: any[], columns: Slick.Column<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
@@ -112,6 +137,12 @@ module crystal.elements {
                         this.numberOfOrderChanges++;
                     });
                 }
+            }
+            if(this.fillContainerHeight){
+                this.fillContainerHeightImpl();
+            }
+            if(this.fillContainerWidth){
+                this.fillContainerWidthImpl();
             }
             this.renderCount++;
             return grid;

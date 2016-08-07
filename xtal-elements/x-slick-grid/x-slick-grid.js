@@ -25,7 +25,11 @@ var crystal;
                     type: String,
                     value: '600px'
                 },
-                fillContainer: {
+                fillContainerHeight: {
+                    type: Boolean,
+                    value: false
+                },
+                fillContainerWidth: {
                     type: Boolean,
                     value: false
                 },
@@ -65,20 +69,43 @@ var crystal;
                     .css('width', this.width);
                 this.gridDiv = $thisGrid;
                 console.log(this.fillContainer);
-                if (this.fillContainer) {
-                    console.log('add listener');
+                if (this.fillContainerHeight) {
                     window.addEventListener('resize', function (e) {
-                        _this.debounce('fillContainer', function () {
-                            console.log('in resize');
-                            var offsetTop = _this.offsetTop;
-                            var containerHeight = _this.parentElement.clientHeight;
-                            var thisHeight = containerHeight - offsetTop;
-                            if (thisHeight > 0) {
-                                $thisGrid.css('height', thisHeight);
-                                _this.grid.resizeCanvas();
-                            }
-                        }, 500);
+                        _this.debounce('fillContainerHeight', _this.fillContainerHeightImpl, 500);
                     });
+                }
+                if (this.fillContainerWidth) {
+                    window.addEventListener('resize', function (e) {
+                        _this.debounce('fillContainerWidth', _this.fillContainerWidthImpl, 500);
+                    });
+                }
+            },
+            fillContainerHeightImpl: function () {
+                // console.log('in resize');
+                // const thisGrid = this.$$('#grid');
+                // const $thisGrid = $(thisGrid);
+                // const offsetTop = this.offsetTop;
+                // const containerHeight = this.parentElement.clientHeight;
+                // const thisHeight = containerHeight - offsetTop;
+                // if(thisHeight > 0){
+                //     $thisGrid.css('height', thisHeight);
+                //     this.grid.resizeCanvas();
+                // }
+                this.fillContainerXImpl('offsetTop', 'clientHeight', 'height');
+            },
+            fillContainerWidthImpl: function () {
+                this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width');
+            },
+            fillContainerXImpl: function (offsetDim, clientDim, cssDim) {
+                var thisGrid = this.$$('#grid');
+                var $thisGrid = $(thisGrid);
+                var offset = this[offsetDim];
+                var containerLength = this.parentElement[clientDim];
+                var thisLength = containerLength - offset;
+                console.log(thisLength);
+                if (thisLength > 0) {
+                    $thisGrid.css(cssDim, thisLength);
+                    this.grid.resizeCanvas();
                 }
             },
             setInitialData: function (data, columns, gridOptions, wcOptions) {
@@ -108,6 +135,12 @@ var crystal;
                             _this.numberOfOrderChanges++;
                         });
                     }
+                }
+                if (this.fillContainerHeight) {
+                    this.fillContainerHeightImpl();
+                }
+                if (this.fillContainerWidth) {
+                    this.fillContainerWidthImpl();
                 }
                 this.renderCount++;
                 return grid;
