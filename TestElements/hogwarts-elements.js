@@ -11,9 +11,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 var TestElements;
 (function (TestElements) {
     var RonWeasley = (function (_super) {
@@ -25,13 +22,11 @@ var TestElements;
         __decorate([
             property({
                 notify: true
-            }), 
-            __metadata('design:type', Object)
+            })
         ], RonWeasley.prototype, "girlfriend", void 0);
         RonWeasley = __decorate([
             component('ron-weasley'),
-            template("\n        <div>Ron is dating {{girlfriend}}</span>\n        <div>Ron knows Ginny is dating {{ginnyBoyfriend}}</div>\n    "), 
-            __metadata('design:paramtypes', [])
+            template("\n        <div>Ron is dating {{girlfriend}}</span>\n        <div>Ron knows Ginny is dating {{ginnyBoyfriend}}</div>\n    ")
         ], RonWeasley);
         return RonWeasley;
     }(polymer.Base));
@@ -45,13 +40,11 @@ var TestElements;
         __decorate([
             property({
                 notify: true
-            }), 
-            __metadata('design:type', Object)
+            })
         ], GinnyWeasley.prototype, "boyfriend", void 0);
         GinnyWeasley = __decorate([
             component('ginny-weasley'),
-            template("\n        <div>Ginny is dating {{boyfriend}}</div>\n    "), 
-            __metadata('design:paramtypes', [])
+            template("\n        <div>Ginny is dating {{boyfriend}}</div>\n    ")
         ], GinnyWeasley);
         return GinnyWeasley;
     }(polymer.Base));
@@ -68,29 +61,23 @@ var TestElements;
             property({
                 observer: 'onNewOwlMessage',
                 notify: true,
-            }), 
-            __metadata('design:type', Object)
+            })
         ], HarryPotter.prototype, "owlMessage", void 0);
         __decorate([
             crystal.metaBind({
                 elementSelector: 'siriusMessanger',
                 setPath: 'messageFromHarry',
                 targetsMayAppearLater: true,
-            }), 
-            __metadata('design:type', Function), 
-            __metadata('design:paramtypes', [String, String]), 
-            __metadata('design:returntype', void 0)
+            })
         ], HarryPotter.prototype, "onNewOwlMessage", null);
         __decorate([
             property({
                 notify: true,
-            }), 
-            __metadata('design:type', Object)
+            })
         ], HarryPotter.prototype, "flooMessage", void 0);
         HarryPotter = __decorate([
             component('harry-potter'),
-            template("\n        <table>\n            <tr>\n                <td>Owl Message: </td>\n                <td>\n                    <input type='text' value=\"{{owlMessage::input}}\"/>\n                </td>\n            </tr>\n            <tr>\n                <td>Floo Message: </td>\n                <td><input type='text' value=\"{{flooMessage::input}}\"/></td>\n            </tr>\n        </table>\n    "), 
-            __metadata('design:paramtypes', [])
+            template("\n        <table>\n            <tr>\n                <td>Owl Message: </td>\n                <td>\n                    <input type='text' value=\"{{owlMessage::input}}\"/>\n                </td>\n            </tr>\n            <tr>\n                <td>Floo Message: </td>\n                <td><input type='text' value=\"{{flooMessage::input}}\"/></td>\n            </tr>\n        </table>\n    ")
         ], HarryPotter);
         return HarryPotter;
     }(polymer.Base));
@@ -101,13 +88,11 @@ var TestElements;
             _super.apply(this, arguments);
         }
         __decorate([
-            property(), 
-            __metadata('design:type', Object)
+            property()
         ], SiriusBlack.prototype, "messageFromHarry", void 0);
         SiriusBlack = __decorate([
             component('sirius-black'),
-            template("\n        <span>Message received from Harry: {{messageFromHarry}}</span>\n    "), 
-            __metadata('design:paramtypes', [])
+            template("\n        <span>Message received from Harry: {{messageFromHarry}}</span>\n    ")
         ], SiriusBlack);
         return SiriusBlack;
     }(polymer.Base));

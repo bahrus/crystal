@@ -18,14 +18,14 @@ var crystal;
         };
     }
     ;
-    const fnSignature = 'return ';
-    const fnSignatureLn = fnSignature.length;
+    var fnSignature = 'return ';
+    var fnSignatureLn = fnSignature.length;
     function getMemberName(fnString) {
-        const iPosReturn = fnString.indexOf(fnSignature);
+        var iPosReturn = fnString.indexOf(fnSignature);
         fnString = fnString.substr(iPosReturn + fnSignatureLn);
-        const iPosSemi = fnString.indexOf(';');
+        var iPosSemi = fnString.indexOf(';');
         fnString = fnString.substr(0, iPosSemi);
-        const iPosDot = fnString.indexOf('.');
+        var iPosDot = fnString.indexOf('.');
         fnString = fnString.substr(iPosDot + 1);
         return fnString;
     }
@@ -33,43 +33,44 @@ var crystal;
         return getMemberName(getter.toString());
     }
     crystal.getName = getName;
-    const test = x => `
-    <div>
-    ${x => {
-    }}
-    
-    </div>
-    `;
+    var test = function (x) {
+        return ("\n    <div>\n    " + function (x) {
+        } + "\n    \n    </div>\n    ");
+    };
     crystal.cachedObjects = {};
     function metaBind(bindInfo) {
         return function metaBind(target, propertyKey, descriptor) {
             if (!descriptor) {
                 descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
             }
-            const originalMethod = descriptor.value;
+            var originalMethod = descriptor.value;
             // NOTE: Do not use arrow syntax here. Use a function expression in
             // order to use the correct value of `this` in this method (see notes below)
-            descriptor.value = function (...args) {
+            descriptor.value = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
                 var result = originalMethod.apply(this, args); // run and store the result
-                const htmlElement = this;
-                let elementSelector = bindInfo.elementSelector;
-                const valToSet = args[0];
+                var htmlElement = this;
+                var elementSelector = bindInfo.elementSelector;
+                var valToSet = args[0];
                 if (bindInfo.targetsMayAppearLater) {
                     crystal.cachedObjects[elementSelector] = {
                         path: bindInfo.setPath,
                         val: valToSet,
                     };
-                    elementSelector = `.${crystal.labelTagName}-${bindInfo.elementSelector}`;
+                    elementSelector = "." + crystal.labelTagName + "-" + bindInfo.elementSelector;
                 }
-                let targetEls;
+                var targetEls;
                 if (bindInfo.internalOnly) {
                     targetEls = htmlElement.querySelectorAll(elementSelector);
                 }
                 else {
                     targetEls = document.querySelectorAll(elementSelector);
                 }
-                for (let i = 0, ii = targetEls.length; i < ii; i++) {
-                    let targetEl = targetEls[i];
+                for (var i = 0, ii = targetEls.length; i < ii; i++) {
+                    var targetEl = targetEls[i];
                     targetEl.set(bindInfo.setPath, valToSet);
                 }
                 return result; // return the result of the original method
@@ -79,9 +80,9 @@ var crystal;
     }
     crystal.metaBind = metaBind;
     function performCustElActions(actions, target) {
-        let polymerContext;
-        for (let i = 0, ii = actions.length; i < ii; i++) {
-            const action = actions[i];
+        var polymerContext;
+        for (var i = 0, ii = actions.length; i < ii; i++) {
+            var action = actions[i];
             if (Array.isArray(action)) {
                 performCustElActions(action, target);
                 continue;
@@ -89,9 +90,9 @@ var crystal;
             if (action.debug) {
                 debugger;
             }
-            const doFn = action.do;
+            var doFn = action.do;
             if (doFn && typeof (doFn === 'function')) {
-                const polymerAction = action;
+                var polymerAction = action;
                 if (!polymerContext) {
                     polymerContext = {
                         element: target,
@@ -102,10 +103,10 @@ var crystal;
                 continue;
             }
             //#region merge object into custom element
-            for (const key in action) {
+            for (var key in action) {
                 if (target.get && target.set) {
-                    const currVal = target.get(key);
-                    const newOrExtendedVal = action[key];
+                    var currVal = target.get(key);
+                    var newOrExtendedVal = action[key];
                     if (!currVal) {
                         target.set(key, newOrExtendedVal);
                     }
@@ -129,8 +130,8 @@ var crystal;
             if (!descriptor) {
                 descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
             }
-            const originalMethod = descriptor.value;
-            const polymerContext = {
+            var originalMethod = descriptor.value;
+            var polymerContext = {
                 element: target,
                 action: action,
                 methodName: propertyKey,
@@ -138,7 +139,11 @@ var crystal;
             };
             // NOTE: Do not use arrow syntax here. Use a function expression in
             // order to use the correct value of `this` in this method (see notes below)
-            descriptor.value = function (...args) {
+            descriptor.value = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
                 polymerContext.args = args;
                 if (action.before) {
                     polymerContext.isBeforeMethod = true;
@@ -169,16 +174,16 @@ var crystal;
         }
     }
     function extend(dest, obj, deep) {
-        const h = dest.$$hashKey;
+        var h = dest.$$hashKey;
         //for (let i = 0, ii = src.length; i < ii; ++i) {
         //const obj = src[i];
         if ((typeof obj !== 'object') && (typeof obj !== 'function')) {
             return;
         }
-        const keys = Object.keys(obj);
-        for (let j = 0, jj = keys.length; j < jj; j++) {
-            const key = keys[j];
-            const src = obj[key];
+        var keys = Object.keys(obj);
+        for (var j = 0, jj = keys.length; j < jj; j++) {
+            var key = keys[j];
+            var src = obj[key];
             if (deep && (typeof src === 'object')) {
                 if (src instanceof Date) {
                     dest[key] = new Date(src.valueOf());
@@ -201,8 +206,8 @@ var crystal;
     //#endregion
     //#region custom element helpers
     function nextNonScriptSibling(el) {
-        let nextElement = el.nextElementSibling;
-        let tagName = nextElement.tagName;
+        var nextElement = el.nextElementSibling;
+        var tagName = nextElement.tagName;
         while (nextElement) {
             //let bKeepGoing = false
             switch (tagName) {
@@ -220,9 +225,9 @@ var crystal;
     }
     crystal.nextNonScriptSibling = nextNonScriptSibling;
     function nextDomBindElement(el) {
-        let nextElement = el.nextElementSibling;
+        var nextElement = el.nextElementSibling;
         while (nextElement) {
-            const isAttr = nextElement.getAttribute('is');
+            var isAttr = nextElement.getAttribute('is');
             if (isAttr && (isAttr == 'dom-bind')) {
                 break;
             }
@@ -232,14 +237,14 @@ var crystal;
     }
     crystal.nextDomBindElement = nextDomBindElement;
     function evalInner(element, isTS) {
-        let inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
+        var inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
         if (isTS) {
             inner = util.stripTypings(inner);
         }
-        const actionGetter = eval(inner);
-        let actions;
+        var actionGetter = eval(inner);
+        var actions;
         if (typeof actionGetter === 'function') {
-            const context = {
+            var context = {
                 element: element,
             };
             actions = actionGetter(context);
@@ -257,13 +262,13 @@ var crystal;
     }
     crystal.readStringConstant = readStringConstant;
     function CoordinateDataBetweenElementsActionImpl(context) {
-        let coordinator = context.action;
-        window.addEventListener('WebComponentsReady', e => {
+        var coordinator = context.action;
+        window.addEventListener('WebComponentsReady', function (e) {
             // any code that depends on polymer here
-            const he = context.element;
-            const act = context.action;
-            const watchPath = Polymer['CaseMap'].camelToDashCase(act.watchPath);
-            he.addEventListener(watchPath + '-changed', e => {
+            var he = context.element;
+            var act = context.action;
+            var watchPath = Polymer['CaseMap'].camelToDashCase(act.watchPath);
+            he.addEventListener(watchPath + '-changed', function (e) {
                 debugger;
             });
         });
@@ -274,13 +279,13 @@ var crystal;
     (function (util) {
         function stripTypings(text) {
             //const tokenArray = multiSplit(text, [';', ','])
-            const tokenArray = text.split(' ');
-            for (let i = 0, ii = tokenArray.length; i < ii; i++) {
-                const token = tokenArray[i];
+            var tokenArray = text.split(' ');
+            for (var i = 0, ii = tokenArray.length; i < ii; i++) {
+                var token = tokenArray[i];
                 switch (token) {
                     case 'const':
                         if (i + 2 < ii) {
-                            const nextToken = tokenArray[i + 1];
+                            var nextToken = tokenArray[i + 1];
                             if (nextToken.indexOf(':') > -1) {
                                 tokenArray[i + 1] = nextToken.replace(':', '');
                                 tokenArray[i + 2] = '';
@@ -289,16 +294,16 @@ var crystal;
                         continue;
                 }
             }
-            const text2 = tokenArray.join(' ');
-            const tokenArray2 = splitPairs(text2, { lhs: '(', rhs: ')' });
-            for (let i = 0, ii = tokenArray2.length; i < ii; i++) {
-                const token = tokenArray2[i];
+            var text2 = tokenArray.join(' ');
+            var tokenArray2 = splitPairs(text2, { lhs: '(', rhs: ')' });
+            for (var i = 0, ii = tokenArray2.length; i < ii; i++) {
+                var token = tokenArray2[i];
                 if (token === '(' && i + 2 < ii) {
                     if (tokenArray2[i + 2] != ')') {
                         throw "Invalid expression";
                     }
-                    const args = tokenArray2[i + 1].split(',');
-                    const newArgs = args.map(s => substringBefore(s, ';'));
+                    var args = tokenArray2[i + 1].split(',');
+                    var newArgs = args.map(function (s) { return substringBefore(s, ';'); });
                     tokenArray2[i + 1] = newArgs.join(',');
                 }
             }
@@ -306,10 +311,10 @@ var crystal;
         }
         util.stripTypings = stripTypings;
         function splitPairs(text, pair) {
-            const returnObj = [];
-            let region = [];
-            for (let i = 0, ii = text.length; i < ii; i++) {
-                const chr = text[i];
+            var returnObj = [];
+            var region = [];
+            for (var i = 0, ii = text.length; i < ii; i++) {
+                var chr = text[i];
                 switch (chr) {
                     case pair.rhs:
                     case pair.lhs:
@@ -328,7 +333,7 @@ var crystal;
             return returnObj;
         }
         function substringBefore(value, search) {
-            const iPos = value.indexOf(search);
+            var iPos = value.indexOf(search);
             if (iPos < -1)
                 return value;
             return value.substr(0, iPos);

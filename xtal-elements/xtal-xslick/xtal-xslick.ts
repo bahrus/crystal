@@ -5,11 +5,15 @@
 module crystal.elements {
     export interface IXtalXSlickOptions{
         trackCurrentRow?:boolean;
+        trackColumnChanges?: boolean;
     }
     Polymer({
         is: 'xtal-xslick',
         data: null,
-        columns: null,
+        //columns: null,
+        get columns(){
+            return this.grid.getColumns();
+        },
         gridOptions: null,
         wcOptions: null,
         grid: null,
@@ -31,16 +35,25 @@ module crystal.elements {
             },
             clickedCellIndex:{
                 type: Number,
-                value: -1,
                 notify: true,
                 reflectToAttribute: true
             },
             clickedRowIndex:{
                 type: Number,
-                value: -1,
+                notify: true,
+                reflectToAttribute: true
+            },
+            numberOfWidthDeltas:{
+                type: Number,
+                notify: true,
+                reflectToAttribute: true
+            },
+            numberOfOrderChanges:{
+                type: Number,
                 notify: true,
                 reflectToAttribute: true
             }
+
         },
         ready: function() {
             const thisGrid = this.$$('#grid');
@@ -58,10 +71,22 @@ module crystal.elements {
             const grid = this.grid;
             if(wcOptions){
                 if(wcOptions.trackCurrentRow){
+                    this.clickedCellIndex = -1;
+                    this.clickedRowIndex = -1;
                     grid.onClick.subscribe(e => {
                         var cell = grid.getCellFromEvent(e);
                         this.clickedCellIndex = cell.cell;
                         this.clickedRowIndex = cell.row;
+                    });
+                }
+                if(wcOptions.trackColumnChanges){
+                    this.numberOfWidthDeltas = 0;
+                    this.numberOfOrderChanges = 0;
+                    grid.onColumnsResized.subscribe(e=>{
+                        this.numberOfWidthDeltas++;
+                    });
+                    grid.onColumnsReordered.subscribe(e => {
+                        this.numberOfOrderChanges++;
                     });
                 }
             }
