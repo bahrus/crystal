@@ -27,6 +27,10 @@ module crystal.elements {
                 type: String,
                 value: '600px'
             },
+            fillConainer:{
+                type: Boolean,
+                value: false
+            },
             renderCount:{
                 type: Number,
                 value: 0,
@@ -62,6 +66,9 @@ module crystal.elements {
                 .css('height', this.height)
                 .css('width', this.width);
             this.gridDiv = $thisGrid;
+            if(this.fillConainer){
+
+            }
         },
         setInitialData(data: any[], columns: Slick.Column<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
             this.data = data;

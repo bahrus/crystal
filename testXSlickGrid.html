@@ -29,42 +29,47 @@
 
     </script>
     <link rel="import" href="bower_components/polymer/polymer.html">
-    <link rel="import" href="xtal-elements/x-slick-grid/x-slick-grid.html" />
-<!--<div id="myGrid" style="width:600px;height:500px;"></div>-->
-    <x-slick-grid width="900px"></x-slick-grid>
-    <script>
-        window.addEventListener('WebComponentsReady', function(e){
-            var xslick = document.querySelector('x-slick-grid');
-            var columns = [
-                {id: "title", name: "Title", field: "title"},
-                {id: "duration", name: "Duration", field: "duration"},
-                {id: "%", name: "% Complete", field: "percentComplete"},
-                {id: "start", name: "Start", field: "start"},
-                {id: "finish", name: "Finish", field: "finish"},
-                {id: "effort-driven", name: "Effort Driven", field: "effortDriven"}
-            ];
 
-            var options = {
-                enableCellNavigation: true,
-                enableColumnReorder: false
+    <link rel="import" href="xtal-elements/x-slick-grid/x-slick-grid.html" />
+    <x-slick-grid width="500px" height="500px"></x-slick-grid>
+    <script>
+        var xslick = document.querySelector('x-slick-grid');
+        var columns = [
+            {id: "title", name: "Title", field: "title"},
+            {id: "duration", name: "Duration", field: "duration"},
+            {id: "%", name: "% Complete", field: "percentComplete"},
+            {id: "start", name: "Start", field: "start"},
+            {id: "finish", name: "Finish", field: "finish"},
+            {id: "effort-driven", name: "Effort Driven", field: "effortDriven"}
+        ];
+
+        var options = {
+            enableCellNavigation: true,
+            enableColumnReorder: false
+        };
+        var wcOptions = {
+            trackCurrentRow: true,
+            trackColumnChanges: true,
+        };
+        var data = [];
+        for (var i = 0; i < 500; i++) {
+            data[i] = {
+                title: "Task " + i,
+                duration: "5 days",
+                percentComplete: Math.round(Math.random() * 100),
+                start: "01/01/2009",
+                finish: "01/05/2009",
+                effortDriven: (i % 5 == 0)
             };
-            var wcOptions = {
-                trackCurrentRow: true,
-                trackColumnChanges: true,
-            };
-            var data = [];
-            for (var i = 0; i < 500; i++) {
-                data[i] = {
-                    title: "Task " + i,
-                    duration: "5 days",
-                    percentComplete: Math.round(Math.random() * 100),
-                    start: "01/01/2009",
-                    finish: "01/05/2009",
-                    effortDriven: (i % 5 == 0)
-                };
-            }
+        }
+        if(xslick.setInitialData){
             xslick.setInitialData(data, columns, options, wcOptions);
-        });
+        }else{
+            window.addEventListener('WebComponentsReady', function(e){
+                xslick.setInitialData(data, columns, options, wcOptions);
+            });
+        }
+
 
     </script>
 </body>

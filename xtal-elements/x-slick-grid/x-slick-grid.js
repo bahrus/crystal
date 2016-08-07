@@ -25,6 +25,10 @@ var crystal;
                     type: String,
                     value: '600px'
                 },
+                fillConainer: {
+                    type: Boolean,
+                    value: false
+                },
                 renderCount: {
                     type: Number,
                     value: 0,
@@ -59,6 +63,8 @@ var crystal;
                     .css('height', this.height)
                     .css('width', this.width);
                 this.gridDiv = $thisGrid;
+                if (this.fillConainer) {
+                }
             },
             setInitialData: function (data, columns, gridOptions, wcOptions) {
                 var _this = this;
