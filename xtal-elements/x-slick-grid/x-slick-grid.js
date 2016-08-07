@@ -25,7 +25,7 @@ var crystal;
                     type: String,
                     value: '600px'
                 },
-                fillConainer: {
+                fillContainer: {
                     type: Boolean,
                     value: false
                 },
@@ -57,13 +57,28 @@ var crystal;
                 }
             },
             ready: function () {
+                var _this = this;
                 var thisGrid = this.$$('#grid');
                 var $thisGrid = $(thisGrid);
                 $thisGrid
                     .css('height', this.height)
                     .css('width', this.width);
                 this.gridDiv = $thisGrid;
-                if (this.fillConainer) {
+                console.log(this.fillContainer);
+                if (this.fillContainer) {
+                    console.log('add listener');
+                    window.addEventListener('resize', function (e) {
+                        _this.debounce('fillContainer', function () {
+                            console.log('in resize');
+                            var offsetTop = _this.offsetTop;
+                            var containerHeight = _this.parentElement.clientHeight;
+                            var thisHeight = containerHeight - offsetTop;
+                            if (thisHeight > 0) {
+                                $thisGrid.css('height', thisHeight);
+                                _this.grid.resizeCanvas();
+                            }
+                        }, 500);
+                    });
                 }
             },
             setInitialData: function (data, columns, gridOptions, wcOptions) {

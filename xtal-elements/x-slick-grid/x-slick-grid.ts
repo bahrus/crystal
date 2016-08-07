@@ -27,7 +27,7 @@ module crystal.elements {
                 type: String,
                 value: '600px'
             },
-            fillConainer:{
+            fillContainer:{
                 type: Boolean,
                 value: false
             },
@@ -66,8 +66,24 @@ module crystal.elements {
                 .css('height', this.height)
                 .css('width', this.width);
             this.gridDiv = $thisGrid;
-            if(this.fillConainer){
+            console.log(this.fillContainer);
+            if(this.fillContainer){
+                console.log('add listener');
+                window.addEventListener('resize', e =>{
+                    this.debounce('fillContainer', () => {
+                        console.log('in resize');
+                        const offsetTop = this.offsetTop;
+                        const containerHeight = this.parentElement.clientHeight;
+                        const thisHeight = containerHeight - offsetTop;
+                        if(thisHeight > 0){
+                            $thisGrid.css('height', thisHeight);
+                            this.grid.resizeCanvas();
+                        }
+                    }, 500);
 
+
+
+                });
             }
         },
         setInitialData(data: any[], columns: Slick.Column<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){

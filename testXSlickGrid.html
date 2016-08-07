@@ -12,7 +12,7 @@
 
 
 </head>
-<body>
+<body style="margin:0">
     <script>
         (function() {
             if ('registerElement' in document
@@ -31,7 +31,12 @@
     <link rel="import" href="bower_components/polymer/polymer.html">
 
     <link rel="import" href="xtal-elements/x-slick-grid/x-slick-grid.html" />
-    <x-slick-grid width="500px" height="500px"></x-slick-grid>
+    <div style="background-color: greenyellow; width:100%; height: 100%;position:absolute">
+        <div style="height:100px">i am here</div>
+        <x-slick-grid width="500px" height="500px" fill-container="true"></x-slick-grid>
+
+    </div>
+
     <script>
         var xslick = document.querySelector('x-slick-grid');
         var columns = [
