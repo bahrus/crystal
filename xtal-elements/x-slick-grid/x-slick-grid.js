@@ -58,6 +58,21 @@ var crystal;
                     type: Number,
                     notify: true,
                     reflectToAttribute: true
+                },
+                isContextMenuOpen: {
+                    type: Boolean,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                lastClickedXValue: {
+                    type: Number,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                lastClickedYValue: {
+                    type: Number,
+                    notify: true,
+                    reflectToAttribute: true
                 }
             },
             ready: function () {
@@ -68,7 +83,6 @@ var crystal;
                     .css('height', this.height)
                     .css('width', this.width);
                 this.gridDiv = $thisGrid;
-                console.log(this.fillContainer);
                 if (this.fillContainerWidth || this.fillContainerHeight) {
                     window.addEventListener('resize', function (e) {
                         if (_this.fillContainerWidth && _this.fillContainerHeight) {
@@ -131,6 +145,19 @@ var crystal;
                         });
                         grid.onColumnsReordered.subscribe(function (e) {
                             _this.numberOfOrderChanges++;
+                        });
+                    }
+                    if (wcOptions.trackContextMenu) {
+                        this.isContextMenuOpen = false;
+                        grid.onContextMenu.subscribe(function (e) {
+                            e.preventDefault();
+                            _this.isContextMenuOpen = true;
+                            _this.lastClickedXValue = e.pageX;
+                            _this.lastClickedYValue = e.pageY;
+                            var _thisEl = _this;
+                            $("body").one("click", function () {
+                                _thisEl.isContextMenuOpen = false;
+                            });
                         });
                     }
                 }

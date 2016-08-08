@@ -6,6 +6,7 @@ module crystal.elements {
     export interface IXSlickGridOptions{
         trackCurrentRow?:boolean;
         trackColumnChanges?: boolean;
+        trackContextMenu?:boolean;
     }
     Polymer({
         is: 'x-slick-grid',
@@ -60,8 +61,22 @@ module crystal.elements {
                 type: Number,
                 notify: true,
                 reflectToAttribute: true
+            },
+            isContextMenuOpen:{
+                type:  Boolean,
+                notify: true,
+                reflectToAttribute: true
+            },
+            lastClickedXValue:{
+                type: Number,
+                notify: true,
+                reflectToAttribute: true
+            },
+            lastClickedYValue:{
+                type: Number,
+                notify: true,
+                reflectToAttribute: true
             }
-
         },
         ready: function() {
             const thisGrid = this.$$('#grid');
@@ -70,7 +85,6 @@ module crystal.elements {
                 .css('height', this.height)
                 .css('width', this.width);
             this.gridDiv = $thisGrid;
-            console.log(this.fillContainer);
             if(this.fillContainerWidth || this.fillContainerHeight){
                 window.addEventListener('resize', e => {
                     if(this.fillContainerWidth && this.fillContainerHeight) {
@@ -135,6 +149,20 @@ module crystal.elements {
                         this.numberOfOrderChanges++;
                     });
                 }
+                if(wcOptions.trackContextMenu){
+                    this.isContextMenuOpen = false;
+                    grid.onContextMenu.subscribe(e =>{
+                        e.preventDefault();
+                        this.isContextMenuOpen = true;
+                        this.lastClickedXValue = e.pageX;
+                        this.lastClickedYValue = e.pageY;
+                        const _thisEl = this;
+                        $("body").one("click", function () {
+                            _thisEl.isContextMenuOpen = false;
+                        });
+                    });
+                }
+
             }
             if(this.fillContainerHeight){
                 this.fillContainerHeightImpl();
