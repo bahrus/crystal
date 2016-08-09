@@ -11,7 +11,8 @@ module crystal.elements {
     }
 
     export interface IXSlickGridColumn<T> extends Slick.Column<T>{
-        editorNSFn?: string[]
+        //editorNSFn?: string[]
+        editorFn?: (col?: IXSlickGridColumn<T>) => any;
     }
     Polymer({
         is: 'x-slick-grid',
@@ -133,14 +134,17 @@ module crystal.elements {
             this.columns = columns;
             for(let i = 0, ii = columns.length; i < ii; i++){
                 let col = columns[i];
-                if(col.editorNSFn && !col.editor){
-                    let editorFn = window;
-                    const editorNSFn = col.editorNSFn;
-                    for(let j = 0, jj = editorNSFn.length; j < jj; j++){
-                        const token = editorNSFn[j];
-                        editorFn = editorFn[token];
-                    }
-                    col.editor = editorFn;
+                // if(col.editorNSFn && !col.editor){
+                //     let editorFn = window;
+                //     const editorNSFn = col.editorNSFn;
+                //     for(let j = 0, jj = editorNSFn.length; j < jj; j++){
+                //         const token = editorNSFn[j];
+                //         editorFn = editorFn[token];
+                //     }
+                //     col.editor = editorFn;
+                // }
+                if(col.editorFn){
+                    col.editor = col.editorFn();
                 }
             }
             this.gridOptions = gridOptions;

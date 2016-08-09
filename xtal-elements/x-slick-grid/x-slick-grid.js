@@ -126,14 +126,17 @@ var crystal;
                 this.columns = columns;
                 for (var i = 0, ii = columns.length; i < ii; i++) {
                     var col = columns[i];
-                    if (col.editorNSFn && !col.editor) {
-                        var editorFn = window;
-                        var editorNSFn = col.editorNSFn;
-                        for (var j = 0, jj = editorNSFn.length; j < jj; j++) {
-                            var token = editorNSFn[j];
-                            editorFn = editorFn[token];
-                        }
-                        col.editor = editorFn;
+                    // if(col.editorNSFn && !col.editor){
+                    //     let editorFn = window;
+                    //     const editorNSFn = col.editorNSFn;
+                    //     for(let j = 0, jj = editorNSFn.length; j < jj; j++){
+                    //         const token = editorNSFn[j];
+                    //         editorFn = editorFn[token];
+                    //     }
+                    //     col.editor = editorFn;
+                    // }
+                    if (col.editorFn) {
+                        col.editor = col.editorFn();
                     }
                 }
                 this.gridOptions = gridOptions;
