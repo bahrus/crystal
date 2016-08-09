@@ -7,6 +7,11 @@ module crystal.elements {
         trackCurrentRow?:boolean;
         trackColumnChanges?: boolean;
         trackContextMenu?:boolean;
+        useCellSelectionModel?: boolean;
+    }
+
+    export interface IXSlickGridColumn<T> extends Slick.Column<T>{
+        editorNSFn?: string[]
     }
     Polymer({
         is: 'x-slick-grid',
@@ -123,9 +128,21 @@ module crystal.elements {
 
             }
         },
-        setInitialData(data: any[], columns: Slick.Column<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
+        setInitialData(data: any[], columns: IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
             this.data = data;
             this.columns = columns;
+            for(let i = 0, ii = columns.length; i < ii; i++){
+                let col = columns[i];
+                if(col.editorNSFn && !col.editor){
+                    let editorFn = window;
+                    const editorNSFn = col.editorNSFn;
+                    for(let j = 0, jj = editorNSFn.length; j < jj; j++){
+                        const token = editorNSFn[j];
+                        editorFn = editorFn[token];
+                    }
+                    col.editor = editorFn;
+                }
+            }
             this.gridOptions = gridOptions;
             this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
             const grid = this.grid;
@@ -162,7 +179,9 @@ module crystal.elements {
                         });
                     });
                 }
-
+                if(wcOptions.useCellSelectionModel){
+                    grid.setSelectionModel(new Slick['CellSelectionModel']());
+                }
             }
             if(this.fillContainerHeight){
                 this.fillContainerHeightImpl();

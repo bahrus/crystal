@@ -124,6 +124,18 @@ var crystal;
                 var _this = this;
                 this.data = data;
                 this.columns = columns;
+                for (var i = 0, ii = columns.length; i < ii; i++) {
+                    var col = columns[i];
+                    if (col.editorNSFn && !col.editor) {
+                        var editorFn = window;
+                        var editorNSFn = col.editorNSFn;
+                        for (var j = 0, jj = editorNSFn.length; j < jj; j++) {
+                            var token = editorNSFn[j];
+                            editorFn = editorFn[token];
+                        }
+                        col.editor = editorFn;
+                    }
+                }
                 this.gridOptions = gridOptions;
                 this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                 var grid = this.grid;
@@ -159,6 +171,9 @@ var crystal;
                                 _thisEl.isContextMenuOpen = false;
                             });
                         });
+                    }
+                    if (wcOptions.useCellSelectionModel) {
+                        grid.setSelectionModel(new Slick['CellSelectionModel']());
                     }
                 }
                 if (this.fillContainerHeight) {
