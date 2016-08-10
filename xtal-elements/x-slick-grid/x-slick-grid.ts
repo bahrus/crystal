@@ -13,13 +13,16 @@ module crystal.elements {
     export interface IXSlickGridColumn<T> extends Slick.Column<T>{
         //editorNSFn?: string[]
         editorFn?: (col?: IXSlickGridColumn<T>) => any;
+        columns?: IXSlickGridColumn<T>[];
     }
     Polymer({
         is: 'x-slick-grid',
-        data: null,
         //columns: null,
         get columns(){
             return this.grid.getColumns();
+        },
+        get data(){
+            return this.grid.getData();
         },
         gridOptions: null,
         wcOptions: null,
@@ -129,24 +132,20 @@ module crystal.elements {
 
             }
         },
-        setInitialData(data: any[], columns: IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
-            this.data = data;
-            this.columns = columns;
+        setEditor(columns: IXSlickGridColumn<any>[]){
             for(let i = 0, ii = columns.length; i < ii; i++){
                 let col = columns[i];
-                // if(col.editorNSFn && !col.editor){
-                //     let editorFn = window;
-                //     const editorNSFn = col.editorNSFn;
-                //     for(let j = 0, jj = editorNSFn.length; j < jj; j++){
-                //         const token = editorNSFn[j];
-                //         editorFn = editorFn[token];
-                //     }
-                //     col.editor = editorFn;
-                // }
                 if(col.editorFn){
                     col.editor = col.editorFn();
                 }
+                const childColumns = col.columns;
+                if(childColumns) this.setEditor(childColumns);
             }
+        },
+        setInitialData(data: any[], columns: IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
+            //this.data = data;
+            //this.columns = columns;
+            this.setEditor(columns);
             this.gridOptions = gridOptions;
             this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
             const grid = this.grid;

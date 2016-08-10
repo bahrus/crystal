@@ -7,10 +7,12 @@ var crystal;
     (function (elements) {
         Polymer({
             is: 'x-slick-grid',
-            data: null,
             //columns: null,
             get columns() {
                 return this.grid.getColumns();
+            },
+            get data() {
+                return this.grid.getData();
             },
             gridOptions: null,
             wcOptions: null,
@@ -120,25 +122,22 @@ var crystal;
                     }
                 }
             },
-            setInitialData: function (data, columns, gridOptions, wcOptions) {
-                var _this = this;
-                this.data = data;
-                this.columns = columns;
+            setEditor: function (columns) {
                 for (var i = 0, ii = columns.length; i < ii; i++) {
                     var col = columns[i];
-                    // if(col.editorNSFn && !col.editor){
-                    //     let editorFn = window;
-                    //     const editorNSFn = col.editorNSFn;
-                    //     for(let j = 0, jj = editorNSFn.length; j < jj; j++){
-                    //         const token = editorNSFn[j];
-                    //         editorFn = editorFn[token];
-                    //     }
-                    //     col.editor = editorFn;
-                    // }
                     if (col.editorFn) {
                         col.editor = col.editorFn();
                     }
+                    var childColumns = col.columns;
+                    if (childColumns)
+                        this.setEditor(childColumns);
                 }
+            },
+            setInitialData: function (data, columns, gridOptions, wcOptions) {
+                var _this = this;
+                //this.data = data;
+                //this.columns = columns;
+                this.setEditor(columns);
                 this.gridOptions = gridOptions;
                 this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                 var grid = this.grid;
