@@ -791,6 +791,10 @@ declare namespace Slick {
         onSelectedRangesChanged: Slick.Event<E>;
     }
 
+    export class CellSelectionModel{
+
+    }
+
     export class Grid<T extends SlickData> {
 
         /**

@@ -184,7 +184,7 @@ module crystal.elements {
                     });
                 }
                 if(wcOptions.useCellSelectionModel){
-                    grid.setSelectionModel(new Slick['CellSelectionModel']());
+                    grid.setSelectionModel(new Slick.CellSelectionModel());
                 }
             }
             if(this.fillContainerHeight){
