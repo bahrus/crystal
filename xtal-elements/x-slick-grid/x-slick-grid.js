@@ -117,7 +117,7 @@ var crystal;
                 var thisLength = containerLength - offset;
                 if (thisLength > 0) {
                     $thisGrid.css(cssDim, thisLength);
-                    if (resize) {
+                    if (resize && this.grid) {
                         this.grid.resizeCanvas();
                     }
                 }
@@ -141,6 +141,9 @@ var crystal;
                 this.gridOptions = gridOptions;
                 this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                 var grid = this.grid;
+                grid.onMouseEnter.subscribe(function (e, d) {
+                    console.log([e, d]);
+                });
                 if (wcOptions) {
                     if (wcOptions.trackCurrentRow) {
                         this.clickedCellIndex = -1;
@@ -175,7 +178,13 @@ var crystal;
                         });
                     }
                     if (wcOptions.useCellSelectionModel) {
-                        grid.setSelectionModel(new Slick.CellSelectionModel());
+                        this.importHref('Slick.CellRangeSelector.html', function (e) {
+                            _this.importHref('Slick.CellSelectionModel.html', function (e) {
+                                _this.importHref('Slick.CellRangeDecorator.html', function (e) {
+                                    grid.setSelectionModel(new Slick.CellSelectionModel());
+                                });
+                            });
+                        });
                     }
                 }
                 if (this.fillContainerHeight) {
