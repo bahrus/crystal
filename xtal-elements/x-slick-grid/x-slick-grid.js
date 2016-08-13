@@ -12,6 +12,10 @@ var crystal;
                 return;
             }
             var nextStep = importStep.shift();
+            if (!nextStep) {
+                importHrefs(importStep, polymerElement, callBack);
+                return;
+            }
             var resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
             if (nextStep.conditonForImport) {
                 if (nextStep.conditonForImport(polymerElement)) {
@@ -47,6 +51,10 @@ var crystal;
                 width: {
                     type: String,
                     value: '600px'
+                },
+                importSlickGridEditors: {
+                    type: Boolean,
+                    value: false
                 },
                 fillContainerHeight: {
                     type: Boolean,
@@ -120,7 +128,7 @@ var crystal;
                     },
                     { importURL: 'SlickCore.html' },
                     { importURL: 'SlickGrid.html' },
-                    { importURL: 'SlickEditors.html' }
+                    this.importSlickGridEditors ? { importURL: 'SlickEditors.html' } : null
                 ];
                 importHrefs(slickDependencies, this, function () {
                     console.log('start ready');

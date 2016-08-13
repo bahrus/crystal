@@ -27,6 +27,10 @@ module crystal.elements {
             return;
         }
         const nextStep = importStep.shift();
+        if(!nextStep){
+            importHrefs(importStep, polymerElement, callBack);
+            return;
+        }
         const resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
         if(nextStep.conditonForImport){
             if(nextStep.conditonForImport(polymerElement)){
@@ -61,6 +65,10 @@ module crystal.elements {
             width:{
                 type: String,
                 value: '600px'
+            },
+            importSlickGridEditors:{
+                type: Boolean,
+                value: false
             },
             fillContainerHeight:{
                 type: Boolean,
@@ -134,7 +142,7 @@ module crystal.elements {
                 },
                 {importURL: 'SlickCore.html'},
                 {importURL: 'SlickGrid.html'},
-                {importURL: 'SlickEditors.html'}
+                this.importSlickGridEditors ? {importURL: 'SlickEditors.html'} : null
             ];
             importHrefs(slickDependencies, this, () =>{
                 console.log('start ready')
