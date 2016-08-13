@@ -112,10 +112,13 @@ module crystal.elements {
                 reflectToAttribute: true
             }
         },
-        resourcesLoaded: false,
         readyFnInitialized: false,
         created: function(){
             console.log('start created');
+
+            console.log('end created');
+        },
+        ready: function() {
             const slickDependencies : IDynamicImportStep[] = [
                 {
                     importURL: 'JQuery.html',
@@ -133,39 +136,29 @@ module crystal.elements {
                 {importURL: 'SlickGrid.html'},
                 {importURL: 'SlickEditors.html'}
             ];
-            importHrefs(slickDependencies, this, (el) =>{
-                this.resourcesLoaded = true;
+            importHrefs(slickDependencies, this, () =>{
+                console.log('start ready')
+                const thisGrid = this.$$('#grid');
+                const $thisGrid = $(thisGrid);
+                $thisGrid
+                    .css('height', this.height)
+                    .css('width', this.width);
+                this.gridDiv = $thisGrid;
+                if(this.fillContainerWidth || this.fillContainerHeight){
+                    window.addEventListener('resize', e => {
+                        if(this.fillContainerWidth && this.fillContainerHeight) {
+                            this.debounce('fillContainerBothDim', this.fillContainerBothDimImpl, 500);
+                        }else if(this.fillContainerHeight){
+                            this.debounce('fillContainerHeight', this.fillContainerHeightImpl, 500);
+                        }else{ //width only
+                            this.debounce('fillContainerWidth', this.fillContainerWidthImpl, 500);
+                        }
+                    });
+
+                }
+                this.readyFnInitialized = true;
             });
-            console.log('end created');
-        },
-        ready: function() {
-            if(!this.resourcesLoaded){
-                setTimeout(() =>{
-                    this.ready();
 
-                }, 10);
-                return;
-            }
-            console.log('start ready')
-            const thisGrid = this.$$('#grid');
-            const $thisGrid = $(thisGrid);
-            $thisGrid
-                .css('height', this.height)
-                .css('width', this.width);
-            this.gridDiv = $thisGrid;
-            if(this.fillContainerWidth || this.fillContainerHeight){
-                window.addEventListener('resize', e => {
-                    if(this.fillContainerWidth && this.fillContainerHeight) {
-                        this.debounce('fillContainerBothDim', this.fillContainerBothDimImpl, 500);
-                    }else if(this.fillContainerHeight){
-                        this.debounce('fillContainerHeight', this.fillContainerHeightImpl, 500);
-                    }else{ //width only
-                        this.debounce('fillContainerWidth', this.fillContainerWidthImpl, 500);
-                    }
-                });
-
-            }
-            this.readyFnInitialized = true;
         },
         fillContainerBothDimImpl: function(){
             this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);

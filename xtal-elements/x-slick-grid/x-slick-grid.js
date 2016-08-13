@@ -98,11 +98,13 @@ var crystal;
                     reflectToAttribute: true
                 }
             },
-            resourcesLoaded: false,
             readyFnInitialized: false,
             created: function () {
-                var _this = this;
                 console.log('start created');
+                console.log('end created');
+            },
+            ready: function () {
+                var _this = this;
                 var slickDependencies = [
                     {
                         importURL: 'JQuery.html',
@@ -120,40 +122,29 @@ var crystal;
                     { importURL: 'SlickGrid.html' },
                     { importURL: 'SlickEditors.html' }
                 ];
-                importHrefs(slickDependencies, this, function (el) {
-                    _this.resourcesLoaded = true;
+                importHrefs(slickDependencies, this, function () {
+                    console.log('start ready');
+                    var thisGrid = _this.$$('#grid');
+                    var $thisGrid = $(thisGrid);
+                    $thisGrid
+                        .css('height', _this.height)
+                        .css('width', _this.width);
+                    _this.gridDiv = $thisGrid;
+                    if (_this.fillContainerWidth || _this.fillContainerHeight) {
+                        window.addEventListener('resize', function (e) {
+                            if (_this.fillContainerWidth && _this.fillContainerHeight) {
+                                _this.debounce('fillContainerBothDim', _this.fillContainerBothDimImpl, 500);
+                            }
+                            else if (_this.fillContainerHeight) {
+                                _this.debounce('fillContainerHeight', _this.fillContainerHeightImpl, 500);
+                            }
+                            else {
+                                _this.debounce('fillContainerWidth', _this.fillContainerWidthImpl, 500);
+                            }
+                        });
+                    }
+                    _this.readyFnInitialized = true;
                 });
-                console.log('end created');
-            },
-            ready: function () {
-                var _this = this;
-                if (!this.resourcesLoaded) {
-                    setTimeout(function () {
-                        _this.ready();
-                    }, 10);
-                    return;
-                }
-                console.log('start ready');
-                var thisGrid = this.$$('#grid');
-                var $thisGrid = $(thisGrid);
-                $thisGrid
-                    .css('height', this.height)
-                    .css('width', this.width);
-                this.gridDiv = $thisGrid;
-                if (this.fillContainerWidth || this.fillContainerHeight) {
-                    window.addEventListener('resize', function (e) {
-                        if (_this.fillContainerWidth && _this.fillContainerHeight) {
-                            _this.debounce('fillContainerBothDim', _this.fillContainerBothDimImpl, 500);
-                        }
-                        else if (_this.fillContainerHeight) {
-                            _this.debounce('fillContainerHeight', _this.fillContainerHeightImpl, 500);
-                        }
-                        else {
-                            _this.debounce('fillContainerWidth', _this.fillContainerWidthImpl, 500);
-                        }
-                    });
-                }
-                this.readyFnInitialized = true;
             },
             fillContainerBothDimImpl: function () {
                 this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
