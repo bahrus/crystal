@@ -136,7 +136,6 @@ var crystal;
                     this.importSlickGridEditors ? { importURL: 'SlickEditors.html' } : null
                 ];
                 importHrefs(slickDependencies, this, function () {
-                    console.log('start ready');
                     var thisGrid = _this.$$('#grid');
                     var $thisGrid = $(thisGrid);
                     $thisGrid

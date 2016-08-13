@@ -158,7 +158,6 @@ module crystal.elements {
                 this.importSlickGridEditors ? {importURL: 'SlickEditors.html'} : null
             ];
             importHrefs(slickDependencies, this, () =>{
-                console.log('start ready')
                 const thisGrid = this.$$('#grid');
                 const $thisGrid = $(thisGrid);
                 $thisGrid
