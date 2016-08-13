@@ -9,7 +9,12 @@
     <!--<script src="bower_components/jquery/jquery.min.js"></script>-->
     <!--<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>-->
     <!--<script src="bower_components/jquery.event/event.drag/jquery.event.drag.js"></script>-->
-
+    <style>
+        .x-slick-grid-hover{
+            background: 0 !important;
+            background-color: blueviolet !important;
+        }
+    </style>
 </head>
 <body style="margin:0">
     <script>
@@ -58,12 +63,14 @@
             enableCellNavigation: true,
             enableColumnReorder: false,
             editable: true,
+            frozenColumn: 1
         };
         var wcOptions = {
             trackCurrentRow: true,
             trackColumnChanges: true,
             //trackContextMenu: true,
             useCellSelectionModel: true,
+            trackRowHover: true,
         };
         var data = [];
         for (var i = 0; i < 500; i++) {

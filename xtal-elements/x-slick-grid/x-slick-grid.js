@@ -1,6 +1,7 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
+///<reference path='x-slick-grid.mouseOverRow.ts'/>
 var crystal;
 (function (crystal) {
     var elements;
@@ -39,7 +40,15 @@ var crystal;
             get data() {
                 return this.grid.getData();
             },
-            gridOptions: null,
+            get selectedRow() {
+                if (this.clickedRowIndex === -1)
+                    return null;
+                return this.data[this.clickedRowIndex];
+            },
+            get options() {
+                return this.grid.getOptions();
+            },
+            //gridOptions: null,
             wcOptions: null,
             grid: null,
             gridDiv: null,
@@ -107,10 +116,6 @@ var crystal;
                 }
             },
             readyFnInitialized: false,
-            created: function () {
-                console.log('start created');
-                console.log('end created');
-            },
             ready: function () {
                 var _this = this;
                 var slickDependencies = [
@@ -199,12 +204,18 @@ var crystal;
                     return;
                 }
                 this.setEditor(columns);
-                this.gridOptions = gridOptions;
+                //this.gridOptions = gridOptions;
                 this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                 var grid = this.grid;
-                grid.onMouseEnter.subscribe(function (e, d) {
-                    //console.log([e, d]);
-                });
+                this.wcOptions = wcOptions;
+                if (wcOptions.trackRowHover) {
+                    this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), function () {
+                        elements.enableMouseOverSlickGrid(_this);
+                    }, null, true);
+                }
+                // grid.onMouseEnter.subscribe((e, d) =>{
+                //     //console.log([e, d]);
+                // })
                 if (wcOptions) {
                     if (wcOptions.trackCurrentRow) {
                         this.clickedCellIndex = -1;
@@ -254,17 +265,6 @@ var crystal;
                 this.renderCount++;
                 return grid;
             },
-            getSelectedRow: function () {
-                if (this.clickedRowIndex === -1)
-                    return null;
-                return this.data[this.clickedRowIndex];
-            },
-            getGrid: function () {
-                return this.grid;
-            },
-            getGridDiv: function () {
-                return this.gridDiv;
-            }
         });
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));

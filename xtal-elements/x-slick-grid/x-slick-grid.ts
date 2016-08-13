@@ -1,6 +1,7 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
+///<reference path='x-slick-grid.mouseOverRow.ts'/>
 
 module crystal.elements {
     export interface IXSlickGridOptions{
@@ -8,6 +9,7 @@ module crystal.elements {
         trackColumnChanges?: boolean;
         trackContextMenu?:boolean;
         useCellSelectionModel?: boolean;
+        trackRowHover?: boolean;
     }
 
     export interface IXSlickGridColumn<T> extends Slick.Column<T>{
@@ -19,6 +21,13 @@ module crystal.elements {
     export interface IDynamicImportStep{
         conditonForImport?: (polymerElement?: polymer.Base) => boolean;
         importURL: string;
+    }
+    export interface ISlickGridOptions<T> extends Slick.GridOptions<T>{
+        frozenColumn: number;
+    }
+    export interface IXSlickGridElement<T> extends polymer.Base{
+        grid: Slick.Grid<T>;
+        options: ISlickGridOptions<T>;
     }
 
     function importHrefs(importStep: IDynamicImportStep[], polymerElement: polymer.Base, callBack?: () => void){
@@ -44,6 +53,8 @@ module crystal.elements {
             })
         }
     }
+
+
     Polymer({
         is: 'x-slick-grid',
         //columns: null,
@@ -53,7 +64,14 @@ module crystal.elements {
         get data(){
             return this.grid.getData();
         },
-        gridOptions: null,
+        get selectedRow(){
+            if(this.clickedRowIndex === -1) return null;
+            return this.data[this.clickedRowIndex];
+        },
+        get options(){
+            return this.grid.getOptions();
+        },
+        //gridOptions: null,
         wcOptions: null,
         grid: null,
         gridDiv: null,
@@ -121,11 +139,6 @@ module crystal.elements {
             }
         },
         readyFnInitialized: false,
-        created: function(){
-            console.log('start created');
-
-            console.log('end created');
-        },
         ready: function() {
             const slickDependencies : IDynamicImportStep[] = [
                 {
@@ -213,12 +226,18 @@ module crystal.elements {
                 return;
             }
             this.setEditor(columns);
-            this.gridOptions = gridOptions;
+            //this.gridOptions = gridOptions;
             this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
             const grid = this.grid;
-            grid.onMouseEnter.subscribe((e, d) =>{
-                //console.log([e, d]);
-            })
+            this.wcOptions = wcOptions;
+            if(wcOptions.trackRowHover){
+                this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), () =>{
+                    enableMouseOverSlickGrid(this);
+                }, null, true);
+            }
+            // grid.onMouseEnter.subscribe((e, d) =>{
+            //     //console.log([e, d]);
+            // })
             if(wcOptions){
                 if(wcOptions.trackCurrentRow){
                     this.clickedCellIndex = -1;
@@ -270,16 +289,13 @@ module crystal.elements {
             this.renderCount++;
             return grid;
         },
-        getSelectedRow(){
-            if(this.clickedRowIndex === -1) return null;
-            return this.data[this.clickedRowIndex];
-        },
-        getGrid: function(){
-            return this.grid;
-        },
-        getGridDiv: function(){
-            return this.gridDiv;
-        }
+
+        // getGrid: function(){
+        //     return this.grid;
+        // },
+        // getGridDiv: function(){
+        //     return this.gridDiv;
+        // }
     });
 
 
