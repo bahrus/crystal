@@ -15,6 +15,31 @@ module crystal.elements {
         editorFn?: (col?: IXSlickGridColumn<T>) => any;
         columns?: IXSlickGridColumn<T>[];
     }
+
+    export interface IDynamicImportStep{
+        conditonForImport?: (polymerElement?: polymer.Base) => boolean;
+        importURL: string;
+    }
+
+    function importHrefs(importStep: IDynamicImportStep[], polymerElement: polymer.Base, callBack?: () => void){
+        if(importStep.length === 0) {
+            if(callBack) callBack();
+            return;
+        }
+        const nextStep = importStep.shift();
+        const resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
+        if(nextStep.conditonForImport){
+            if(nextStep.conditonForImport(polymerElement)){
+                polymerElement.importHref(resolvedURL, () =>{
+                    importHrefs(importStep, polymerElement, callBack);
+                })
+            }
+        }else{
+            polymerElement.importHref(resolvedURL, () =>{
+                importHrefs(importStep, polymerElement, callBack);
+            })
+        }
+    }
     Polymer({
         is: 'x-slick-grid',
         //columns: null,
@@ -150,7 +175,7 @@ module crystal.elements {
             this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
             const grid = this.grid;
             grid.onMouseEnter.subscribe((e, d) =>{
-                console.log([e, d]);
+                //console.log([e, d]);
             })
             if(wcOptions){
                 if(wcOptions.trackCurrentRow){
@@ -186,13 +211,19 @@ module crystal.elements {
                     });
                 }
                 if(wcOptions.useCellSelectionModel){
-                    this.importHref('Slick.CellRangeSelector.html', e=>{
-                        this.importHref('Slick.CellSelectionModel.html', e=>{
-                            this.importHref('Slick.CellRangeDecorator.html', e=>{
-                                grid.setSelectionModel(new Slick.CellSelectionModel());
-                            });
-                        });
-                    });
+                    console.log('I');
+                    const cellModelImpors: IDynamicImportStep[] = [{importURL: 'Slick.CellRangeSelector.html'}, {importURL: 'Slick.CellSelectionModel.html'}, {importURL: 'Slick.CellRangeDecorator.html'}];
+                    importHrefs(cellModelImpors, this, () => {
+                        console.log(' am here!');
+                        grid.setSelectionModel(new Slick.CellSelectionModel())
+                    })
+                    // this.importHref('Slick.CellRangeSelector.html', e=>{
+                    //     this.importHref('Slick.CellSelectionModel.html', e=>{
+                    //         this.importHref('Slick.CellRangeDecorator.html', e=>{
+                    //             grid.setSelectionModel(new Slick.CellSelectionModel());
+                    //         });
+                    //     });
+                    // });
 
                 }
             }

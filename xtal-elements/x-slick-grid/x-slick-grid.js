@@ -5,6 +5,27 @@ var crystal;
 (function (crystal) {
     var elements;
     (function (elements) {
+        function importHrefs(importStep, polymerElement, callBack) {
+            if (importStep.length === 0) {
+                if (callBack)
+                    callBack();
+                return;
+            }
+            var nextStep = importStep.shift();
+            var resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
+            if (nextStep.conditonForImport) {
+                if (nextStep.conditonForImport(polymerElement)) {
+                    polymerElement.importHref(resolvedURL, function () {
+                        importHrefs(importStep, polymerElement, callBack);
+                    });
+                }
+            }
+            else {
+                polymerElement.importHref(resolvedURL, function () {
+                    importHrefs(importStep, polymerElement, callBack);
+                });
+            }
+        }
         Polymer({
             is: 'x-slick-grid',
             //columns: null,
@@ -142,7 +163,7 @@ var crystal;
                 this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                 var grid = this.grid;
                 grid.onMouseEnter.subscribe(function (e, d) {
-                    console.log([e, d]);
+                    //console.log([e, d]);
                 });
                 if (wcOptions) {
                     if (wcOptions.trackCurrentRow) {
@@ -178,12 +199,11 @@ var crystal;
                         });
                     }
                     if (wcOptions.useCellSelectionModel) {
-                        this.importHref('Slick.CellRangeSelector.html', function (e) {
-                            _this.importHref('Slick.CellSelectionModel.html', function (e) {
-                                _this.importHref('Slick.CellRangeDecorator.html', function (e) {
-                                    grid.setSelectionModel(new Slick.CellSelectionModel());
-                                });
-                            });
+                        console.log('I');
+                        var cellModelImpors = [{ importURL: 'Slick.CellRangeSelector.html' }, { importURL: 'Slick.CellSelectionModel.html' }, { importURL: 'Slick.CellRangeDecorator.html' }];
+                        importHrefs(cellModelImpors, this, function () {
+                            console.log(' am here!');
+                            grid.setSelectionModel(new Slick.CellSelectionModel());
                         });
                     }
                 }
