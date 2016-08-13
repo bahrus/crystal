@@ -98,8 +98,42 @@ var crystal;
                     reflectToAttribute: true
                 }
             },
+            resourcesLoaded: false,
+            readyFnInitialized: false,
+            created: function () {
+                var _this = this;
+                console.log('start created');
+                var slickDependencies = [
+                    {
+                        importURL: 'JQuery.html',
+                        conditonForImport: function () { return typeof ($) === 'undefined'; }
+                    },
+                    {
+                        importURL: 'JQueryUI.html',
+                        conditonForImport: function () { return !($ && $['ui']); }
+                    },
+                    {
+                        importURL: 'Jquery.Event.DragDrop.html',
+                        conditonForImport: function () { return !($ && $.fn.drag); }
+                    },
+                    { importURL: 'SlickCore.html' },
+                    { importURL: 'SlickGrid.html' },
+                    { importURL: 'SlickEditors.html' }
+                ];
+                importHrefs(slickDependencies, this, function (el) {
+                    _this.resourcesLoaded = true;
+                });
+                console.log('end created');
+            },
             ready: function () {
                 var _this = this;
+                if (!this.resourcesLoaded) {
+                    setTimeout(function () {
+                        _this.ready();
+                    }, 10);
+                    return;
+                }
+                console.log('start ready');
                 var thisGrid = this.$$('#grid');
                 var $thisGrid = $(thisGrid);
                 $thisGrid
@@ -119,6 +153,7 @@ var crystal;
                         }
                     });
                 }
+                this.readyFnInitialized = true;
             },
             fillContainerBothDimImpl: function () {
                 this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
@@ -158,6 +193,12 @@ var crystal;
                 var _this = this;
                 //this.data = data;
                 //this.columns = columns;
+                if (!this.readyFnInitialized) {
+                    setTimeout(function () {
+                        _this.setInitialData(data, columns, gridOptions, wcOptions);
+                    }, 10);
+                    return;
+                }
                 this.setEditor(columns);
                 this.gridOptions = gridOptions;
                 this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
@@ -199,10 +240,8 @@ var crystal;
                         });
                     }
                     if (wcOptions.useCellSelectionModel) {
-                        console.log('I');
                         var cellModelImpors = [{ importURL: 'Slick.CellRangeSelector.html' }, { importURL: 'Slick.CellSelectionModel.html' }, { importURL: 'Slick.CellRangeDecorator.html' }];
                         importHrefs(cellModelImpors, this, function () {
-                            console.log(' am here!');
                             grid.setSelectionModel(new Slick.CellSelectionModel());
                         });
                     }

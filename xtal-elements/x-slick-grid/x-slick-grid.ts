@@ -112,7 +112,41 @@ module crystal.elements {
                 reflectToAttribute: true
             }
         },
+        resourcesLoaded: false,
+        readyFnInitialized: false,
+        created: function(){
+            console.log('start created');
+            const slickDependencies : IDynamicImportStep[] = [
+                {
+                    importURL: 'JQuery.html',
+                    conditonForImport: () => typeof($) === 'undefined'
+                },
+                {
+                    importURL: 'JQueryUI.html',
+                    conditonForImport: () => !($ && $['ui'])
+                },
+                {
+                    importURL: 'Jquery.Event.DragDrop.html',
+                    conditonForImport: () => !($ && $.fn.drag)
+                },
+                {importURL: 'SlickCore.html'},
+                {importURL: 'SlickGrid.html'},
+                {importURL: 'SlickEditors.html'}
+            ];
+            importHrefs(slickDependencies, this, (el) =>{
+                this.resourcesLoaded = true;
+            });
+            console.log('end created');
+        },
         ready: function() {
+            if(!this.resourcesLoaded){
+                setTimeout(() =>{
+                    this.ready();
+
+                }, 10);
+                return;
+            }
+            console.log('start ready')
             const thisGrid = this.$$('#grid');
             const $thisGrid = $(thisGrid);
             $thisGrid
@@ -131,7 +165,7 @@ module crystal.elements {
                 });
 
             }
-
+            this.readyFnInitialized = true;
         },
         fillContainerBothDimImpl: function(){
             this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
@@ -170,6 +204,13 @@ module crystal.elements {
         setInitialData(data: any[], columns: IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
             //this.data = data;
             //this.columns = columns;
+            if(!this.readyFnInitialized){
+                setTimeout(() =>{
+                    this.setInitialData(data, columns, gridOptions, wcOptions);
+
+                }, 10);
+                return;
+            }
             this.setEditor(columns);
             this.gridOptions = gridOptions;
             this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
@@ -211,19 +252,11 @@ module crystal.elements {
                     });
                 }
                 if(wcOptions.useCellSelectionModel){
-                    console.log('I');
                     const cellModelImpors: IDynamicImportStep[] = [{importURL: 'Slick.CellRangeSelector.html'}, {importURL: 'Slick.CellSelectionModel.html'}, {importURL: 'Slick.CellRangeDecorator.html'}];
                     importHrefs(cellModelImpors, this, () => {
-                        console.log(' am here!');
                         grid.setSelectionModel(new Slick.CellSelectionModel())
                     })
-                    // this.importHref('Slick.CellRangeSelector.html', e=>{
-                    //     this.importHref('Slick.CellSelectionModel.html', e=>{
-                    //         this.importHref('Slick.CellRangeDecorator.html', e=>{
-                    //             grid.setSelectionModel(new Slick.CellSelectionModel());
-                    //         });
-                    //     });
-                    // });
+
 
                 }
             }
