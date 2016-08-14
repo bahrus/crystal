@@ -21,6 +21,8 @@
             <h2>Demonstrates:</h2>
             <ul>
                 <li>basic grid with minimal configuration</li>
+                <li>Relatively low number of references needed</li>
+                <li>JQuery / JQuery UI only loaded by the web component if they are not present already</li>
             </ul>
             <h2>View Source:</h2>
             <ul>
@@ -32,7 +34,6 @@
 </table>
 
 <script>
-    var grid;
     var columns = [
         {id: "title", name: "Title", field: "title"},
         {id: "duration", name: "Duration", field: "duration"},
