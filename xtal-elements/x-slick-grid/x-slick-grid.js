@@ -61,7 +61,7 @@ var crystal;
                     type: String,
                     value: '600px'
                 },
-                importSlickGridEditors: {
+                useSlickGridEditors: {
                     type: Boolean,
                     value: false
                 },
@@ -148,7 +148,7 @@ var crystal;
                     },
                     { importURL: 'SlickCore.html' },
                     { importURL: 'SlickGrid.html' },
-                    this.importSlickGridEditors ? { importURL: 'SlickEditors.html' } : null,
+                    this.useSlickGridEditors ? { importURL: 'SlickEditors.html' } : null,
                     this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeSelector.html' } : null,
                     this.selectionModel === 'Cell' ? { importURL: 'Slick.CellSelectionModel.html' } : null,
                     this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeDecorator.html' } : null,
@@ -204,7 +204,7 @@ var crystal;
                     }
                 }
             },
-            setEditor: function (columns) {
+            setEditorAndFormatter: function (columns) {
                 for (var i = 0, ii = columns.length; i < ii; i++) {
                     var col = columns[i];
                     if (col.editorFn) {
@@ -212,7 +212,7 @@ var crystal;
                     }
                     var childColumns = col.columns;
                     if (childColumns)
-                        this.setEditor(childColumns);
+                        this.setEditorAndFormatter(childColumns);
                 }
             },
             setInitialData: function (data, columns, gridOptions, wcOptions) {
@@ -225,7 +225,7 @@ var crystal;
                     }, 10);
                     return;
                 }
-                this.setEditor(columns);
+                this.setEditorAndFormatter(columns);
                 //this.gridOptions = gridOptions;
                 if (wcOptions && wcOptions.dataProvider) {
                     var dataProvider = wcOptions.dataProvider(data);

@@ -15,10 +15,13 @@
     </style>
 </head>
 <body>
-<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<!--polyfill if needed-->
+<script>(function() {if ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')) {} else {var e = document.createElement('script'); e.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';document.body.appendChild(e);}})();</script>
+
+<link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="../x-slick-grid.html" />
 
-<input type=text>
+<input type="text"/>
 
 <table width="100%">
     <tr>
@@ -41,7 +44,7 @@
     </tr>
 </table>
 
-<input type=text>
+<input type="text"/>
 
 
 
@@ -55,10 +58,11 @@
     var columns = [
         {id: "title", name: "Title", field: "title", width: 120, cssClass: "cell-title", formatter: formatter},
         {id: "duration", name: "Duration", field: "duration"},
-        {id: "%", name: "% Complete", field: "percentComplete", width: 80, resizable: false, formatter: Slick.Formatters.PercentCompleteBar},
+        {id: "%", name: "% Complete", field: "percentComplete", width: 80, resizable: false, formatterFn: function(e){return Slick.Formatters.PercentCompleteBar}},
         {id: "start", name: "Start", field: "start", minWidth: 60},
         {id: "finish", name: "Finish", field: "finish", minWidth: 60},
-        {id: "effort-driven", name: "Effort Driven", sortable: false, width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.Checkmark}
+        {id: "effort-driven", name: "Effort Driven", sortable: false, width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven",
+            formatterFn: function(e){return Slick.Formatters.Checkmark}}
     ];
 
     var options = {
@@ -67,27 +71,26 @@
         enableCellNavigation: true
     };
 
-    $(function () {
-        for (var i = 0; i < 5; i++) {
-            var d = (data[i] = {});
 
-            d["title"] = "<a href='#' tabindex='0'>Task</a> " + i;
-            d["duration"] = "5 days";
-            d["percentComplete"] = Math.min(100, Math.round(Math.random() * 110));
-            d["start"] = "01/01/2009";
-            d["finish"] = "01/05/2009";
-            d["effortDriven"] = (i % 5 == 0);
-        }
+    for (var i = 0; i < 5; i++) {
+        var d = (data[i] = {});
 
-        var xslick = document.querySelector('x-slick-grid');
-        if(xslick.setInitialData){
+        d["title"] = "<a href='#' tabindex='0'>Task</a> " + i;
+        d["duration"] = "5 days";
+        d["percentComplete"] = Math.min(100, Math.round(Math.random() * 110));
+        d["start"] = "01/01/2009";
+        d["finish"] = "01/05/2009";
+        d["effortDriven"] = (i % 5 == 0);
+    }
+
+    var xslick = document.querySelector('x-slick-grid');
+    if(xslick.setInitialData){
+        xslick.setInitialData(data, columns, options);
+    }else{
+        window.addEventListener('WebComponentsReady', function(e){
             xslick.setInitialData(data, columns, options);
-        }else{
-            window.addEventListener('WebComponentsReady', function(e){
-                xslick.setInitialData(data, columns, options);
-            });
-        }
-    })
+        });
+    }
 </script>
 </body>
 </html>

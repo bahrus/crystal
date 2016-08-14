@@ -19,6 +19,7 @@ module crystal.elements {
     export interface IXSlickGridColumn<T> extends Slick.Column<T>{
         //editorNSFn?: string[]
         editorFn?: (col?: IXSlickGridColumn<T>) => any;
+        formatterFn?: (col?: IXSlickGridColumn<T>) => any;
         columns?: IXSlickGridColumn<T>[];
     }
 
@@ -88,7 +89,7 @@ module crystal.elements {
                 type: String,
                 value: '600px'
             },
-            importSlickGridEditors:{
+            useSlickGridEditors:{
                 type: Boolean,
                 value: false
             },
@@ -174,7 +175,7 @@ module crystal.elements {
                 },
                 {importURL: 'SlickCore.html'},
                 {importURL: 'SlickGrid.html'},
-                this.importSlickGridEditors     ? {importURL: 'SlickEditors.html'}               : null,
+                this.useSlickGridEditors     ? {importURL: 'SlickEditors.html'}               : null,
                 this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeSelector.html'}    : null,
                 this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellSelectionModel.html'}   : null,
                 this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeDecorator.html'}   : null,
@@ -231,14 +232,17 @@ module crystal.elements {
 
             }
         },
-        setEditor(columns: IXSlickGridColumn<any>[]){
+        setEditorAndFormatter(columns: IXSlickGridColumn<any>[]){
             for(let i = 0, ii = columns.length; i < ii; i++){
                 let col = columns[i];
                 if(col.editorFn){
-                    col.editor = col.editorFn();
+                    col.editor = col.editorFn(col);
+                }
+                if(col.formatterFn){
+                    col.formatter = col.formatterFn(col)
                 }
                 const childColumns = col.columns;
-                if(childColumns) this.setEditor(childColumns);
+                if(childColumns) this.setEditorAndFormatter(childColumns);
             }
         },
         setInitialData<T>(data: T[], columns: IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions<T>){
@@ -251,7 +255,7 @@ module crystal.elements {
                 }, 10);
                 return;
             }
-            this.setEditor(columns);
+            this.setEditorAndFormatter(columns);
             //this.gridOptions = gridOptions;
             if(wcOptions && wcOptions.dataProvider){
                 const dataProvider = wcOptions.dataProvider(data);
