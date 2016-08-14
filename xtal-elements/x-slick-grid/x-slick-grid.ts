@@ -4,12 +4,16 @@
 ///<reference path='x-slick-grid.mouseOverRow.ts'/>
 
 module crystal.elements {
-    export interface IXSlickGridOptions{
+    type SelectionModel = 'Cell' | 'Row';
+
+    export interface IXSlickGridOptions<T>{
         trackCurrentRow?:boolean;
         trackColumnChanges?: boolean;
         trackContextMenu?:boolean;
-        useCellSelectionModel?: boolean;
         trackRowHover?: boolean;
+        //selectionModel?: SelectionModel;
+        //dataViewOptions?: Slick.Data.DataViewOptions<T>;
+        dataProvider?: (data: T[]) => Slick.DataProvider<T>;
     }
 
     export interface IXSlickGridColumn<T> extends Slick.Column<T>{
@@ -136,6 +140,12 @@ module crystal.elements {
                 type: Number,
                 notify: true,
                 reflectToAttribute: true
+            },
+            selectionModel:{
+                type: String,
+            },
+            useDataViewDataProvider:{
+                type:  Boolean,
             }
         },
         readyFnInitialized: false,
@@ -155,7 +165,11 @@ module crystal.elements {
                 },
                 {importURL: 'SlickCore.html'},
                 {importURL: 'SlickGrid.html'},
-                this.importSlickGridEditors ? {importURL: 'SlickEditors.html'} : null
+                this.importSlickGridEditors     ? {importURL: 'SlickEditors.html'}               : null,
+                this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeSelector.html'}    : null,
+                this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellSelectionModel.html'}   : null,
+                this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeDecorator.html'}   : null,
+                this.useDataViewDataProvider    ? {importURL: 'Slick.DataView.html'}             : null,
             ];
             importHrefs(slickDependencies, this, () =>{
                 const thisGrid = this.$$('#grid');
@@ -214,7 +228,7 @@ module crystal.elements {
                 if(childColumns) this.setEditor(childColumns);
             }
         },
-        setInitialData(data: any[], columns: IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions){
+        setInitialData<T>(data: T[], columns: IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions<T>){
             //this.data = data;
             //this.columns = columns;
             if(!this.readyFnInitialized){
@@ -226,7 +240,13 @@ module crystal.elements {
             }
             this.setEditor(columns);
             //this.gridOptions = gridOptions;
-            this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+            if(wcOptions && wcOptions.dataProvider){
+                const dataProvider = wcOptions.dataProvider(data);
+                this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
+            }else{
+                this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+            }
+
             const grid = this.grid;
             this.wcOptions = wcOptions;
             if(wcOptions.trackRowHover){
@@ -270,14 +290,8 @@ module crystal.elements {
                         });
                     });
                 }
-                if(wcOptions.useCellSelectionModel){
-                    const cellModelImpors: IDynamicImportStep[] = [{importURL: 'Slick.CellRangeSelector.html'}, {importURL: 'Slick.CellSelectionModel.html'}, {importURL: 'Slick.CellRangeDecorator.html'}];
-                    importHrefs(cellModelImpors, this, () => {
-                        grid.setSelectionModel(new Slick.CellSelectionModel())
-                    })
 
 
-                }
             }
             if(this.fillContainerHeight){
                 this.fillContainerHeightImpl();

@@ -113,6 +113,12 @@ var crystal;
                     type: Number,
                     notify: true,
                     reflectToAttribute: true
+                },
+                selectionModel: {
+                    type: String,
+                },
+                useDataViewDataProvider: {
+                    type: Boolean,
                 }
             },
             readyFnInitialized: false,
@@ -133,7 +139,11 @@ var crystal;
                     },
                     { importURL: 'SlickCore.html' },
                     { importURL: 'SlickGrid.html' },
-                    this.importSlickGridEditors ? { importURL: 'SlickEditors.html' } : null
+                    this.importSlickGridEditors ? { importURL: 'SlickEditors.html' } : null,
+                    this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeSelector.html' } : null,
+                    this.selectionModel === 'Cell' ? { importURL: 'Slick.CellSelectionModel.html' } : null,
+                    this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeDecorator.html' } : null,
+                    this.useDataViewDataProvider ? { importURL: 'Slick.DataView.html' } : null,
                 ];
                 importHrefs(slickDependencies, this, function () {
                     var thisGrid = _this.$$('#grid');
@@ -204,7 +214,13 @@ var crystal;
                 }
                 this.setEditor(columns);
                 //this.gridOptions = gridOptions;
-                this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+                if (wcOptions && wcOptions.dataProvider) {
+                    var dataProvider = wcOptions.dataProvider(data);
+                    this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
+                }
+                else {
+                    this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+                }
                 var grid = this.grid;
                 this.wcOptions = wcOptions;
                 if (wcOptions.trackRowHover) {
@@ -246,12 +262,6 @@ var crystal;
                             $("body").one("click", function () {
                                 _thisEl.isContextMenuOpen = false;
                             });
-                        });
-                    }
-                    if (wcOptions.useCellSelectionModel) {
-                        var cellModelImpors = [{ importURL: 'Slick.CellRangeSelector.html' }, { importURL: 'Slick.CellSelectionModel.html' }, { importURL: 'Slick.CellRangeDecorator.html' }];
-                        importHrefs(cellModelImpors, this, function () {
-                            grid.setSelectionModel(new Slick.CellSelectionModel());
                         });
                     }
                 }
