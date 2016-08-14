@@ -119,6 +119,15 @@ var crystal;
                 },
                 useDataViewDataProvider: {
                     type: Boolean,
+                },
+                useSlickPaging: {
+                    type: Boolean,
+                },
+                useSlickColumnPicker: {
+                    type: Boolean
+                },
+                useSlickFormatters: {
+                    type: Boolean
                 }
             },
             readyFnInitialized: false,
@@ -143,7 +152,11 @@ var crystal;
                     this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeSelector.html' } : null,
                     this.selectionModel === 'Cell' ? { importURL: 'Slick.CellSelectionModel.html' } : null,
                     this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeDecorator.html' } : null,
+                    this.selectionModel === 'Row' ? { importURL: 'Click.RowSelectionModel.html' } : null,
                     this.useDataViewDataProvider ? { importURL: 'Slick.DataView.html' } : null,
+                    this.useSlickPaging ? { importURL: 'controls/SlickPager.html' } : null,
+                    this.useSlickColumnPicker ? { importURL: 'controls/SlickColumnPicker.html' } : null,
+                    this.useSlickFormatters ? { importURL: 'SlickFormatters.html' } : null
                 ];
                 importHrefs(slickDependencies, this, function () {
                     var thisGrid = _this.$$('#grid');
@@ -227,15 +240,12 @@ var crystal;
                 }
                 var grid = this.grid;
                 this.wcOptions = wcOptions;
-                if (wcOptions.trackRowHover) {
-                    this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), function () {
-                        elements.enableMouseOverSlickGrid(_this);
-                    }, null, true);
-                }
-                // grid.onMouseEnter.subscribe((e, d) =>{
-                //     //console.log([e, d]);
-                // })
                 if (wcOptions) {
+                    if (wcOptions.trackRowHover) {
+                        this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), function () {
+                            elements.enableMouseOverSlickGrid(_this);
+                        }, null, true);
+                    }
                     if (wcOptions.trackCurrentRow) {
                         this.clickedCellIndex = -1;
                         this.clickedRowIndex = -1;
