@@ -218,6 +218,10 @@ var crystal;
                     var dataProvider = wcOptions.dataProvider(data);
                     this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                 }
+                else if (this.useDataViewDataProvider) {
+                    var dataProvider = new Slick.Data.DataView({ inlineFilters: true });
+                    this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
+                }
                 else {
                     this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                 }

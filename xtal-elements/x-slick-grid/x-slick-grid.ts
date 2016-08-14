@@ -243,7 +243,11 @@ module crystal.elements {
             if(wcOptions && wcOptions.dataProvider){
                 const dataProvider = wcOptions.dataProvider(data);
                 this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
-            }else{
+            }else if(this.useDataViewDataProvider){
+                const dataProvider = new Slick.Data.DataView({ inlineFilters: true });
+                this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
+            }
+            else{
                 this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
             }
 
