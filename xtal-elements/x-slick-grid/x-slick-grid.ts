@@ -185,7 +185,7 @@ module crystal.elements {
                 this.useSlickFormatters         ? {importURL: 'SlickFormatters.html'}            : null
             ];
             importHrefs(slickDependencies, this, () =>{
-                const thisGrid = this.$$('#grid');
+                const thisGrid = this.$$('[role]');
                 const $thisGrid = $(thisGrid);
                 $thisGrid
                     .css('height', this.height)
