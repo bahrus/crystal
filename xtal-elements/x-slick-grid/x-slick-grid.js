@@ -50,7 +50,7 @@ var crystal;
                     type: String,
                     value: '600px'
                 },
-                useSlickGridEditors: {
+                useSlickEditors: {
                     type: Boolean,
                     value: false
                 },
@@ -129,7 +129,7 @@ var crystal;
                     !$IsDefined || !$.fn.drag ? { importURL: 'Jquery.Event.DragDrop.html' } : null,
                     { importURL: 'SlickCore.html' },
                     { importURL: 'SlickGrid.html' },
-                    this.useSlickGridEditors ? { importURL: 'SlickEditors.html' } : null,
+                    this.useSlickEditors ? { importURL: 'SlickEditors.html' } : null,
                     this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeSelector.html' } : null,
                     this.selectionModel === 'Cell' ? { importURL: 'Slick.CellSelectionModel.html' } : null,
                     this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeDecorator.html' } : null,
@@ -260,6 +260,16 @@ var crystal;
                             $("body").one("click", function () {
                                 _thisEl.isContextMenuOpen = false;
                             });
+                        });
+                    }
+                    if (wcOptions.enableAddRowOptions && wcOptions.enableAddRowOptions.autoCommit) {
+                        grid.onAddNewRow.subscribe(function (e, args) {
+                            var data = grid.getData();
+                            var item = args.item;
+                            grid.invalidateRow(data.length);
+                            data.push(item);
+                            grid.updateRowCount();
+                            grid.render();
                         });
                     }
                 }

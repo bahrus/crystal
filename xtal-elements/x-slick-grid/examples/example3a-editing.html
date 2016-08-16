@@ -76,6 +76,11 @@
     asyncEditorLoading: false,
     autoEdit: false
   };
+  var webComponentOptions = {
+    enableAddRowOptions:{
+      autoCommit: true
+    }
+  }
 
   for (var i = 0; i < 500; i++) {
     var d = (data[i] = {});
@@ -90,25 +95,13 @@
   }
 
 
-  function addEventHandlers(){
-    var grid = xslick.grid;
-    grid.onAddNewRow.subscribe(function (e, args) {
-      console.log('iah');
-      var item = args.item;
-      grid.invalidateRow(data.length);
-      data.push(item);
-      grid.updateRowCount();
-      grid.render();
-    });
-  }
+
   var xslick = document.querySelector('x-slick-grid');
   if(xslick.setInitialData){
-    xslick.setInitialData(data, columns, options);
-    addEventHandlers();
+    xslick.setInitialData(data, columns, options, webComponentOptions);
   }else{
     window.addEventListener('WebComponentsReady', function(e){
-      xslick.setInitialData(data, columns, options);
-      addEventHandlers();
+      xslick.setInitialData(data, columns, options, webComponentOptions);
     });
   }
 </script>
