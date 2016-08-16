@@ -148,10 +148,11 @@ module crystal.elements {
         },
         readyFnInitialized: false,
         ready: function() {
+            const $IsDefined = (typeof($) !== 'undefined');
             const slickDependencies : IDynamicImportStep[] = [
-                typeof($) === 'undefined' ? {importURL: 'JQuery.html'} : null,
-                !($ && $['ui']) ? {importURL: 'JQueryUI.html'} : null,
-                !($ && $.fn.drag) ? {importURL: 'Jquery.Event.DragDrop.html'} : null,
+                !$IsDefined ? {importURL: 'JQuery.html'} : null,
+                !$IsDefined || !$['ui'] ? {importURL: 'JQueryUI.html'} : null,
+                !$IsDefined || !$.fn.drag ? {importURL: 'Jquery.Event.DragDrop.html'} : null,
                 {importURL: 'SlickCore.html'},
                 {importURL: 'SlickGrid.html'},
                 this.useSlickGridEditors        ? {importURL: 'SlickEditors.html'}               : null,

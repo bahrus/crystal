@@ -122,10 +122,11 @@ var crystal;
             readyFnInitialized: false,
             ready: function () {
                 var _this = this;
+                var $IsDefined = (typeof ($) !== 'undefined');
                 var slickDependencies = [
-                    typeof ($) === 'undefined' ? { importURL: 'JQuery.html' } : null,
-                    !($ && $['ui']) ? { importURL: 'JQueryUI.html' } : null,
-                    !($ && $.fn.drag) ? { importURL: 'Jquery.Event.DragDrop.html' } : null,
+                    !$IsDefined ? { importURL: 'JQuery.html' } : null,
+                    !$IsDefined || !$['ui'] ? { importURL: 'JQueryUI.html' } : null,
+                    !$IsDefined || !$.fn.drag ? { importURL: 'Jquery.Event.DragDrop.html' } : null,
                     { importURL: 'SlickCore.html' },
                     { importURL: 'SlickGrid.html' },
                     this.useSlickGridEditors ? { importURL: 'SlickEditors.html' } : null,
