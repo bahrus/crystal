@@ -199,7 +199,7 @@ module crystal.elements {
             this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
         },
         fillContainerXImpl: function(offsetDim: string, clientDim: string , cssDim: string, resize: boolean){
-            const thisGrid = this.$$('#grid');
+            const thisGrid = this.$$('[role="grid"]');
             const $thisGrid = $(thisGrid);
             const offset = this[offsetDim];
             const containerLength = this.parentElement[clientDim];

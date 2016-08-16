@@ -173,7 +173,7 @@ var crystal;
                 this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
             },
             fillContainerXImpl: function (offsetDim, clientDim, cssDim, resize) {
-                var thisGrid = this.$$('#grid');
+                var thisGrid = this.$$('[role="grid"]');
                 var $thisGrid = $(thisGrid);
                 var offset = this[offsetDim];
                 var containerLength = this.parentElement[clientDim];
