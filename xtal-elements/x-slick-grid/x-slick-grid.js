@@ -18,22 +18,12 @@ var crystal;
                 return;
             }
             var resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
-            if (nextStep.conditonForImport) {
-                if (nextStep.conditonForImport(polymerElement)) {
-                    polymerElement.importHref(resolvedURL, function () {
-                        importHrefs(importStep, polymerElement, callBack);
-                    });
-                }
-            }
-            else {
-                polymerElement.importHref(resolvedURL, function () {
-                    importHrefs(importStep, polymerElement, callBack);
-                });
-            }
+            polymerElement.importHref(resolvedURL, function () {
+                importHrefs(importStep, polymerElement, callBack);
+            });
         }
         Polymer({
             is: 'x-slick-grid',
-            //columns: null,
             get columns() {
                 return this.grid.getColumns();
             },
@@ -48,14 +38,13 @@ var crystal;
             get options() {
                 return this.grid.getOptions();
             },
-            //gridOptions: null,
             wcOptions: null,
             grid: null,
             gridDiv: null,
             properties: {
                 height: {
                     type: String,
-                    value: '500px',
+                    value: '500px'
                 },
                 width: {
                     type: String,
@@ -77,7 +66,7 @@ var crystal;
                     type: Number,
                     value: 0,
                     notify: true,
-                    reflectToAttribute: true,
+                    reflectToAttribute: true
                 },
                 clickedCellIndex: {
                     type: Number,
@@ -115,13 +104,13 @@ var crystal;
                     reflectToAttribute: true
                 },
                 selectionModel: {
-                    type: String,
+                    type: String
                 },
                 useDataViewDataProvider: {
-                    type: Boolean,
+                    type: Boolean
                 },
                 useSlickPaging: {
-                    type: Boolean,
+                    type: Boolean
                 },
                 useSlickColumnPicker: {
                     type: Boolean
@@ -134,18 +123,9 @@ var crystal;
             ready: function () {
                 var _this = this;
                 var slickDependencies = [
-                    {
-                        importURL: 'JQuery.html',
-                        conditonForImport: function () { return typeof ($) === 'undefined'; }
-                    },
-                    {
-                        importURL: 'JQueryUI.html',
-                        conditonForImport: function () { return !($ && $['ui']); }
-                    },
-                    {
-                        importURL: 'Jquery.Event.DragDrop.html',
-                        conditonForImport: function () { return !($ && $.fn.drag); }
-                    },
+                    typeof ($) === 'undefined' ? { importURL: 'JQuery.html' } : null,
+                    !($ && $['ui']) ? { importURL: 'JQueryUI.html' } : null,
+                    !($ && $.fn.drag) ? { importURL: 'Jquery.Event.DragDrop.html' } : null,
                     { importURL: 'SlickCore.html' },
                     { importURL: 'SlickGrid.html' },
                     this.useSlickGridEditors ? { importURL: 'SlickEditors.html' } : null,
@@ -208,7 +188,10 @@ var crystal;
                 for (var i = 0, ii = columns.length; i < ii; i++) {
                     var col = columns[i];
                     if (col.editorFn) {
-                        col.editor = col.editorFn();
+                        col.editor = col.editorFn(col);
+                    }
+                    if (col.formatterFn) {
+                        col.formatter = col.formatterFn(col);
                     }
                     var childColumns = col.columns;
                     if (childColumns)
@@ -287,7 +270,7 @@ var crystal;
                 }
                 this.renderCount++;
                 return grid;
-            },
+            }
         });
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));

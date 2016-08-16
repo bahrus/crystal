@@ -24,7 +24,6 @@ module crystal.elements {
     }
 
     export interface IDynamicImportStep{
-        conditonForImport?: (polymerElement?: polymer.Base) => boolean;
         importURL: string;
     }
     export interface ISlickGridOptions<T> extends Slick.GridOptions<T>{
@@ -34,7 +33,6 @@ module crystal.elements {
         grid: Slick.Grid<T>;
         options: ISlickGridOptions<T>;
     }
-
     function importHrefs(importStep: IDynamicImportStep[], polymerElement: polymer.Base, callBack?: () => void){
         if(importStep.length === 0) {
             if(callBack) callBack();
@@ -46,23 +44,14 @@ module crystal.elements {
             return;
         }
         const resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
-        if(nextStep.conditonForImport){
-            if(nextStep.conditonForImport(polymerElement)){
-                polymerElement.importHref(resolvedURL, () =>{
-                    importHrefs(importStep, polymerElement, callBack);
-                })
-            }
-        }else{
-            polymerElement.importHref(resolvedURL, () =>{
-                importHrefs(importStep, polymerElement, callBack);
-            })
-        }
+        polymerElement.importHref(resolvedURL, () =>{
+            importHrefs(importStep, polymerElement, callBack);
+        })
     }
 
 
     Polymer({
         is: 'x-slick-grid',
-        //columns: null,
         get columns(){
             return this.grid.getColumns();
         },
@@ -76,7 +65,6 @@ module crystal.elements {
         get options(){
             return this.grid.getOptions();
         },
-        //gridOptions: null,
         wcOptions: null,
         grid: null,
         gridDiv: null,
@@ -161,21 +149,12 @@ module crystal.elements {
         readyFnInitialized: false,
         ready: function() {
             const slickDependencies : IDynamicImportStep[] = [
-                {
-                    importURL: 'JQuery.html',
-                    conditonForImport: () => typeof($) === 'undefined'
-                },
-                {
-                    importURL: 'JQueryUI.html',
-                    conditonForImport: () => !($ && $['ui'])
-                },
-                {
-                    importURL: 'Jquery.Event.DragDrop.html',
-                    conditonForImport: () => !($ && $.fn.drag)
-                },
+                typeof($) === 'undefined' ? {importURL: 'JQuery.html'} : null,
+                !($ && $['ui']) ? {importURL: 'JQueryUI.html'} : null,
+                !($ && $.fn.drag) ? {importURL: 'Jquery.Event.DragDrop.html'} : null,
                 {importURL: 'SlickCore.html'},
                 {importURL: 'SlickGrid.html'},
-                this.useSlickGridEditors     ? {importURL: 'SlickEditors.html'}               : null,
+                this.useSlickGridEditors        ? {importURL: 'SlickEditors.html'}               : null,
                 this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeSelector.html'}    : null,
                 this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellSelectionModel.html'}   : null,
                 this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeDecorator.html'}   : null,
@@ -322,12 +301,7 @@ module crystal.elements {
             return grid;
         },
 
-        // getGrid: function(){
-        //     return this.grid;
-        // },
-        // getGridDiv: function(){
-        //     return this.gridDiv;
-        // }
+
     });
 
 
