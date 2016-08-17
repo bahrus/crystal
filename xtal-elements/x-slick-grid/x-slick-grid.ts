@@ -242,7 +242,6 @@ module crystal.elements {
             }
             this.setEditorAndFormatter(columns);
             //this.gridOptions = gridOptions;
-            console.log(data);
             if(data['addItem']){
                 this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
             }else{
@@ -254,7 +253,7 @@ module crystal.elements {
                     this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                 }
                 else{
-
+                    this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                 }
             }
 

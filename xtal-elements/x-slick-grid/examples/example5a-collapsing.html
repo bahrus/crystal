@@ -194,23 +194,27 @@
   }
 
 
-  // initialize the model
-  dataView = new Slick.Data.DataView({ inlineFilters: true });
-  dataView.beginUpdate();
-  dataView.setItems(data);
-  dataView.setFilter(myFilter);
-  dataView.endUpdate();
 
+  var wcOptions = {
+    dataProvider: function(data){
+      dataView = new Slick.Data.DataView({ inlineFilters: true });
+      dataView.beginUpdate();
+      dataView.setItems(data);
+      dataView.setFilter(myFilter);
+      dataView.endUpdate();
+      return dataView;
+    }
+  };
 
   // initialize the grid
   //grid = new Slick.Grid("#myGrid", dataView, columns, options);
   var xslick = document.querySelector('x-slick-grid');
   if(xslick.setInitialData){
-    xslick.setInitialData(dataView, columns, options);
+    xslick.setInitialData(data, columns, options, wcOptions);
     addEventHandlers(xslick.grid);
   }else{
     window.addEventListener('WebComponentsReady', function(e){
-      xslick.setInitialData(dataView, columns, options);
+      xslick.setInitialData(data, columns, options, wcOptions);
       addEventHandlers(xslick.grid);
     });
   }
