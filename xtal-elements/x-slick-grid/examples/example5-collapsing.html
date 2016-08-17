@@ -206,11 +206,11 @@
   //grid = new Slick.Grid("#myGrid", dataView, columns, options);
   var xslick = document.querySelector('x-slick-grid');
   if(xslick.setInitialData){
-    xslick.setInitialData(data, columns, options);
+    xslick.setInitialData(dataView, columns, options);
     addEventHandlers(xslick.grid);
   }else{
     window.addEventListener('WebComponentsReady', function(e){
-      xslick.setInitialData(data, columns, options);
+      xslick.setInitialData(dataView, columns, options);
       addEventHandlers(xslick.grid);
     });
   }

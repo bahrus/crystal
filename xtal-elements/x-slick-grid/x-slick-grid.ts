@@ -242,16 +242,22 @@ module crystal.elements {
             }
             this.setEditorAndFormatter(columns);
             //this.gridOptions = gridOptions;
-            if(wcOptions && wcOptions.dataProvider){
-                const dataProvider = wcOptions.dataProvider(data);
-                this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
-            }else if(this.useDataViewDataProvider){
-                const dataProvider = new Slick.Data.DataView({ inlineFilters: true });
-                this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
-            }
-            else{
+            console.log(data);
+            if(data['addItem']){
                 this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+            }else{
+                if(wcOptions && wcOptions.dataProvider){
+                    const dataProvider = wcOptions.dataProvider(data);
+                    this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
+                }else if(this.useDataViewDataProvider){
+                    const dataProvider = new Slick.Data.DataView({ inlineFilters: true });
+                    this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
+                }
+                else{
+
+                }
             }
+
 
             const grid = this.grid;
             this.wcOptions = wcOptions;
