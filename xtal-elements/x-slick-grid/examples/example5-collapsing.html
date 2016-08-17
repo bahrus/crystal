@@ -51,7 +51,12 @@
       </div>
       <br/>
 
-      <x-slick-grid use-slick-editors use-slick-formatters selection-model="Cell"></x-slick-grid>
+      <x-slick-grid
+              use-slick-editors
+              use-slick-formatters
+              selection-model="Cell"
+              use-data-view-data-provider
+      ></x-slick-grid>
     </td>
     <td valign="top">
       <h2>Demonstrates:</h2>
@@ -202,15 +207,15 @@
   var xslick = document.querySelector('x-slick-grid');
   if(xslick.setInitialData){
     xslick.setInitialData(data, columns, options);
-    addEventHandlers();
+    addEventHandlers(xslick.grid);
   }else{
     window.addEventListener('WebComponentsReady', function(e){
       xslick.setInitialData(data, columns, options);
-      addEventHandlers();
+      addEventHandlers(xslick.grid);
     });
   }
 
-  function addEventHandlers(){
+  function addEventHandlers(grid){
     grid.onCellChange.subscribe(function (e, args) {
       dataView.updateItem(args.item.id, args.item);
     });
