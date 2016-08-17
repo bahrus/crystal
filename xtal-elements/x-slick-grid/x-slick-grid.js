@@ -44,7 +44,7 @@ var crystal;
             properties: {
                 height: {
                     type: String,
-                    value: '500px'
+                    value: '500px',
                 },
                 width: {
                     type: String,
@@ -66,7 +66,7 @@ var crystal;
                     type: Number,
                     value: 0,
                     notify: true,
-                    reflectToAttribute: true
+                    reflectToAttribute: true,
                 },
                 clickedCellIndex: {
                     type: Number,
@@ -104,13 +104,13 @@ var crystal;
                     reflectToAttribute: true
                 },
                 selectionModel: {
-                    type: String
+                    type: String,
                 },
                 useDataViewDataProvider: {
-                    type: Boolean
+                    type: Boolean,
                 },
                 useSlickPaging: {
-                    type: Boolean
+                    type: Boolean,
                 },
                 useSlickColumnPicker: {
                     type: Boolean
@@ -281,7 +281,7 @@ var crystal;
                 }
                 this.renderCount++;
                 return grid;
-            }
+            },
         });
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
