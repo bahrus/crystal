@@ -38,9 +38,14 @@ var crystal;
             get options() {
                 return this.grid.getOptions();
             },
+            get dataProvider() {
+                //const grid = this.grid as Slick.Grid<any>;
+                return this._dataProvider;
+            },
             wcOptions: null,
             grid: null,
             gridDiv: null,
+            _dataProvider: null,
             properties: {
                 height: {
                     type: String,
@@ -217,10 +222,12 @@ var crystal;
                 else {
                     if (wcOptions && wcOptions.dataProvider) {
                         var dataProvider = wcOptions.dataProvider(data);
+                        this._dataProvider = dataProvider;
                         this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                     }
                     else if (this.useDataViewDataProvider) {
                         var dataProvider = new Slick.Data.DataView({ inlineFilters: true });
+                        this._dataProvider = dataProvider;
                         this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                     }
                     else {
