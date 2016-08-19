@@ -57,7 +57,7 @@ module crystal.elements {
         onContextMenu?: (eventData: Slick.OnContextMenuEventArgs<T>, data?: T) => void;
         onKeyDown?: (eventData: Slick.OnKeyDownEventArgs<T>, data?: T) => void;
         onAddNewRow?: (eventData: Slick.OnAddNewRowEventArgs<T>, data?: T) => void;
-        onValidationError: (eventData: Slick.OnValidationErrorEventArgs<T>, data?: T) => void;
+        onValidationError?: (eventData: Slick.OnValidationErrorEventArgs<T>, data?: T) => void;
         onColumnsReordered?: (eventData: Slick.OnColumnsReorderedEventArgs<T>, data?: T) => void;
         onColumnsResized?: (eventData: Slick.OnColumnsResizedEventArgs<T>, data?: T) => void;
         onCellChange?: (eventData: Slick.OnCellChangeEventArgs<T>, data?: T) => void;
