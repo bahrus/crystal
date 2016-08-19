@@ -22,6 +22,14 @@ var crystal;
                 importHrefs(importStep, polymerElement, callBack);
             });
         }
+        function attachEventHandlers(grid, handlers) {
+            if (!handlers)
+                return;
+            for (var key in handlers) {
+                var handler = handlers[key];
+                grid[key].subscribe(handler);
+            }
+        }
         Polymer({
             is: 'x-slick-grid',
             get columns() {
@@ -237,6 +245,7 @@ var crystal;
                 var grid = this.grid;
                 this.wcOptions = wcOptions;
                 if (wcOptions) {
+                    attachEventHandlers(grid, wcOptions.eventHandlers);
                     if (wcOptions.trackRowHover) {
                         this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), function () {
                             elements.enableMouseOverSlickGrid(_this);

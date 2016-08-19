@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <title>SlickGrid example 5: Collapsing</title>
+  <title>SlickGrid example 5a: Collapsing, with code reduction via web component</title>
   <link rel="stylesheet" href="examples.css" type="text/css"/>
   <style>
     .cell-title {
@@ -193,6 +193,39 @@
       dataView.setFilter(myFilter);
       dataView.endUpdate();
       return dataView;
+    },
+    eventHandlers:{
+        onCellChange: function(e, args){
+            xslick.dataProvider.updateItem(args.item.id, args.item);
+        },
+        onAddNewRow: function(e, args){
+            var item = {
+                "id": "new_" + (Math.round(Math.random() * 10000)),
+                "indent": 0,
+                "title": "New task",
+                "duration": "1 day",
+                "percentComplete": 0,
+                "start": "01/01/2009",
+                "finish": "01/01/2009",
+                "effortDriven": false};
+            $.extend(item, args.item);
+            xslick.dataProvider.addItem(item);
+        },
+        onClick: function(e, args){
+            if ($(e.target).hasClass("toggle")) {
+                var item = xslick.dataProvider.getItem(args.row);
+                if (item) {
+                    if (!item._collapsed) {
+                        item._collapsed = true;
+                    } else {
+                        item._collapsed = false;
+                    }
+
+                    xslick.dataProvider.updateItem(item.id, item);
+                }
+                e.stopImmediatePropagation();
+            }
+        }
     }
   };
 
@@ -210,39 +243,11 @@
   }
 
   function addEventHandlers(grid){
-    grid.onCellChange.subscribe(function (e, args) {
-      xslick.dataProvider.updateItem(args.item.id, args.item);
-    });
 
-    grid.onAddNewRow.subscribe(function (e, args) {
-      var item = {
-        "id": "new_" + (Math.round(Math.random() * 10000)),
-        "indent": 0,
-        "title": "New task",
-        "duration": "1 day",
-        "percentComplete": 0,
-        "start": "01/01/2009",
-        "finish": "01/01/2009",
-        "effortDriven": false};
-      $.extend(item, args.item);
-        xslick.dataProvider.addItem(item);
-    });
 
-    grid.onClick.subscribe(function (e, args) {
-      if ($(e.target).hasClass("toggle")) {
-        var item = xslick.dataProvider.getItem(args.row);
-        if (item) {
-          if (!item._collapsed) {
-            item._collapsed = true;
-          } else {
-            item._collapsed = false;
-          }
 
-            xslick.dataProvider.updateItem(item.id, item);
-        }
-        e.stopImmediatePropagation();
-      }
-    });
+
+    
 
 
     // wire up model events to drive the grid

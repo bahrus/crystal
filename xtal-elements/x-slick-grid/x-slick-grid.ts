@@ -19,6 +19,7 @@ module crystal.elements {
         //dataViewOptions?: Slick.Data.DataViewOptions<T>;
         dataProvider?: (data: T[]) => Slick.DataProvider<T>;
         enableAddRowOptions?: IXSlickGridEnableAddRowOptions;
+        eventHandlers?: ISlickGridEventHandlers<T>;
     }
 
     export interface IXSlickGridColumn<T> extends Slick.Column<T>{
@@ -38,6 +39,41 @@ module crystal.elements {
         grid: Slick.Grid<T>;
         options: ISlickGridOptions<T>;
     }
+    export interface ISlickGridEventHandlers<T>{
+        onScroll?: (eventData: Slick.OnScrollEventArgs<T>, data?: T) => void;
+        onSort?: (eventData: Slick.OnSortEventArgs<T>, data?: T) => void
+        onHeaderMouseEnter?: (eventData: Slick.OnHeaderMouseEventArgs<T>, data?: T) => void;
+        onHeaderMouseLeave?: (eventData: Slick.OnHeaderMouseEventArgs<T>, data?: T) => void;
+        onHeaderContextMenu?: (eventData: Slick.OnHeaderContextMenuEventArgs<T>, data?: T) => void;
+        onHeaderClick?: (eventData: Slick.OnHeaderClickEventArgs<T>, data?: T) => void;
+        onHeaderCellRendered?: (eventData: Slick.OnHeaderCellRenderedEventArgs<T>, data?: T) => void;
+        onBeforeHeaderCellDestroy?: (eventData: Slick.OnBeforeHeaderCellDestroyEventArgs<T>, data?: T) => void;
+        onHeaderRowCellRendered?: (eventData: Slick.OnHeaderRowCellRenderedEventArgs<T>, data?: T) => void;
+        onBeforeHeaderRowCellDestroy?: (eventData: Slick.OnBeforeHeaderRowCellDestroyEventArgs<T>, data?: T) => void;
+        onMouseEnter?: (eventData: Slick.OnMouseEnterEventArgs<T>, data?: T) => void;
+        onMouseLeave?: (eventData: Slick.OnMouseLeaveEventArgs<T>, data?: T) => void;
+        onClick?: (eventData: Slick.OnClickEventArgs<T>, data?: T) => void;
+        onDblClick?: (eventData: Slick.OnDblClickEventArgs<T>, data?: T) => void;
+        onContextMenu?: (eventData: Slick.OnContextMenuEventArgs<T>, data?: T) => void;
+        onKeyDown?: (eventData: Slick.OnKeyDownEventArgs<T>, data?: T) => void;
+        onAddNewRow?: (eventData: Slick.OnAddNewRowEventArgs<T>, data?: T) => void;
+        onValidationError: (eventData: Slick.OnValidationErrorEventArgs<T>, data?: T) => void;
+        onColumnsReordered?: (eventData: Slick.OnColumnsReorderedEventArgs<T>, data?: T) => void;
+        onColumnsResized?: (eventData: Slick.OnColumnsResizedEventArgs<T>, data?: T) => void;
+        onCellChange?: (eventData: Slick.OnCellChangeEventArgs<T>, data?: T) => void;
+        onBeforeEditCell?: (eventData: Slick.OnBeforeEditCellEventArgs<T>, data?: T) => void;
+        onBeforeCellEditorDestroy?: (eventData: Slick.OnBeforeCellEditorDestroyEventArgs<T>, data?: T) => void;
+        onBeforeDestroy?: (eventData: Slick.OnBeforeDestroyEventArgs<T>, data?: T) => void;
+        onActiveCellChanged?: (eventData: Slick.OnActiveCellChangedEventArgs<T>, data?: T) => void;
+        onActiveCellPositionChanged?: (eventData: Slick.OnActiveCellPositionChangedEventArgs<T>, data?: T) => void;
+        onDragInit?: (eventData: Slick.OnDragInitEventArgs<T>, data?: T) => void;
+        onDragStart?: (eventData: Slick.OnDragStartEventArgs<T>, data?: T) => void;
+        onDrag?: (eventData: Slick.OnDragEventArgs<T>, data?: T) => void;
+        onDragEnd?: (eventData: Slick.OnDragEndEventArgs<T>, data?: T) => void;
+        onSelectedRowsChanged?: (eventData: Slick.OnSelectedRowsChangedEventArgs<T>, data?: T) => void;
+        onCellCssStylesChanged?: (eventData: Slick.OnCellCssStylesChangedEventArgs<T>, data?: T) => void;
+        onViewportChanged?: (eventData: Slick.OnViewportChangedEventArgs<T>, data?: T) => void;
+    }
     function importHrefs(importStep: IDynamicImportStep[], polymerElement: polymer.Base, callBack?: () => void){
         if(importStep.length === 0) {
             if(callBack) callBack();
@@ -53,7 +89,14 @@ module crystal.elements {
             importHrefs(importStep, polymerElement, callBack);
         })
     }
+    function attachEventHandlers<T>(grid: Slick.Grid<T>, handlers: ISlickGridEventHandlers<T>){
+        if(!handlers) return;
+        for(const key in handlers){
+            const handler = handlers[key];
+            grid[key].subscribe(handler);
+        }
 
+    }
 
     Polymer({
         is: 'x-slick-grid',
@@ -264,11 +307,11 @@ module crystal.elements {
                 }
             }
 
-
             const grid = this.grid;
             this.wcOptions = wcOptions;
 
             if(wcOptions){
+                attachEventHandlers(grid, wcOptions.eventHandlers);
                 if(wcOptions.trackRowHover){
                     this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), () =>{
                         enableMouseOverSlickGrid(this);
