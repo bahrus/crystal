@@ -256,11 +256,11 @@ var crystal;
                 this.wcOptions = wcOptions;
                 if (wcOptions) {
                     attachEventHandlers(grid, wcOptions.eventHandlers);
-                    if (wcOptions.trackRowHover) {
-                        this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), function () {
-                            elements.enableMouseOverSlickGrid(_this);
-                        }, null, true);
-                    }
+                    // if(wcOptions.trackRowHover){
+                    //     this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), () =>{
+                    //         enableMouseOverSlickGrid(this);
+                    //     }, null, true);
+                    // }
                     if (wcOptions.trackCurrentRow) {
                         this.clickedCellIndex = -1;
                         this.clickedRowIndex = -1;

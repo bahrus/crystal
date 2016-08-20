@@ -5,14 +5,4 @@
 		"sourceMap": true,
 		"experimentalDecorators": true
 	}
-	// "files": [
-    // 	"crystal.ts",
-	// 	"xtal-elements/xtal-include.ts",
-	// 	"xtal-elements/js-xtal-init.ts",
-	// 	"xtal-elements/xtal-label.ts",
-	// 	"xtal-elements/xtal-litedom-proc.ts",
-	// 	"xtal-elements/js-xtal-set.ts",
-	// 	"xtal-elements/xtal-sink.ts"
-
-  	// ]
 }
