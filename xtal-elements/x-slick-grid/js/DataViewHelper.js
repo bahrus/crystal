@@ -10,23 +10,27 @@ var crystal;
             dataView.setFilter(filter);
             dataView.endUpdate();
             if (options && options.addStandardRowHandling) {
-                if (!options.gridFinder) {
-                    throw 'gridFinder required';
-                }
-                dataView.onRowCountChanged.subscribe(function (e, args) {
-                    var grid = options.gridFinder();
-                    grid.updateRowCount();
-                    grid.render();
-                });
-                dataView.onRowsChanged.subscribe(function (e, args) {
-                    var grid = options.gridFinder();
-                    grid.invalidateRows(args.rows);
-                    grid.render();
-                });
+                addStandardRowHandling(dataView, options);
             }
             return dataView;
         }
         elements.createDataViewWithFilter = createDataViewWithFilter;
+        function addStandardRowHandling(dataView, options) {
+            if (!options.gridFinder) {
+                throw 'gridFinder required';
+            }
+            dataView.onRowCountChanged.subscribe(function (e, args) {
+                var grid = options.gridFinder();
+                grid.updateRowCount();
+                grid.render();
+            });
+            dataView.onRowsChanged.subscribe(function (e, args) {
+                var grid = options.gridFinder();
+                grid.invalidateRows(args.rows);
+                grid.render();
+            });
+        }
+        elements.addStandardRowHandling = addStandardRowHandling;
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
 //# sourceMappingURL=DataViewHelper.js.map

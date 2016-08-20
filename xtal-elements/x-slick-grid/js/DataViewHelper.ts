@@ -12,21 +12,25 @@ module crystal.elements{
         dataView.setFilter(filter);
         dataView.endUpdate();
         if(options && options.addStandardRowHandling){
-            if(!options.gridFinder){
-                throw 'gridFinder required';
-            }
-            dataView.onRowCountChanged.subscribe(function (e, args) {
-                const grid = options.gridFinder();
-                grid.updateRowCount();
-                grid.render();
-            });
-
-            dataView.onRowsChanged.subscribe(function (e, args) {
-                const grid = options.gridFinder();
-                grid.invalidateRows(args.rows);
-                grid.render();
-            });
+            addStandardRowHandling(dataView, options);
         }
         return dataView;
+    }
+
+    export function addStandardRowHandling<T>(dataView:  Slick.Data.DataView<T>, options: ICreateDataViewOptions<T>){
+        if(!options.gridFinder){
+            throw 'gridFinder required';
+        }
+        dataView.onRowCountChanged.subscribe(function (e, args) {
+            const grid = options.gridFinder();
+            grid.updateRowCount();
+            grid.render();
+        });
+
+        dataView.onRowsChanged.subscribe(function (e, args) {
+            const grid = options.gridFinder();
+            grid.invalidateRows(args.rows);
+            grid.render();
+        });
     }
 }
