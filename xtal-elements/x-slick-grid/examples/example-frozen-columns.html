@@ -7,7 +7,7 @@
   <!--<link rel="stylesheet" href="../controls/slick.pager.css" type="text/css" media="screen" charset="utf-8"/>-->
   <!--<link rel="stylesheet" href="../css/smoothness/jquery-ui-1.8.24.custom.css" type="text/css" media="screen"-->
         <!--charset="utf-8"/>-->
-  <!--<link rel="stylesheet" href="examples.css" type="text/css" media="screen" charset="utf-8"/>-->
+  <link rel="stylesheet" href="examples.css" type="text/css" media="screen" charset="utf-8"/>
   <!--<link rel="stylesheet" href="../controls/slick.columnpicker.css" type="text/css" media="screen" charset="utf-8"/>-->
   <style>
     .cell-title {
@@ -190,9 +190,9 @@ var wcOptions = {
     },
     onSelectedRowsChanged: function(e){
       selectedRowIds = [];
-      var rows = grid.getSelectedRows();
+      var rows = xslick.grid.getSelectedRows();
       for (var i = 0, l = rows.length; i < l; i++) {
-        var item = dataView.getItem(rows[i]);
+        var item = xslick.dataProvider.getItem(rows[i]);
         if (item) selectedRowIds.push(item.id);
       }
     },
