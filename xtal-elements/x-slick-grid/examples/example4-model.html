@@ -101,8 +101,8 @@
 </div>
 
 <script>
-var dataView;
-var grid;
+//var dataView;
+//var grid;
 var data = [];
 var columns = [
   {id: "sel", name: "#", field: "num", behavior: "select", cssClass: "cell-selection", width: 40, cannotTriggerInsert: true, resizable: false, selectable: false },
@@ -193,6 +193,10 @@ if(xslick.setInitialData){
     xslick.setInitialData(dataView, columns, options);
     addEventHandlers(xslick.grid);
   });
+}
+
+function addEventHandlers(grid){
+
 }
 $(function () {
   // prepare the data
