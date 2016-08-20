@@ -1,7 +1,6 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
-///<reference path='x-slick-grid.mouseOverRow.ts'/>
 var crystal;
 (function (crystal) {
     var elements;
