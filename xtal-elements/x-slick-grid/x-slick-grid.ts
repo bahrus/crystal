@@ -129,11 +129,7 @@ module crystal.elements {
             width:{
                 type: String,
                 value: '600px'
-            },
-            useSlickEditors:{
-                type: Boolean,
-                value: false
-            },
+            },          
             fillContainerHeight:{
                 type: Boolean,
                 value: false
@@ -197,6 +193,10 @@ module crystal.elements {
             },
             useSlickFormatters:{
                 type:  Boolean
+            },
+            useSlickEditors:{
+                type: Boolean,
+                value: false
             }
         },
         readyFnInitialized: false,
