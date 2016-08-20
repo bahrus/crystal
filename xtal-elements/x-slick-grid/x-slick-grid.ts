@@ -212,7 +212,7 @@ module crystal.elements {
                 this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeSelector.html'}    : null,
                 this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellSelectionModel.html'}   : null,
                 this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeDecorator.html'}   : null,
-                this.selectionModel === 'Row'   ? {importURL: 'Click.RowSelectionModel.html'}    : null,
+                this.selectionModel === 'Row'   ? {importURL: 'Slick.RowSelectionModel.html'}    : null,
                 this.useDataViewDataProvider    ? {importURL: 'Slick.DataView.html'}             : null,
                 this.useSlickPaging             ? {importURL: 'controls/SlickPager.html'}        : null,
                 this.useSlickColumnPicker       ? {importURL: 'controls/SlickColumnPicker.html'} : null,
@@ -308,6 +308,14 @@ module crystal.elements {
             }
 
             const grid = this.grid;
+            switch(this.selectionModel){
+                case 'Cell':
+                    grid.setSelectionModel((new Slick.CellSelectionModel()));
+                    break;
+                case 'Row':
+                    grid.setSelectionModel(new Slick.RowSelectionModel());
+                    break;
+            }
             this.wcOptions = wcOptions;
 
             if(wcOptions){
