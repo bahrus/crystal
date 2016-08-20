@@ -16,15 +16,18 @@ var crystal;
         }
         elements.createDataViewWithFilter = createDataViewWithFilter;
         function addStandardRowHandling(dataView, options) {
+            console.log('in addStandardRowHandling');
             if (!options.gridFinder) {
                 throw 'gridFinder required';
             }
             dataView.onRowCountChanged.subscribe(function (e, args) {
+                console.log('onRowCountChanged');
                 var grid = options.gridFinder();
                 grid.updateRowCount();
                 grid.render();
             });
             dataView.onRowsChanged.subscribe(function (e, args) {
+                console.log('onRowsChanged');
                 var grid = options.gridFinder();
                 grid.invalidateRows(args.rows);
                 grid.render();

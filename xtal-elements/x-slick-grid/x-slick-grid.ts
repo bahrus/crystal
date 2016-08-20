@@ -291,7 +291,9 @@ module crystal.elements {
             this.setEditorAndFormatter(columns);
             //this.gridOptions = gridOptions;
             if(data['addItem']){
-                this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+                const dataProvider = data;
+                this._dataProvider = dataProvider;
+                this.grid =  new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
             }else{
                 if(wcOptions && wcOptions.dataProvider){
                     const dataProvider = wcOptions.dataProvider(data);

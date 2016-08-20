@@ -18,16 +18,19 @@ module crystal.elements{
     }
 
     export function addStandardRowHandling<T>(dataView:  Slick.Data.DataView<T>, options: ICreateDataViewOptions<T>){
+        console.log('in addStandardRowHandling');
         if(!options.gridFinder){
             throw 'gridFinder required';
         }
         dataView.onRowCountChanged.subscribe(function (e, args) {
+            console.log('onRowCountChanged');
             const grid = options.gridFinder();
             grid.updateRowCount();
             grid.render();
         });
 
         dataView.onRowsChanged.subscribe(function (e, args) {
+            console.log('onRowsChanged');
             const grid = options.gridFinder();
             grid.invalidateRows(args.rows);
             grid.render();

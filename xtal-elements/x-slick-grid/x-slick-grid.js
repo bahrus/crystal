@@ -225,7 +225,9 @@ var crystal;
                 this.setEditorAndFormatter(columns);
                 //this.gridOptions = gridOptions;
                 if (data['addItem']) {
-                    this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
+                    var dataProvider = data;
+                    this._dataProvider = dataProvider;
+                    this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                 }
                 else {
                     if (wcOptions && wcOptions.dataProvider) {
