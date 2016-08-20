@@ -63,10 +63,6 @@ var crystal;
                     type: String,
                     value: '600px'
                 },
-                useSlickEditors: {
-                    type: Boolean,
-                    value: false
-                },
                 fillContainerHeight: {
                     type: Boolean,
                     value: false
@@ -130,6 +126,10 @@ var crystal;
                 },
                 useSlickFormatters: {
                     type: Boolean
+                },
+                useSlickEditors: {
+                    type: Boolean,
+                    value: false
                 }
             },
             readyFnInitialized: false,
