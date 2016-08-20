@@ -112,16 +112,6 @@
     {id: "effort-driven", name: "Effort Driven", width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.Checkmark, editor: Slick.Editors.Checkbox, cannotTriggerInsert: true}
   ];
 
-  var options = {
-    editable: true,
-    enableAddRow: true,
-    enableCellNavigation: true,
-    asyncEditorLoading: false
-  };
-
-  var percentCompleteThreshold = 0;
-  var searchString = "";
-
   function myFilter(item) {
     if (item["percentComplete"] < percentCompleteThreshold) {
       return false;
@@ -146,44 +136,12 @@
     return true;
   }
 
-  function percentCompleteSort(a, b) {
-    return a["percentComplete"] - b["percentComplete"];
-  }
-
-  var indent = 0;
-  var parents = [];
-
-  // prepare the data
-  for (var i = 0; i < 1000; i++) {
-    var d = (data[i] = {});
-    var parent;
-
-    if (Math.random() > 0.8 && i > 0) {
-      indent++;
-      parents.push(i - 1);
-    } else if (Math.random() < 0.3 && indent > 0) {
-      indent--;
-      parents.pop();
-    }
-
-    if (parents.length > 0) {
-      parent = parents[parents.length - 1];
-    } else {
-      parent = null;
-    }
-
-    d["id"] = "id_" + i;
-    d["indent"] = indent;
-    d["parent"] = parent;
-    d["title"] = "Task " + i;
-    d["duration"] = "5 days";
-    d["percentComplete"] = Math.round(Math.random() * 100);
-    d["start"] = "01/01/2009";
-    d["finish"] = "01/05/2009";
-    d["effortDriven"] = (i % 5 == 0);
-  }
-
-
+  var options = {
+    editable: true,
+    enableAddRow: true,
+    enableCellNavigation: true,
+    asyncEditorLoading: false
+  };
 
   var wcOptions = {
     dataProvider: function(data){
@@ -226,6 +184,52 @@
         }
     }
   };
+
+
+  var percentCompleteThreshold = 0;
+  var searchString = "";
+
+  
+
+  function percentCompleteSort(a, b) {
+    return a["percentComplete"] - b["percentComplete"];
+  }
+
+  var indent = 0;
+  var parents = [];
+
+  // prepare the data
+  for (var i = 0; i < 1000; i++) {
+    var d = (data[i] = {});
+    var parent;
+
+    if (Math.random() > 0.8 && i > 0) {
+      indent++;
+      parents.push(i - 1);
+    } else if (Math.random() < 0.3 && indent > 0) {
+      indent--;
+      parents.pop();
+    }
+
+    if (parents.length > 0) {
+      parent = parents[parents.length - 1];
+    } else {
+      parent = null;
+    }
+
+    d["id"] = "id_" + i;
+    d["indent"] = indent;
+    d["parent"] = parent;
+    d["title"] = "Task " + i;
+    d["duration"] = "5 days";
+    d["percentComplete"] = Math.round(Math.random() * 100);
+    d["start"] = "01/01/2009";
+    d["finish"] = "01/05/2009";
+    d["effortDriven"] = (i % 5 == 0);
+  }
+
+
+
 
   // initialize the grid
   //grid = new Slick.Grid("#myGrid", dataView, columns, options);

@@ -123,6 +123,66 @@ var options = {
   topPanelHeight: 25
 };
 
+var wcOptions = {
+    dataProvider: function(data){
+      return crystal.elements.createDataViewWithFilter(data, myFilter, {
+        addStandardRowHandling: true,
+        gridFinder: function(){return xslick.grid;}
+      })
+    },
+    eventHandlers:{
+      onCellChange: function(e, args){
+        xslick.dataProvider.updateItem(args.item.id, args.item);
+      },
+      onAddNewRow:{
+        var item = {"num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false};
+        $.extend(item, args.item);
+        xslick.dataProvider.addItem(item);
+      },
+      onKeyDown:function(e){
+        // select all rows on ctrl-a
+        if (e.which != 65 || !e.ctrlKey) {
+          return false;
+        }
+
+        var rows = [];
+        for (var i = 0; i < dataView.getLength(); i++) {
+          rows.push(i);
+        }
+
+        grid.setSelectedRows(rows);
+        e.preventDefault();
+      },
+      onSort: function (e, args) {
+          sortdir = args.sortAsc ? 1 : -1;
+          sortcol = args.sortCol.field;
+
+          if ($.browser.msie && $.browser.version <= 8) {
+            // using temporary Object.prototype.toString override
+            // more limited and does lexicographic sort only by default, but can be much faster
+
+            var percentCompleteValueFn = function () {
+              var val = this["percentComplete"];
+              if (val < 10) {
+                return "00" + val;
+              } else if (val < 100) {
+                return "0" + val;
+              } else {
+                return val;
+              }
+            };
+
+            // use numeric sort of % and lexicographic for everything else
+            dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
+          } else {
+            // using native sort with comparer
+            // preferred method but can be very slow in IE with huge datasets
+            dataView.sort(comparer, args.sortAsc);
+          }
+      }
+    }
+}
+
 var sortcol = "title";
 var sortdir = 1;
 var percentCompleteThreshold = 0;
@@ -216,58 +276,58 @@ $(function () {
     .appendTo(grid.getTopPanel())
     .show();
 
-  grid.onCellChange.subscribe(function (e, args) {
-    dataView.updateItem(args.item.id, args.item);
-  });
+  // grid.onCellChange.subscribe(function (e, args) {
+  //   dataView.updateItem(args.item.id, args.item);
+  // });
 
-  grid.onAddNewRow.subscribe(function (e, args) {
-    var item = {"num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false};
-    $.extend(item, args.item);
-    dataView.addItem(item);
-  });
+  // grid.onAddNewRow.subscribe(function (e, args) {
+  //   var item = {"num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false};
+  //   $.extend(item, args.item);
+  //   dataView.addItem(item);
+  // });
 
-  grid.onKeyDown.subscribe(function (e) {
-    // select all rows on ctrl-a
-    if (e.which != 65 || !e.ctrlKey) {
-      return false;
-    }
+  // grid.onKeyDown.subscribe(function (e) {
+  //   // select all rows on ctrl-a
+  //   if (e.which != 65 || !e.ctrlKey) {
+  //     return false;
+  //   }
 
-    var rows = [];
-    for (var i = 0; i < dataView.getLength(); i++) {
-      rows.push(i);
-    }
+  //   var rows = [];
+  //   for (var i = 0; i < dataView.getLength(); i++) {
+  //     rows.push(i);
+  //   }
 
-    grid.setSelectedRows(rows);
-    e.preventDefault();
-  });
+  //   grid.setSelectedRows(rows);
+  //   e.preventDefault();
+  // });
 
-  grid.onSort.subscribe(function (e, args) {
-    sortdir = args.sortAsc ? 1 : -1;
-    sortcol = args.sortCol.field;
+  // grid.onSort.subscribe(function (e, args) {
+  //   sortdir = args.sortAsc ? 1 : -1;
+  //   sortcol = args.sortCol.field;
 
-    if ($.browser.msie && $.browser.version <= 8) {
-      // using temporary Object.prototype.toString override
-      // more limited and does lexicographic sort only by default, but can be much faster
+  //   if ($.browser.msie && $.browser.version <= 8) {
+  //     // using temporary Object.prototype.toString override
+  //     // more limited and does lexicographic sort only by default, but can be much faster
 
-      var percentCompleteValueFn = function () {
-        var val = this["percentComplete"];
-        if (val < 10) {
-          return "00" + val;
-        } else if (val < 100) {
-          return "0" + val;
-        } else {
-          return val;
-        }
-      };
+  //     var percentCompleteValueFn = function () {
+  //       var val = this["percentComplete"];
+  //       if (val < 10) {
+  //         return "00" + val;
+  //       } else if (val < 100) {
+  //         return "0" + val;
+  //       } else {
+  //         return val;
+  //       }
+  //     };
 
-      // use numeric sort of % and lexicographic for everything else
-      dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
-    } else {
-      // using native sort with comparer
-      // preferred method but can be very slow in IE with huge datasets
-      dataView.sort(comparer, args.sortAsc);
-    }
-  });
+  //     // use numeric sort of % and lexicographic for everything else
+  //     dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
+  //   } else {
+  //     // using native sort with comparer
+  //     // preferred method but can be very slow in IE with huge datasets
+  //     dataView.sort(comparer, args.sortAsc);
+  //   }
+  // });
 
   // wire up model events to drive the grid
   dataView.onRowCountChanged.subscribe(function (e, args) {
