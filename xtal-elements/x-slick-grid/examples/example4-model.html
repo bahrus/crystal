@@ -109,8 +109,7 @@
 </div>
 
 <script>
-//var dataView;
-//var grid;
+
 var data = [];
 var columns = [
   {id: "sel", name: "#", field: "num", behavior: "select", cssClass: "cell-selection", width: 40, cannotTriggerInsert: true, resizable: false, selectable: false },
@@ -270,19 +269,8 @@ function addEventHandlers(grid, dataView){
           .show();
 
   crystal.elements.addStandardRowHandling(dataView, {
-      addStandardRowHandling: true,
       gridFinder: function(){return xslick.grid;}
   });
-//   //wire up model events to drive the grid
-//  dataView.onRowCountChanged.subscribe(function (e, args) {
-//    grid.updateRowCount();
-//    grid.render();
-//  });
-//
-//  dataView.onRowsChanged.subscribe(function (e, args) {
-//    grid.invalidateRows(args.rows);
-//    grid.render();
-//  });
 
   dataView.onPagingInfoChanged.subscribe(function (e, pagingInfo) {
     var isLastPage = pagingInfo.pageNum == pagingInfo.totalPages - 1;
