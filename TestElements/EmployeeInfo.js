@@ -1,11 +1,12 @@
 var TestElements;
 (function (TestElements) {
-    class EmployeeInfo {
-        constructor(Name, Address) {
+    var EmployeeInfo = (function () {
+        function EmployeeInfo(Name, Address) {
             this.Name = Name;
             this.Address = Address;
         }
-    }
+        return EmployeeInfo;
+    }());
     TestElements.EmployeeInfo = EmployeeInfo;
 })(TestElements || (TestElements = {}));
 //# sourceMappingURL=EmployeeInfo.js.map

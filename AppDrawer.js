@@ -1,61 +1,73 @@
-class AppDrawer extends HTMLElement {
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var AppDrawer = (function (_super) {
+    __extends(AppDrawer, _super);
     // Can define constructor arguments if you wish.
-    constructor() {
+    function AppDrawer() {
+        var _this = this;
         // If you define a ctor, always call super() first!
         // This is specific to CE and required by the spec.
-        super();
+        _super.call(this);
         console.log('in constructor');
         // Setup a click listener on <app-drawer> itself.
-        this.addEventListener('click', e => {
+        this.addEventListener('click', function (e) {
             // Don't toggle the drawer if it's disabled.
-            if (this.disabled) {
+            if (_this.disabled) {
                 return;
             }
-            this.toggleDrawer();
+            _this.toggleDrawer();
         });
     }
-    // A getter/setter for an open property.
-    get open() {
-        return this.hasAttribute('open');
-    }
-    set open(val) {
-        // Reflect the value of the open property as an HTML attribute.
-        if (val) {
-            this.setAttribute('open', '');
-        }
-        else {
-            this.removeAttribute('open');
-        }
-        this.toggleDrawer();
-    }
-    // A getter/setter for a disabled property.
-    get disabled() {
-        return this.hasAttribute('disabled');
-    }
-    set disabled(val) {
-        // Reflect the value of the disabled property as an HTML attribute.
-        if (val) {
-            this.setAttribute('disabled', '');
-        }
-        else {
-            this.removeAttribute('disabled');
-        }
-    }
-    toggleDrawer() {
+    Object.defineProperty(AppDrawer.prototype, "open", {
+        // A getter/setter for an open property.
+        get: function () {
+            return this.hasAttribute('open');
+        },
+        set: function (val) {
+            // Reflect the value of the open property as an HTML attribute.
+            if (val) {
+                this.setAttribute('open', '');
+            }
+            else {
+                this.removeAttribute('open');
+            }
+            this.toggleDrawer();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AppDrawer.prototype, "disabled", {
+        // A getter/setter for a disabled property.
+        get: function () {
+            return this.hasAttribute('disabled');
+        },
+        set: function (val) {
+            // Reflect the value of the disabled property as an HTML attribute.
+            if (val) {
+                this.setAttribute('disabled', '');
+            }
+            else {
+                this.removeAttribute('disabled');
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    AppDrawer.prototype.toggleDrawer = function () {
         this.open = !this.open;
-    }
-    connectedCallback() {
+    };
+    AppDrawer.prototype.connectedCallback = function () {
         //const shadowRoot = this.attachShadow({mode: 'open'});
-        this.innerHTML = `
-                <div style="color:red">
-                I am here
-                </div>
-                `;
-    }
-    disconnectedCallback() {
-    }
-    attributeChangedCallback(attrName, oldVal, newVal) {
-    }
-}
+        this.innerHTML = "\n                <div style=\"color:red\">\n                I am here\n                </div>\n                ";
+    };
+    AppDrawer.prototype.disconnectedCallback = function () {
+    };
+    AppDrawer.prototype.attributeChangedCallback = function (attrName, oldVal, newVal) {
+    };
+    return AppDrawer;
+}(HTMLElement));
 customElements.define('app-drawer', AppDrawer);
 //# sourceMappingURL=AppDrawer.js.map

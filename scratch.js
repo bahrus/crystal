@@ -1,2 +1,2 @@
-var test = 'hello';
+var test = 'hellox';
 //# sourceMappingURL=scratch.js.map
