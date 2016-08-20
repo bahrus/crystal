@@ -23,10 +23,10 @@ var crystal;
             }
             XtalDOMTransformer.prototype.attached = function () {
                 var _this = this;
-                var target = crystal.nextNonScriptSibling(this);
+                var target = nextNonScriptSibling(this);
                 this.async(function () {
                     var targetChildren = Polymer.dom(target)['getEffectiveChildNodes']();
-                    var actions = crystal.evalInner(_this);
+                    var actions = evalInner(_this);
                     for (var j = 0, jj = actions.length; j < jj; j++) {
                         var action = actions[j];
                         action(targetChildren, target);
