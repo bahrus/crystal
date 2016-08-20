@@ -186,16 +186,11 @@
 
 
   var wcOptions = {
-//    dataProvider: function(data){
-//      var dataView = new Slick.Data.DataView({ inlineFilters: true });
-//      dataView.beginUpdate();
-//      dataView.setItems(data);
-//      dataView.setFilter(myFilter);
-//      dataView.endUpdate();
-//      return dataView;
-//    },
     dataProvider: function(data){
-      return crystal.elements.createDataViewWithFilter(data, myFilter)
+      return crystal.elements.createDataViewWithFilter(data, myFilter, {
+        addStandardRowHandling: true,
+        gridFinder: function(){return xslick.grid;}
+      })
     },
     eventHandlers:{
         onCellChange: function(e, args){
@@ -246,26 +241,7 @@
   }
 
   function addEventHandlers(grid){
-
-
-
-
-
-
-
-    // wire up model events to drive the grid
-
-      xslick.dataProvider.onRowCountChanged.subscribe(function (e, args) {
-      grid.updateRowCount();
-      grid.render();
-    });
-
-      xslick.dataProvider.onRowsChanged.subscribe(function (e, args) {
-      grid.invalidateRows(args.rows);
-      grid.render();
-    });
-
-
+    
     var h_runfilters = null;
 
     // wire up the slider to apply the filter to the model
