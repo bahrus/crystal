@@ -1,7 +1,6 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
-///<reference path='x-slick-grid.mouseOverRow.ts'/>
 
 module crystal.elements {
     type SelectionModel = 'Cell' | 'Row';
@@ -73,6 +72,7 @@ module crystal.elements {
         onSelectedRowsChanged?: (eventData: Slick.OnSelectedRowsChangedEventArgs<T>, data?: T) => void;
         onCellCssStylesChanged?: (eventData: Slick.OnCellCssStylesChangedEventArgs<T>, data?: T) => void;
         onViewportChanged?: (eventData: Slick.OnViewportChangedEventArgs<T>, data?: T) => void;
+        onFooterRowCellRendered?: (eventData: any, data?: any) => void;
     }
     function importHrefs(importStep: IDynamicImportStep[], polymerElement: polymer.Base, callBack?: () => void){
         if(importStep.length === 0) {

@@ -1,7 +1,6 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
-///<reference path='x-slick-grid.mouseOverRow.ts'/>
 var crystal;
 (function (crystal) {
     var elements;
@@ -256,11 +255,11 @@ var crystal;
                 this.wcOptions = wcOptions;
                 if (wcOptions) {
                     attachEventHandlers(grid, wcOptions.eventHandlers);
-                    if (wcOptions.trackRowHover) {
-                        this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), function () {
-                            elements.enableMouseOverSlickGrid(_this);
-                        }, null, true);
-                    }
+                    // if(wcOptions.trackRowHover){
+                    //     this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), () =>{
+                    //         enableMouseOverSlickGrid(this);
+                    //     }, null, true);
+                    // }
                     if (wcOptions.trackCurrentRow) {
                         this.clickedCellIndex = -1;
                         this.clickedRowIndex = -1;
