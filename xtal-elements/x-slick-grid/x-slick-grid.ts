@@ -72,6 +72,7 @@ module crystal.elements {
         onSelectedRowsChanged?: (eventData: Slick.OnSelectedRowsChangedEventArgs<T>, data?: T) => void;
         onCellCssStylesChanged?: (eventData: Slick.OnCellCssStylesChangedEventArgs<T>, data?: T) => void;
         onViewportChanged?: (eventData: Slick.OnViewportChangedEventArgs<T>, data?: T) => void;
+        onFooterRowCellRendered?: (eventData: any, data?: any) => void;
     }
     function importHrefs(importStep: IDynamicImportStep[], polymerElement: polymer.Base, callBack?: () => void){
         if(importStep.length === 0) {
