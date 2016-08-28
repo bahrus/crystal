@@ -269,7 +269,8 @@ function addEventHandlers(grid, dataView){
           .show();
 
   crystal.elements.addStandardRowHandling(dataView, {
-      gridFinder: function(){return xslick.grid;}
+      //gridFinder: function(){return xslick.grid;}
+    containerFinder: function(){return xslick;}
   });
 
   dataView.onPagingInfoChanged.subscribe(function (e, pagingInfo) {

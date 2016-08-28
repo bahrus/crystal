@@ -96,7 +96,7 @@
 
     function endUpdate() {
       suspend = false;
-      refresh();
+      refresh(this.container);
     }
 
     function setRefreshHints(hints) {
@@ -349,7 +349,7 @@
         updated = {};
       }
       updated[id] = true;
-      refresh();
+      refresh(this.container);
     }
 
     function insertItem(insertBefore, item) {
@@ -749,8 +749,11 @@
       return retval;
     }
 
-    function getFilteredAndPagedItems(items) {
+    function getFilteredAndPagedItems(items, container) {
+      //debugger;
       if (filter) {
+
+        items.container = container;
         var batchFilter = options.inlineFilters ? compiledFilter : uncompiledFilter;
         var batchFilterWithCaching = options.inlineFilters ? compiledFilterWithCaching : uncompiledFilterWithCaching;
 
@@ -823,7 +826,7 @@
       return diff;
     }
 
-    function recalc(_items) {
+    function recalc(_items, container) {
       rowsById = null;
 
       if (refreshHints.isFilterNarrowing !== prevRefreshHints.isFilterNarrowing ||
@@ -831,7 +834,7 @@
         filterCache = [];
       }
 
-      var filteredItems = getFilteredAndPagedItems(_items);
+      var filteredItems = getFilteredAndPagedItems(_items, container);
       totalRows = filteredItems.totalRows;
       var newRows = filteredItems.rows;
 
@@ -851,7 +854,7 @@
       return diff;
     }
 
-    function refresh() {
+    function refresh(container) {
       if (suspend) {
         return;
       }
@@ -859,12 +862,12 @@
       var countBefore = rows.length;
       var totalRowsBefore = totalRows;
 
-      var diff = recalc(items, filter); // pass as direct refs to avoid closure perf hit
+      var diff = recalc(items, container); // pass as direct refs to avoid closure perf hit
       // if the current page is no longer valid, go to last page and recalc
       // we suffer a performance penalty here, but the main loop (recalc) remains highly optimized
       if (pagesize && totalRows < pagenum * pagesize) {
         pagenum = Math.max(0, Math.ceil(totalRows / pagesize) - 1);
-        diff = recalc(items, filter);
+        diff = recalc(items, filter, container);
       }
 
       updated = null;

@@ -56,6 +56,7 @@
               use-slick-formatters
               selection-model="Cell"
               use-data-view-data-provider
+              use-tree-grid-helper
       ></x-slick-grid>
     </td>
     <td valign="top">
@@ -86,6 +87,7 @@
 
 
   var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
+    console.log(dataContext);
     value = value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
     var idx = xslick.dataProvider.getIdxById(dataContext.id);
@@ -113,6 +115,8 @@
   ];
 
   function myFilter(item) {
+    var container = _items.container;
+    if(!crystal.elements.filterOutCollapsedNodes(item, container)) return false;
     if (item["percentComplete"] < percentCompleteThreshold) {
       return false;
     }
@@ -125,7 +129,7 @@
       var parent = data[item.parent];
 
       while (parent) {
-        if (parent._collapsed || (parent["percentComplete"] < percentCompleteThreshold) || (searchString != "" && parent["title"].indexOf(searchString) == -1)) {
+        if ( (parent["percentComplete"] < percentCompleteThreshold) || (searchString != "" && parent["title"].indexOf(searchString) == -1)) {
           return false;
         }
 
@@ -147,7 +151,8 @@
     dataProvider: function(data){
       return crystal.elements.createDataViewWithFilter(data, myFilter, {
         addStandardRowHandling: true,
-        gridFinder: function(){return xslick.grid;}
+        //gridFinder: function(){return xslick.grid;}
+        containerFinder: function(){return xslick;}
       })
     },
     eventHandlers:{
