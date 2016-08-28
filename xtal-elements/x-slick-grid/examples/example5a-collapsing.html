@@ -13,19 +13,7 @@
       text-align: center;
     }
 
-    .toggle {
-      height: 9px;
-      width: 9px;
-      display: inline-block;
-    }
 
-    .toggle.expand {
-      background: url(../images/expand.gif) no-repeat center center;
-    }
-
-    .toggle.collapse {
-      background: url(../images/collapse.gif) no-repeat center center;
-    }
 
   </style>
 </head>
@@ -93,17 +81,16 @@
     var idx = xslick.dataProvider.getIdxById(dataContext.id);
     if (data[idx + 1] && data[idx + 1].indent > data[idx].indent) {
       if (dataContext._collapsed) {
-        return spacer + " <span class='toggle expand'></span>&nbsp;" + value;
+        return spacer + " <span class='xsg_toggle xsg_expand'></span>&nbsp;" + value;
       } else {
-        return spacer + " <span class='toggle collapse'></span>&nbsp;" + value;
+        return spacer + " <span class='xsg_toggle xsg_collapse'></span>&nbsp;" + value;
       }
     } else {
-      return spacer + " <span class='toggle'></span>&nbsp;" + value;
+      return spacer + " <span class='xsg_toggle'></span>&nbsp;" + value;
     }
   };
 
-  //var dataView;
-  //var grid;
+
   var data = [];
   var columns = [
     {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: TaskNameFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
@@ -171,22 +158,7 @@
                 "effortDriven": false};
             $.extend(item, args.item);
             xslick.dataProvider.addItem(item);
-        }//,
-//        onClick: function(e, args){
-//            if ($(e.target).hasClass("toggle")) {
-//                var item = xslick.dataProvider.getItem(args.row);
-//                if (item) {
-//                    if (!item._collapsed) {
-//                        item._collapsed = true;
-//                    } else {
-//                        item._collapsed = false;
-//                    }
-//
-//                    xslick.dataProvider.updateItem(item.id, item);
-//                }
-//                e.stopImmediatePropagation();
-//            }
-//        }
+        }
     }
   };
 
