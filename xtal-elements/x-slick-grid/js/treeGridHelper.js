@@ -66,6 +66,7 @@ var crystal;
                 item._collapsed = true;
             });
             container.dataProvider.refresh(container);
+            container.grid.invalidate();
         }
         elements.collapseAll = collapseAll;
     })(elements = crystal.elements || (crystal.elements = {}));

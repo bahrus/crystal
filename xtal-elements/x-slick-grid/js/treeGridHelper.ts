@@ -72,5 +72,6 @@ module crystal.elements{
             item._collapsed = true;
         })
         container.dataProvider.refresh(container);
+        container.grid.invalidate();
     }
 }

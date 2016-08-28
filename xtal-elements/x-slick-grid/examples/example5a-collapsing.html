@@ -38,7 +38,7 @@
         <input type=text id="txtSearch">
 
         <div>
-          <a id="collapseAll">Collapse All</a> |
+          <a href="javascript:xslick.collapseAll();">Collapse All</a> |
           <a>Expand All</a>
         </div>
 
@@ -242,9 +242,7 @@
         xslick.dataProvider.refresh(xslick);
     });
 
-    $('#collapseAll').click(function(e){
-        xslick.collapseAll();
-    });
+
   }
 
 </script>
