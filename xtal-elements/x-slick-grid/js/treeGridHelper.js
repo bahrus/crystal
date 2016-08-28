@@ -59,6 +59,15 @@ var crystal;
             }
         }
         elements.nodeColumnFormatter = nodeColumnFormatter;
+        function collapseAll() {
+            var container = this;
+            var items = container.dataProvider.getItems();
+            items.forEach(function (item) {
+                item._collapsed = true;
+            });
+            container.dataProvider.refresh(container);
+        }
+        elements.collapseAll = collapseAll;
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
 //# sourceMappingURL=treeGridHelper.js.map

@@ -64,4 +64,13 @@ module crystal.elements{
             return spacer + " <span class='xsg_toggle'></span>&nbsp;" + value;
         }
     }
+
+    export function collapseAll<T>(){//(container: IXSlickGridElement<T>){
+        const container = this as IXSlickGridElement<T>;
+        const items = container.dataProvider.getItems();
+        items.forEach(item => {
+            item._collapsed = true;
+        })
+        container.dataProvider.refresh(container);
+    }
 }

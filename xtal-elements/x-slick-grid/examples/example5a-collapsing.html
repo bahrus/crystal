@@ -36,6 +36,12 @@
         <br/>
         <label>And title including:</label>
         <input type=text id="txtSearch">
+
+        <div>
+          <a id="collapseAll">Collapse All</a> |
+          <a>Expand All</a>
+        </div>
+
       </div>
       <br/>
 
@@ -234,7 +240,11 @@
 
       searchString = this.value;
         xslick.dataProvider.refresh(xslick);
-    })
+    });
+
+    $('#collapseAll').click(function(e){
+        xslick.collapseAll();
+    });
   }
 
 </script>

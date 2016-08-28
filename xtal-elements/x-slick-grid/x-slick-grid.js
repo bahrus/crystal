@@ -260,6 +260,7 @@ var crystal;
                 }
                 if (this.useTreeGridHelper) {
                     elements.attachToggleClickEvent(this);
+                    this.collapseAll = elements.collapseAll;
                 }
                 var grid = this.grid;
                 switch (this.selectionModel) {
