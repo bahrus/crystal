@@ -1,6 +1,7 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
+///<reference path='js/treeGridFilter.ts'/>
 
 module crystal.elements {
     type SelectionModel = 'Cell' | 'Row';
@@ -39,6 +40,7 @@ module crystal.elements {
         options: ISlickGridOptions<T>;
         data: T[];
         _data: T[];
+        dataProvider: any;
     }
     export interface ISlickGridEventHandlers<T>{
         onScroll?: (eventData: Slick.OnScrollEventArgs<T>, data?: T) => void;
@@ -323,7 +325,9 @@ module crystal.elements {
                     this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                 }
             }
-
+            if(this.useTreeGridHelper){
+                attachToggleClickEvent<any>(this as IXSlickGridElement<any>);
+            }
             const grid = this.grid;
             switch(this.selectionModel){
                 case 'Cell':

@@ -34,6 +34,24 @@ var crystal;
             return true;
         }
         elements.filterOutCollapsedNodes = filterOutCollapsedNodes;
+        function attachToggleClickEvent(container) {
+            container.grid.onClick.subscribe(function (e, args) {
+                if ($(e['target']).hasClass("toggle")) {
+                    var item = container.dataProvider.getItem(args.row);
+                    if (item) {
+                        if (!item._collapsed) {
+                            item._collapsed = true;
+                        }
+                        else {
+                            item._collapsed = false;
+                        }
+                        container.dataProvider.updateItem(item.id, item);
+                    }
+                    e.stopImmediatePropagation();
+                }
+            });
+        }
+        elements.attachToggleClickEvent = attachToggleClickEvent;
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
 //# sourceMappingURL=treeGridFilter.js.map

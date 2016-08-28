@@ -171,22 +171,22 @@
                 "effortDriven": false};
             $.extend(item, args.item);
             xslick.dataProvider.addItem(item);
-        },
-        onClick: function(e, args){
-            if ($(e.target).hasClass("toggle")) {
-                var item = xslick.dataProvider.getItem(args.row);
-                if (item) {
-                    if (!item._collapsed) {
-                        item._collapsed = true;
-                    } else {
-                        item._collapsed = false;
-                    }
-
-                    xslick.dataProvider.updateItem(item.id, item);
-                }
-                e.stopImmediatePropagation();
-            }
-        }
+        }//,
+//        onClick: function(e, args){
+//            if ($(e.target).hasClass("toggle")) {
+//                var item = xslick.dataProvider.getItem(args.row);
+//                if (item) {
+//                    if (!item._collapsed) {
+//                        item._collapsed = true;
+//                    } else {
+//                        item._collapsed = false;
+//                    }
+//
+//                    xslick.dataProvider.updateItem(item.id, item);
+//                }
+//                e.stopImmediatePropagation();
+//            }
+//        }
     }
   };
 

@@ -1,6 +1,7 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
+///<reference path='js/treeGridFilter.ts'/>
 var crystal;
 (function (crystal) {
     var elements;
@@ -256,6 +257,9 @@ var crystal;
                     else {
                         this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                     }
+                }
+                if (this.useTreeGridHelper) {
+                    elements.attachToggleClickEvent(this);
                 }
                 var grid = this.grid;
                 switch (this.selectionModel) {

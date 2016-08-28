@@ -39,4 +39,22 @@ module crystal.elements{
         }
         return true;
     }
+
+    export function attachToggleClickEvent<T>(container: IXSlickGridElement<T>){
+        container.grid.onClick.subscribe((e, args) =>{
+            if ($(e['target']).hasClass("toggle")) {
+                var item = container.dataProvider.getItem(args.row);
+                if (item) {
+                    if (!item._collapsed) {
+                        item._collapsed = true;
+                    } else {
+                        item._collapsed = false;
+                    }
+
+                    container.dataProvider.updateItem(item.id, item);
+                }
+                e.stopImmediatePropagation();
+            }
+        });
+    }
 }
