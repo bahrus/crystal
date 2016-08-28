@@ -74,26 +74,12 @@
   }
 
 
-  var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
-    console.log(dataContext);
-    value = value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
-    var idx = xslick.dataProvider.getIdxById(dataContext.id);
-    if (data[idx + 1] && data[idx + 1].indent > data[idx].indent) {
-      if (dataContext._collapsed) {
-        return spacer + " <span class='xsg_toggle xsg_expand'></span>&nbsp;" + value;
-      } else {
-        return spacer + " <span class='xsg_toggle xsg_collapse'></span>&nbsp;" + value;
-      }
-    } else {
-      return spacer + " <span class='xsg_toggle'></span>&nbsp;" + value;
-    }
-  };
+
 
 
   var data = [];
   var columns = [
-    {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: TaskNameFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
+    {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: crystal.elements.nodeColumnFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
     {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text},
     {id: "%", name: "% Complete", field: "percentComplete", width: 80, resizable: false, formatter: Slick.Formatters.PercentCompleteBar, editor: Slick.Editors.PercentComplete},
     {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date},
@@ -138,7 +124,6 @@
     dataProvider: function(data){
       return crystal.elements.createDataViewWithFilter(data, myFilter, {
         addStandardRowHandling: true,
-        //gridFinder: function(){return xslick.grid;}
         containerFinder: function(){return xslick;}
       })
     },
@@ -209,7 +194,6 @@
 
 
   // initialize the grid
-  //grid = new Slick.Grid("#myGrid", dataView, columns, options);
   var xslick = document.querySelector('x-slick-grid');
   if(xslick.setInitialData){
     xslick.setInitialData(data, columns, options, wcOptions);
@@ -232,7 +216,7 @@
 
         if (percentCompleteThreshold != ui.value) {
           window.clearTimeout(h_runfilters);
-          h_runfilters = window.setTimeout(xslick.dataProvider.refresh, 10);
+          h_runfilters = window.setTimeout(function(){xslick.dataProvider.refresh(xslick)}, 10);
           percentCompleteThreshold = ui.value;
         }
       }

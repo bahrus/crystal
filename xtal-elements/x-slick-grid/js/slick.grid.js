@@ -2257,10 +2257,10 @@
 
         if( metadata ) {
         	var columnData = metadata[m.id] || metadata[cell];
-        	result = getFormatter(row, m)(row, cell, value, m, item, columnData );
+        	result = getFormatter(row, m)(row, cell, value, m, item, columnData, options._container );
         }
         else {
-        	result = getFormatter(row, m)(row, cell, value, m, item);
+        	result = getFormatter(row, m)(row, cell, value, m, item, options._container);
         }
 
         return result;

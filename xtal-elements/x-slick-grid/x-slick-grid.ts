@@ -1,7 +1,7 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
-///<reference path='js/treeGridFilter.ts'/>
+///<reference path='js/treeGridHelper.ts'/>
 
 module crystal.elements {
     type SelectionModel = 'Cell' | 'Row';

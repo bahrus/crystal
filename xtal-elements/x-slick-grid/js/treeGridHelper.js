@@ -37,6 +37,28 @@ var crystal;
             });
         }
         elements.attachToggleClickEvent = attachToggleClickEvent;
+        var ampRegExp = /&/g;
+        var ltRegExp = /</g;
+        var gtRegExp = />/g;
+        function nodeColumnFormatter(row, cell, value, columnDef, dataContext, container) {
+            console.log('in nodeColumnFormatter');
+            value = value.replace(ampRegExp, "&amp;").replace(ltRegExp, "&lt;").replace(gtRegExp, "&gt;");
+            var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
+            var data = container._data;
+            var idx = container.dataProvider.getIdxById(dataContext.id);
+            if (data[idx + 1] && data[idx + 1].indent > data[idx].indent) {
+                if (dataContext._collapsed) {
+                    return spacer + " <span class='xsg_toggle xsg_expand'></span>&nbsp;" + value;
+                }
+                else {
+                    return spacer + " <span class='xsg_toggle xsg_collapse'></span>&nbsp;" + value;
+                }
+            }
+            else {
+                return spacer + " <span class='xsg_toggle'></span>&nbsp;" + value;
+            }
+        }
+        elements.nodeColumnFormatter = nodeColumnFormatter;
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
-//# sourceMappingURL=treeGridFilter.js.map
+//# sourceMappingURL=treeGridHelper.js.map

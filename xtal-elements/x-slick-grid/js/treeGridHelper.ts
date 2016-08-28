@@ -43,4 +43,25 @@ module crystal.elements{
             }
         });
     }
+
+    const ampRegExp = /&/g;
+    const ltRegExp = /</g;
+    const gtRegExp = />/g;
+    export function nodeColumnFormatter<T extends ITreeNode>(row: number, cell: number, value: any,
+                                           columnDef : Slick.Column<T>, dataContext: ITreeNode, container: IXSlickGridElement<T>){
+        console.log('in nodeColumnFormatter');
+        value = value.replace(ampRegExp, "&amp;").replace(ltRegExp, "&lt;").replace(gtRegExp, "&gt;");
+        var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
+        const data = container._data;
+        var idx = container.dataProvider.getIdxById(dataContext.id);
+        if (data[idx + 1] && data[idx + 1].indent > data[idx].indent) {
+            if (dataContext._collapsed) {
+                return spacer + " <span class='xsg_toggle xsg_expand'></span>&nbsp;" + value;
+            } else {
+                return spacer + " <span class='xsg_toggle xsg_collapse'></span>&nbsp;" + value;
+            }
+        } else {
+            return spacer + " <span class='xsg_toggle'></span>&nbsp;" + value;
+        }
+    }
 }
