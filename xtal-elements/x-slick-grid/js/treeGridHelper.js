@@ -19,6 +19,9 @@ var crystal;
             return true;
         }
         elements.filterOutCollapsedNodes = filterOutCollapsedNodes;
+        function collapseAndHideNodes(container, searchString, test) {
+        }
+        elements.collapseAndHideNodes = collapseAndHideNodes;
         function attachToggleClickEvent(container) {
             container.grid.onClick.subscribe(function (e, args) {
                 if ($(e['target']).hasClass("xsg_toggle")) {
@@ -59,8 +62,7 @@ var crystal;
             }
         }
         elements.nodeColumnFormatter = nodeColumnFormatter;
-        function collapseAll() {
-            var container = this;
+        function setAllItemsToValue(container, fieldName, value) {
             var items = container.dataProvider.getItems();
             items.forEach(function (item) {
                 item._collapsed = true;
@@ -68,7 +70,16 @@ var crystal;
             container.dataProvider.refresh(container);
             container.grid.invalidate();
         }
+        function collapseAll() {
+            var container = this;
+            setAllItemsToValue(container, '_collapsed', true);
+        }
         elements.collapseAll = collapseAll;
+        function expandAll() {
+            var container = this;
+            setAllItemsToValue(container, '_collapsed', false);
+        }
+        elements.expandAll = expandAll;
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
 //# sourceMappingURL=treeGridHelper.js.map

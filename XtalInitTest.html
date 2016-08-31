@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="XtalInitTest.js"></script>
+</head>
+<body>
+<script>
+    (function() {
+        if ('registerElement' in document
+                && 'import' in document.createElement('link')
+                && 'content' in document.createElement('template')) {
+            // platform is good!
+        } else {
+            // polyfill the platform!
+            var e = document.createElement('script');
+            e.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+            document.body.appendChild(e);
+        }
+    })();
+
+</script>
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+<link rel="import" href="xtal-elements/js-xtal-init.html" />
+    <js-xtal-init allow-native-element-as-target>
+        [
+            {
+                do: function(){
+                    debugger;
+                }
+            }
+        ]
+    </js-xtal-init>
+    <input value="hello" type="text"/>
+
+
+</body>
+</html>

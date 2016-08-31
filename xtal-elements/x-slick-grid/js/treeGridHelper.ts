@@ -26,6 +26,12 @@ module crystal.elements{
         return true;
     }
 
+    export function collapseAndHideNodes<T>(container: IXSlickGridElement<T>, searchString: string,
+                                            test: (container: IXSlickGridElement<T>, item: T, searchString: string) => boolean){
+
+
+    }
+
     export function attachToggleClickEvent<T>(container: IXSlickGridElement<T>){
         container.grid.onClick.subscribe((e, args) =>{
             if ($(e['target']).hasClass("xsg_toggle")) {
@@ -65,13 +71,20 @@ module crystal.elements{
         }
     }
 
-    export function collapseAll<T>(){//(container: IXSlickGridElement<T>){
-        const container = this as IXSlickGridElement<T>;
+    function setAllItemsToValue<T>(container: IXSlickGridElement<T>, fieldName: string, value: any){
         const items = container.dataProvider.getItems();
         items.forEach(item => {
             item._collapsed = true;
         })
         container.dataProvider.refresh(container);
         container.grid.invalidate();
+    }
+    export function collapseAll<T>(){//(container: IXSlickGridElement<T>){
+        const container = this as IXSlickGridElement<T>;
+        setAllItemsToValue<T>(container, '_collapsed', true);
+    }
+    export function expandAll<T>(){
+        const container = this as IXSlickGridElement<T>;
+        setAllItemsToValue<T>(container, '_collapsed', false);
     }
 }

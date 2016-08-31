@@ -328,6 +328,7 @@ module crystal.elements {
             if(this.useTreeGridHelper){
                 attachToggleClickEvent<any>(this as IXSlickGridElement<any>);
                 this.collapseAll = collapseAll;
+                this.expandAll = expandAll;
             }
             const grid = this.grid;
             switch(this.selectionModel){
