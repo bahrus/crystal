@@ -17,6 +17,8 @@ var crystal;
         elements.nextDomBindElement = nextDomBindElement;
         function nextNonScriptSibling(el) {
             var nextElement = el.nextElementSibling;
+            if (!nextElement)
+                return null;
             var tagName = nextElement.tagName;
             while (nextElement) {
                 //let bKeepGoing = false
@@ -88,7 +90,7 @@ var crystal;
                     var polymerAction = action;
                     if (!htmlActionContext) {
                         htmlActionContext = {
-                            element: target,
+                            element: target
                         };
                     }
                     htmlActionContext.action = action;
@@ -129,7 +131,7 @@ var crystal;
                 var actions = void 0;
                 if (typeof actionGetter === 'function') {
                     var context = {
-                        element: element,
+                        element: element
                     };
                     actions = actionGetter(context);
                 }

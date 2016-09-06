@@ -25,6 +25,7 @@ module crystal.elements{
 
     export function nextNonScriptSibling(el:HTMLElement):Element {
         let nextElement = el.nextElementSibling;
+        if(!nextElement) return null;
         let tagName = nextElement.tagName;
         while (nextElement){
             //let bKeepGoing = false
