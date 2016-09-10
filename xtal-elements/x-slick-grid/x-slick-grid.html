@@ -8,9 +8,14 @@
 
 <dom-module id="x-slick-grid">
     <template>
+        <template is="dom-if" if="{{!useShadow}}">
+            <link rel="stylesheet" href="css/slick.grid.css" type="text/css"/>
+            <div role="grid"></div>
 
-        <link rel="stylesheet" href="css/slick.grid.css" type="text/css"/>
-        <div role="grid"></div>
+        </template>
+        <template is="dom-if" if="{{useShadow}}">
+            using shadow
+        </template>
     </template>
 </dom-module>
 <link rel="design-time" href="x-slick-grid.ts">

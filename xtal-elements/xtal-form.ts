@@ -23,10 +23,13 @@ module crystal.elements{
                     console.log(mutation.type);
                 });
             });
-            const config = { attributes: true, childList: true, characterData: true };
+            const config = { attributes: true, childList: true, characterData: true, subtree: true };
             // pass in the target node, as well as the observer options
-            debugger;
-            observer.observe(this, config);
+            const childNodes = this.children;
+            for(const childNode of childNodes){
+                observer.observe(this, config);
+            }
+
         },
     });
 

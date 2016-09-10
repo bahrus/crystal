@@ -1,3 +1,4 @@
+///<reference path="../bower_components/polymer/polymer.d.ts"/>
 var crystal;
 (function (crystal) {
     var elements;
@@ -122,29 +123,24 @@ var crystal;
         }
         elements.performCustElActions = performCustElActions;
         function evalInner(element, isTS) {
-            if (Polymer) {
-                var inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
-                if (isTS) {
-                    inner = util.stripTypings(inner);
-                }
-                var actionGetter = eval(inner);
-                var actions = void 0;
-                if (typeof actionGetter === 'function') {
-                    var context = {
-                        element: element
-                    };
-                    actions = actionGetter(context);
-                }
-                else {
-                    actions = actionGetter;
-                }
-                if (!Array.isArray(actions))
-                    actions = [actions];
-                return actions;
+            var inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
+            if (isTS) {
+                inner = util.stripTypings(inner);
+            }
+            var actionGetter = eval(inner);
+            var actions;
+            if (typeof actionGetter === 'function') {
+                var context = {
+                    element: element
+                };
+                actions = actionGetter(context);
             }
             else {
-                throw "Only Polymer element supported currently";
+                actions = actionGetter;
             }
+            if (!Array.isArray(actions))
+                actions = [actions];
+            return actions;
         }
         elements.evalInner = evalInner;
         var util;

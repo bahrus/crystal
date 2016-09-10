@@ -1,4 +1,4 @@
-declare const Polymer;
+///<reference path="../bower_components/polymer/polymer.d.ts"/>
 
 module crystal.elements{
     export const jsXtaInitTagName = 'js-xtal-init';
@@ -129,27 +129,24 @@ module crystal.elements{
     }
 
     export function evalInner(element: HTMLElement, isTS?: boolean){
-        if(Polymer){
-            let inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
-            if(isTS){
-                inner = util.stripTypings(inner);
-            }
-            const actionGetter = eval(inner);
-            let actions : any;
-            if(typeof actionGetter === 'function'){
-                const context: IHTMLActionContext = {
-                    element: element,
-                };
-                actions = actionGetter(context);
-            }else{
-                actions = actionGetter;
-            }
 
-            if(!Array.isArray(actions)) actions = [actions];
-            return actions;
-        }else{
-            throw "Only Polymer element supported currently";
+        let inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
+        if(isTS){
+            inner = util.stripTypings(inner);
         }
+        const actionGetter = eval(inner);
+        let actions : any;
+        if(typeof actionGetter === 'function'){
+            const context: IHTMLActionContext = {
+                element: element,
+            };
+            actions = actionGetter(context);
+        }else{
+            actions = actionGetter;
+        }
+
+        if(!Array.isArray(actions)) actions = [actions];
+        return actions;
 
     }
 

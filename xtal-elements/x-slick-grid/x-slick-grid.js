@@ -134,6 +134,10 @@ var crystal;
                 },
                 useTreeGridHelper: {
                     type: Boolean,
+                },
+                useShadow: {
+                    type: Boolean,
+                    value: Polymer.Settings.useShadow,
                 }
             },
             readyFnInitialized: false,

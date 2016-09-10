@@ -25,10 +25,13 @@ var crystal;
                         console.log(mutation.type);
                     });
                 });
-                var config = { attributes: true, childList: true, characterData: true };
+                var config = { attributes: true, childList: true, characterData: true, subtree: true };
                 // pass in the target node, as well as the observer options
-                debugger;
-                observer.observe(this, config);
+                var childNodes = this.children;
+                for (var _i = 0, childNodes_1 = childNodes; _i < childNodes_1.length; _i++) {
+                    var childNode = childNodes_1[_i];
+                    observer.observe(this, config);
+                }
             }
         });
     })(elements = crystal.elements || (crystal.elements = {}));
