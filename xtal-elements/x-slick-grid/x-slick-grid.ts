@@ -121,7 +121,6 @@ module crystal.elements {
             //const grid = this.grid as Slick.Grid<any>;
             return this._dataProvider;
         },
-
         wcOptions: null,
         _data: null,
         grid: null,
@@ -206,10 +205,6 @@ module crystal.elements {
             },
             useTreeGridHelper:{
                 type:  Boolean,
-            },
-            useShadow: {
-                type: Boolean,
-                value: Polymer.Settings.useShadow,
             }
         },
         readyFnInitialized: false,
