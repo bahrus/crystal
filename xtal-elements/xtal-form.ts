@@ -2,9 +2,68 @@
 ///<reference path='crystal.ts'/>
 
 module crystal.elements{
+    function serialize(form) {
+        if (!form || form.nodeName !== "FORM") {
+            return;
+        }
+        var i, j, q = [];
+        for (i = form.elements.length - 1; i >= 0; i = i - 1) {
+            if (form.elements[i].name === "") {
+                continue;
+            }
+            switch (form.elements[i].nodeName) {
+                case 'INPUT':
+                    switch (form.elements[i].type) {
+                        case 'text':
+                        case 'hidden':
+                        case 'password':
+                        case 'button':
+                        case 'reset':
+                        case 'submit':
+                            q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                            break;
+                        case 'checkbox':
+                        case 'radio':
+                            if (form.elements[i].checked) {
+                                q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                            }
+                            break;
+                        case 'file':
+                            break;
+                    }
+                    break;
+                case 'TEXTAREA':
+                    q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                    break;
+                case 'SELECT':
+                    switch (form.elements[i].type) {
+                        case 'select-one':
+                            q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                            break;
+                        case 'select-multiple':
+                            for (j = form.elements[i].options.length - 1; j >= 0; j = j - 1) {
+                                if (form.elements[i].options[j].selected) {
+                                    q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].options[j].value));
+                                }
+                            }
+                            break;
+                    }
+                    break;
+                case 'BUTTON':
+                    switch (form.elements[i].type) {
+                        case 'reset':
+                        case 'submit':
+                        case 'button':
+                            q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                            break;
+                    }
+                    break;
+            }
+        }
+        return q.join("&");
+    }
     const xtalForm = Polymer({
         is: 'xtal-form',
-        extends: 'form',
         properties:{
             auto:{
                 type: Boolean
@@ -15,20 +74,37 @@ module crystal.elements{
         },
         attached: function() {
             let target = nextNonScriptSibling(this);
-            // if(target.nodeName != 'iron-ajax'){
-            //     throw 'form must precede iron-ajax element';
-            // }
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    console.log(mutation.type);
-                });
-            });
-            const config = { attributes: true, childList: true, characterData: true, subtree: true };
-            // pass in the target node, as well as the observer options
-            const childNodes = this.children;
-            for(const childNode of childNodes){
-                observer.observe(this, config);
+            if(target.nodeName != 'IRON-AJAX'){
+                throw 'form must precede iron-ajax element';
             }
+            const formElm = this.children[0] as HTMLFormElement;
+            const childInputs = formElm.querySelectorAll('input');
+            for(let i = 0, ii = childInputs.length; i < ii; i++){
+                const childInput = childInputs[i] as HTMLInputElement;
+                childInput['_value'] = childInput.value;
+                Object.defineProperty(childInput, "value", {
+                    get: function() {return this._value;},
+                    set: function(v) {
+                        this._value = v;
+                        const formData = serialize(formElm);
+                        debugger;
+                        target['body'] = formData;
+                        target['generateRequest']();
+                    }
+                });
+            }
+
+            // const observer = new MutationObserver(function(mutations) {
+            //     mutations.forEach(function(mutation) {
+            //         console.log(mutation.type);
+            //     });
+            // });
+            // const config = { attributes: true, childList: true, characterData: true, subtree: true };
+            // // pass in the target node, as well as the observer options
+            // const childNodes = this.children;
+            // for(const childNode of childNodes){
+            //     observer.observe(this, config);
+            // }
 
         },
     });

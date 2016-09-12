@@ -91,7 +91,7 @@ var crystal;
                     var polymerAction = action;
                     if (!htmlActionContext) {
                         htmlActionContext = {
-                            element: target
+                            element: target,
                         };
                     }
                     htmlActionContext.action = action;
@@ -131,7 +131,7 @@ var crystal;
             var actions;
             if (typeof actionGetter === 'function') {
                 var context = {
-                    element: element
+                    element: element,
                 };
                 actions = actionGetter(context);
             }

@@ -7,10 +7,20 @@
 <body>
     <link rel="import" href="bower_components/polymer/polymer.html">
     <link rel="import" href="xtal-elements/xtal-form.html" />
-    <link rel="import" href="xtal-elements/iron-ajax.html" />
+    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html" />
+    <template is="dom-bind">
+        <input type="text" value="{{hostValue::input}}">
 
-    <form is="xtal-form">
-        <input type="text" name="myText1"/>
-    </form>
+        <xtal-form>
+            <form>
+                <input type="text" name="myText1" value="[[hostValue]]"/>
+                <input type="hidden" name="myTest2" value="[[test2]]">
+            </form>
+        </xtal-form>
+
+        <iron-ajax url="myUrl" method="POST" contentType="application/x-www-form-urlencoded; charset=UTF-8">
+
+        </iron-ajax>
+    </template>
 </body>
 </html>
