@@ -79,17 +79,30 @@ module crystal.elements{
             }
             const formElm = this.children[0] as HTMLFormElement;
             const childInputs = formElm.querySelectorAll('input');
+            const _thisForm = this as polymer.Base;
             for(let i = 0, ii = childInputs.length; i < ii; i++){
                 const childInput = childInputs[i] as HTMLInputElement;
                 childInput['_value'] = childInput.value;
+
                 Object.defineProperty(childInput, "value", {
                     get: function() {return this._value;},
                     set: function(v) {
                         this._value = v;
                         const formData = serialize(formElm);
-                        debugger;
+
                         target['body'] = formData;
-                        target['generateRequest']();
+                        if(_thisForm['auto']) {
+                            const debounceDuration = target['debounceDuration'];
+                            if(debounceDuration){
+                                _thisForm.debounce('generateRequest', () =>{
+                                    target['generateRequest']();
+                                }, debounceDuration);
+                            }else{
+                                target['generateRequest']();
+                            }
+
+                        }
+
                     }
                 });
             }

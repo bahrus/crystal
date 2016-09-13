@@ -81,6 +81,7 @@ var crystal;
                 }
                 var formElm = this.children[0];
                 var childInputs = formElm.querySelectorAll('input');
+                var _thisForm = this;
                 for (var i = 0, ii = childInputs.length; i < ii; i++) {
                     var childInput = childInputs[i];
                     childInput['_value'] = childInput.value;
@@ -89,9 +90,18 @@ var crystal;
                         set: function (v) {
                             this._value = v;
                             var formData = serialize(formElm);
-                            debugger;
                             target['body'] = formData;
-                            target['generateRequest']();
+                            if (_thisForm['auto']) {
+                                var debounceDuration = target['debounceDuration'];
+                                if (debounceDuration) {
+                                    _thisForm.debounce('generateRequest', function () {
+                                        target['generateRequest']();
+                                    }, debounceDuration);
+                                }
+                                else {
+                                    target['generateRequest']();
+                                }
+                            }
                         }
                     });
                 }

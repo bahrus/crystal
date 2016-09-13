@@ -11,14 +11,14 @@
     <template is="dom-bind">
         <input type="text" value="{{hostValue::input}}">
 
-        <xtal-form>
+        <xtal-form auto>
             <form>
                 <input type="text" name="myText1" value="[[hostValue]]"/>
                 <input type="hidden" name="myTest2" value="[[test2]]">
             </form>
         </xtal-form>
 
-        <iron-ajax url="myUrl" method="POST" contentType="application/x-www-form-urlencoded; charset=UTF-8">
+        <iron-ajax url="myUrl" method="POST" contentType="application/x-www-form-urlencoded; charset=UTF-8" debounce-duration="2000">
 
         </iron-ajax>
     </template>
