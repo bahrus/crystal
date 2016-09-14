@@ -200,6 +200,7 @@ var crystal;
                 }
                 return returnObj;
             }
+            util.splitPairs = splitPairs;
             function substringBefore(value, search) {
                 var iPos = value.indexOf(search);
                 if (iPos < -1)

@@ -195,7 +195,7 @@ module crystal.elements{
             rhs: string;
         }
 
-        function splitPairs(text: string, pair: IPair): string[]{
+        export function splitPairs(text: string, pair: IPair): string[]{
             const returnObj: string[] = [];
             let region: string[] = [];
             for(let i = 0, ii = text.length; i < ii; i++){
