@@ -107,17 +107,11 @@ module crystal.elements{
                 });
             }
 
-            // const observer = new MutationObserver(function(mutations) {
-            //     mutations.forEach(function(mutation) {
-            //         console.log(mutation.type);
-            //     });
-            // });
-            // const config = { attributes: true, childList: true, characterData: true, subtree: true };
-            // // pass in the target node, as well as the observer options
-            // const childNodes = this.children;
-            // for(const childNode of childNodes){
-            //     observer.observe(this, config);
-            // }
+           if(_thisForm['auto']){
+               const formData = serialize(formElm);
+               target['body'] = formData;
+               target['generateRequest']();
+           }
 
         },
     });
