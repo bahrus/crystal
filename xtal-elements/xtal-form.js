@@ -75,10 +75,11 @@ var crystal;
                 }
             },
             attached: function () {
-                var target = elements.nextNonScriptSibling(this);
-                if (target.nodeName != 'IRON-AJAX') {
-                    throw 'form must precede iron-ajax element';
-                }
+                //let target = nextNonScriptSibling(this);
+                // if(target.nodeName != 'IRON-AJAX'){
+                //     throw 'form must precede iron-ajax element';
+                // }
+                var target = this.$$('iron-ajax');
                 var formElm = this.children[0];
                 var childInputs = formElm.querySelectorAll('input');
                 var _thisForm = this;

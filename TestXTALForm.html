@@ -16,11 +16,12 @@
                 <input type="text" name="myText1" value="[[hostValue]]"/>
                 <input type="hidden" name="myTest2" value="[[test2]]">
             </form>
+            <iron-ajax url="myUrl" method="POST" contentType="application/x-www-form-urlencoded; charset=UTF-8" debounce-duration="2000">
+
+            </iron-ajax>
         </xtal-form>
 
-        <iron-ajax url="myUrl" method="POST" contentType="application/x-www-form-urlencoded; charset=UTF-8" debounce-duration="2000">
 
-        </iron-ajax>
     </template>
 </body>
 </html>

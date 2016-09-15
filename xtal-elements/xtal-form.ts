@@ -73,10 +73,11 @@ module crystal.elements{
             }
         },
         attached: function() {
-            let target = nextNonScriptSibling(this);
-            if(target.nodeName != 'IRON-AJAX'){
-                throw 'form must precede iron-ajax element';
-            }
+            //let target = nextNonScriptSibling(this);
+            // if(target.nodeName != 'IRON-AJAX'){
+            //     throw 'form must precede iron-ajax element';
+            // }
+            let target = this.$$('iron-ajax');
             const formElm = this.children[0] as HTMLFormElement;
             const childInputs = formElm.querySelectorAll('input');
             const _thisForm = this as polymer.Base;
