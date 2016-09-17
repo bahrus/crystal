@@ -64,6 +64,11 @@ var crystal;
             }
             return q.join("&");
         }
+        function validateInputElement(inputEl) {
+            if (inputEl.required && inputEl.value.length === 0)
+                return false;
+            return true;
+        }
         var xtalForm = Polymer({
             is: 'xtal-form',
             properties: {
@@ -80,7 +85,31 @@ var crystal;
                 //     throw 'form must precede iron-ajax element';
                 // }
                 var target = this.$$('iron-ajax');
-                var formElm = this.children[0];
+                var validator = this.$$('js-validator');
+                var customValidatorFns;
+                if (validator) {
+                    customValidatorFns = eval(validator.innerText);
+                }
+                var formElm = this.$$('form'); //this.children[0] as HTMLFormElement;
+                var nativeAndCustomValidatorFn = function () {
+                    var inputs = formElm.querySelectorAll('input');
+                    var formData = {};
+                    for (var i = 0, ii = inputs.length; i < ii; i++) {
+                        var inpu = inputs[i];
+                        if (!validateInputElement(inpu))
+                            return false;
+                        formData[inpu.name] = inpu.value;
+                    }
+                    if (customValidatorFns) {
+                        for (var _i = 0, customValidatorFns_1 = customValidatorFns; _i < customValidatorFns_1.length; _i++) {
+                            var customValidatorFn = customValidatorFns_1[_i];
+                            console.log(customValidatorFn.toString());
+                            if (!customValidatorFn(formData))
+                                return false;
+                        }
+                    }
+                    return true;
+                };
                 var childInputs = formElm.querySelectorAll('input');
                 var _thisForm = this;
                 for (var i = 0, ii = childInputs.length; i < ii; i++) {
@@ -90,9 +119,12 @@ var crystal;
                         get: function () { return this._value; },
                         set: function (v) {
                             this._value = v;
+                            if (!validateInputElement(this))
+                                return;
                             var formData = serialize(formElm);
                             target['body'] = formData;
-                            if (_thisForm['auto']) {
+                            //if(_thisForm['auto'] && formElm.checkValidity()) {
+                            if (_thisForm['auto'] && nativeAndCustomValidatorFn()) {
                                 var debounceDuration = target['debounceDuration'];
                                 if (debounceDuration) {
                                     _thisForm.debounce('generateRequest', function () {
@@ -106,7 +138,7 @@ var crystal;
                         }
                     });
                 }
-                if (_thisForm['auto']) {
+                if (_thisForm['auto'] && nativeAndCustomValidatorFn()) {
                     var formData = serialize(formElm);
                     target['body'] = formData;
                     target['generateRequest']();

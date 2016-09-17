@@ -224,5 +224,6 @@ module crystal.elements{
             if(iPos < -1) return value;
             return value.substr(0, iPos);
         }
+
     }
 }

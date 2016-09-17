@@ -12,9 +12,14 @@
         <input type="text" value="{{hostValue::input}}">
 
         <xtal-form auto>
+            <js-validator hidden>
+                [function(frmObject){
+                    console.log(frmObject['myTest2']);
+                    return frmObject['myTest2'].length < 5
+                }]
+            </js-validator>
             <form>
-                <input type="text" name="myText1" value="[[hostValue]]"/>
-                <input type="hidden" name="myTest2" value="[[test2]]">
+                <input required type="text" name="myTest2" value="[[hostValue]]" hidden>
             </form>
             <iron-ajax url="myUrl" method="POST" contentType="application/x-www-form-urlencoded; charset=UTF-8" debounce-duration="2000">
 
