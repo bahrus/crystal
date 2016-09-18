@@ -63,7 +63,14 @@ module crystal.elements{
         return q.join("&");
     }
     function validateInputElement(inputEl: HTMLInputElement){
-        if(inputEl.required && inputEl.value.length === 0) return false;
+        const val = inputEl.value;
+        if(inputEl.required && val.length === 0) return false;
+        if(inputEl.maxLength != -1 && val.length > inputEl.maxLength) return false;
+        if(inputEl.pattern){
+            const regExp = new RegExp(inputEl.pattern);
+            if(! regExp.test(val)) return false;
+        }
+        //TODO:  set class?
         return true;
     }
     const xtalForm = Polymer({
@@ -77,10 +84,6 @@ module crystal.elements{
             }
         },
         attached: function() {
-            //let target = nextNonScriptSibling(this);
-            // if(target.nodeName != 'IRON-AJAX'){
-            //     throw 'form must precede iron-ajax element';
-            // }
             const target = this.$$('iron-ajax');
             const validator = this.$$('js-validator');
             let  customValidatorFns;
@@ -89,6 +92,7 @@ module crystal.elements{
             }
             const formElm = this.$$('form') as HTMLFormElement; //this.children[0] as HTMLFormElement;
             const nativeAndCustomValidatorFn = () =>{
+                //const hidden = formElm.hidden;
                 const inputs = formElm.querySelectorAll('input');
                 const formData = {};
                 for(let i = 0, ii = inputs.length; i < ii; i++){
@@ -98,7 +102,6 @@ module crystal.elements{
                 }
                 if(customValidatorFns){
                     for(const customValidatorFn of customValidatorFns){
-                        console.log(customValidatorFn.toString());
                         if(!customValidatorFn(formData)) return false;
                     }
                 }
@@ -143,22 +146,9 @@ module crystal.elements{
            }
 
 
-        },
+        }
 
-        // ready: function(){
-        //     this.async(() => {
-        //         //const validatorElm = this.$$('template[role="validator"]') as HTMLTemplateElement;
-        //         //const validatorElm = this.$$('template') as HTMLTemplateElement;
-        //         const validatorElm = this.getEffectiveChildren()[0];
-        //         if(validatorElm){
-        //             const content = document.importNode(validatorElm, true);
-        //             const inner = content['innerHTML'];
-        //             debugger;
-        //             //const validatorFn = eval(content);
-        //         }
-        //     }, 1)
-        //
-        // }
+
     });
 
 }

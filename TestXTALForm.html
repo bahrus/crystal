@@ -7,25 +7,30 @@
 <body>
     <link rel="import" href="bower_components/polymer/polymer.html">
     <link rel="import" href="xtal-elements/xtal-form.html" />
+    <link rel="import" href="xtal-elements/js-transformer.html"/>
     <link rel="import" href="bower_components/iron-ajax/iron-ajax.html" />
     <template is="dom-bind">
         <input type="text" value="{{hostValue::input}}">
 
         <xtal-form auto>
-            <js-validator hidden>
-                [function(frmObject){
-                    console.log(frmObject['myTest2']);
-                    return frmObject['myTest2'].length < 5
-                }]
-            </js-validator>
-            <form>
+            <js-validator hidden>[frmObject => frmObject['myTest2'].length < 5]</js-validator>
+            <form hidden>
                 <input required type="text" name="myTest2" value="[[hostValue]]" hidden>
             </form>
-            <iron-ajax url="myUrl" method="POST" contentType="application/x-www-form-urlencoded; charset=UTF-8" debounce-duration="2000">
-
+            <iron-ajax
+                    url="tsconfig.json"
+                    method="POST"
+                    contentType="application/x-www-form-urlencoded; charset=UTF-8"
+                    handle-as="json"
+                    debounce-duration="2000"
+                    last-response="{{tsConfig}}"
+            >
             </iron-ajax>
+            <js-transformer hidden watch="{{tsConfig}}" result="{{iah}}">
+                [function(tsConfig){ return {hello:'world'}}]
+            </js-transformer>
         </xtal-form>
-
+        <div>[[tsConfig]]</div>
 
     </template>
 </body>

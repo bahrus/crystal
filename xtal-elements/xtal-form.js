@@ -65,8 +65,17 @@ var crystal;
             return q.join("&");
         }
         function validateInputElement(inputEl) {
-            if (inputEl.required && inputEl.value.length === 0)
+            var val = inputEl.value;
+            if (inputEl.required && val.length === 0)
                 return false;
+            if (inputEl.maxLength != -1 && val.length > inputEl.maxLength)
+                return false;
+            if (inputEl.pattern) {
+                var regExp = new RegExp(inputEl.pattern);
+                if (!regExp.test(val))
+                    return false;
+            }
+            //TODO:  set class?
             return true;
         }
         var xtalForm = Polymer({
@@ -80,10 +89,6 @@ var crystal;
                 }
             },
             attached: function () {
-                //let target = nextNonScriptSibling(this);
-                // if(target.nodeName != 'IRON-AJAX'){
-                //     throw 'form must precede iron-ajax element';
-                // }
                 var target = this.$$('iron-ajax');
                 var validator = this.$$('js-validator');
                 var customValidatorFns;
@@ -92,6 +97,7 @@ var crystal;
                 }
                 var formElm = this.$$('form'); //this.children[0] as HTMLFormElement;
                 var nativeAndCustomValidatorFn = function () {
+                    //const hidden = formElm.hidden;
                     var inputs = formElm.querySelectorAll('input');
                     var formData = {};
                     for (var i = 0, ii = inputs.length; i < ii; i++) {
@@ -103,7 +109,6 @@ var crystal;
                     if (customValidatorFns) {
                         for (var _i = 0, customValidatorFns_1 = customValidatorFns; _i < customValidatorFns_1.length; _i++) {
                             var customValidatorFn = customValidatorFns_1[_i];
-                            console.log(customValidatorFn.toString());
                             if (!customValidatorFn(formData))
                                 return false;
                         }
@@ -143,7 +148,7 @@ var crystal;
                     target['body'] = formData;
                     target['generateRequest']();
                 }
-            },
+            }
         });
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
