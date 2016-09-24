@@ -133,6 +133,9 @@ module crystal.elements{
             },
             ironAjaxSelector:{
                 type: String,
+            },
+            cacheAll:{
+                type: Boolean
             }
         },
         attached: function() {
@@ -158,7 +161,22 @@ module crystal.elements{
                     }
                 }
                 return true;
-            }
+            };
+            const submit = () =>{
+                const formData = serialize(formElm, true);
+                target['body'] = formData;
+                if(_thisForm['auto'] && nativeAndCustomValidatorFn()) {
+                    const debounceDuration = target['debounceDuration'];
+                    if(debounceDuration){
+                        _thisForm.debounce('generateRequest', () =>{
+                            target['generateRequest']();
+                        }, debounceDuration);
+                    }else{
+                        target['generateRequest']();
+                    }
+
+                }
+            };
             const childInputs = formElm.querySelectorAll('input');
             const _thisForm = this as polymer.Base;
             for(let i = 0, ii = childInputs.length; i < ii; i++){
@@ -171,30 +189,15 @@ module crystal.elements{
                     set: function(v) {
                         this._value = v;
                         if(!validateInputElement(this as HTMLInputElement)) return;
-                        const formData = serialize(formElm, true);
-                        target['body'] = formData;
+                        submit();
                         //if(_thisForm['auto'] && formElm.checkValidity()) {
-                        if(_thisForm['auto'] && nativeAndCustomValidatorFn()) {
-                            const debounceDuration = target['debounceDuration'];
-                            if(debounceDuration){
-                                _thisForm.debounce('generateRequest', () =>{
-                                    target['generateRequest']();
-                                }, debounceDuration);
-                            }else{
-                                target['generateRequest']();
-                            }
 
-                        }
 
                     }
                 });
             }
-
-           if(_thisForm['auto'] && nativeAndCustomValidatorFn()){
-               const formData = serialize(formElm, true);
-               target['body'] = formData;
-               target['generateRequest']();
-           }
+            submit();
+           
 
 
         }

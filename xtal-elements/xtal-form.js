@@ -143,6 +143,9 @@ var crystal;
                 },
                 ironAjaxSelector: {
                     type: String,
+                },
+                cacheAll: {
+                    type: Boolean
                 }
             },
             attached: function () {
@@ -172,6 +175,21 @@ var crystal;
                     }
                     return true;
                 };
+                var submit = function () {
+                    var formData = serialize(formElm, true);
+                    target['body'] = formData;
+                    if (_thisForm['auto'] && nativeAndCustomValidatorFn()) {
+                        var debounceDuration = target['debounceDuration'];
+                        if (debounceDuration) {
+                            _thisForm.debounce('generateRequest', function () {
+                                target['generateRequest']();
+                            }, debounceDuration);
+                        }
+                        else {
+                            target['generateRequest']();
+                        }
+                    }
+                };
                 var childInputs = formElm.querySelectorAll('input');
                 var _thisForm = this;
                 for (var i = 0, ii = childInputs.length; i < ii; i++) {
@@ -183,28 +201,12 @@ var crystal;
                             this._value = v;
                             if (!validateInputElement(this))
                                 return;
-                            var formData = serialize(formElm, true);
-                            target['body'] = formData;
+                            submit();
                             //if(_thisForm['auto'] && formElm.checkValidity()) {
-                            if (_thisForm['auto'] && nativeAndCustomValidatorFn()) {
-                                var debounceDuration = target['debounceDuration'];
-                                if (debounceDuration) {
-                                    _thisForm.debounce('generateRequest', function () {
-                                        target['generateRequest']();
-                                    }, debounceDuration);
-                                }
-                                else {
-                                    target['generateRequest']();
-                                }
-                            }
                         }
                     });
                 }
-                if (_thisForm['auto'] && nativeAndCustomValidatorFn()) {
-                    var formData = serialize(formElm, true);
-                    target['body'] = formData;
-                    target['generateRequest']();
-                }
+                submit();
             }
         });
     })(elements = crystal.elements || (crystal.elements = {}));
