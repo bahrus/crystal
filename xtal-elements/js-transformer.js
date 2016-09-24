@@ -16,14 +16,26 @@ var crystal;
                         type: Object,
                         notify: true,
                         readOnly: true
+                    },
+                    argument: {
+                        type: Object
                     }
                 }
             },
             _a[onWatchChange] = function (newVal) {
                 var transformedObj = newVal;
+                var arg = this.argument;
+                if (!arg) {
+                    arg = {};
+                }
+                ;
+                arg.context = {
+                    element: this
+                };
                 for (var i = 0, ii = this._transformerFns.length; i < ii; i++) {
                     var transformerFn = this._transformerFns[i];
-                    transformedObj = transformerFn(transformedObj);
+                    transformedObj = transformerFn(transformedObj, arg);
+                    delete arg.context;
                 }
                 this['_setResult'](transformedObj);
             },

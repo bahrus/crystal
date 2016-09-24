@@ -2,30 +2,51 @@
 ///<reference path='crystal.ts'/>
 
 module crystal.elements{
-    function serialize(form) {
+    function serialize(form: HTMLFormElement, asObject?: boolean) : string | {[key: string] : string | string[]} {
         if (!form || form.nodeName !== "FORM") {
             return;
         }
-        var i, j, q = [];
-        for (i = form.elements.length - 1; i >= 0; i = i - 1) {
-            if (form.elements[i].name === "") {
+        //var i, j, q = [];
+        let q : string[];
+        let p : {[key: string] : string | string[]};
+        if(asObject){
+            p = {};
+        }else{
+            q = [];
+        }
+        for (let i = form.elements.length - 1; i >= 0; i = i - 1) {
+            const elm = form.elements[i] as HTMLInputElement;
+            if (elm.name === "") {
                 continue;
             }
-            switch (form.elements[i].nodeName) {
+            const val = encodeURIComponent(elm.value);
+            switch (elm.nodeName) {
                 case 'INPUT':
-                    switch (form.elements[i].type) {
+                    switch (elm.type) {
                         case 'text':
                         case 'hidden':
                         case 'password':
                         case 'button':
                         case 'reset':
                         case 'submit':
-                            q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                            if(q){
+                                q.push(elm.name + "=" + val);
+                            }else{
+                                p[elm.name] = val;
+                            }
+
                             break;
                         case 'checkbox':
                         case 'radio':
-                            if (form.elements[i].checked) {
-                                q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                            if (elm.checked) {
+                                if(q){
+                                    q.push(elm.name + "=" + val);
+                                }else{
+                                    if(p[elm.name]){
+                                        p[elm.name] = [];
+                                    }
+                                    p[elm.name]['push'](val);
+                                }
                             }
                             break;
                         case 'file':
@@ -33,34 +54,65 @@ module crystal.elements{
                     }
                     break;
                 case 'TEXTAREA':
-                    q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                    if(q){
+                        q.push(elm.name + "=" + val);
+                    }else{
+                        p[elm.name] = val;
+                    }
                     break;
                 case 'SELECT':
-                    switch (form.elements[i].type) {
+                    switch (elm.type) {
                         case 'select-one':
-                            q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                            if(q){
+                                q.push(elm.name + "=" + val);
+                            }else{
+                                p[elm.name] = val;
+                            }
                             break;
                         case 'select-multiple':
-                            for (j = form.elements[i].options.length - 1; j >= 0; j = j - 1) {
-                                if (form.elements[i].options[j].selected) {
-                                    q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].options[j].value));
+                            const selm = <HTMLSelectElement><any>elm;
+                            const options = selm.options;
+                            for (let j = options.length - 1; j >= 0; j = j - 1) {
+                                if (options[j]['selected']) {
+                                    const val2 =  encodeURIComponent(options[j]['value']);
+                                    if(q){
+                                        q.push(elm.name + "=" + val);
+                                    }else{
+                                        if(!p[elm.name]){
+                                            p[elm.name] = [];
+                                        }
+                                        p[elm.name]['push'](val);
+                                    }
+
                                 }
                             }
                             break;
                     }
                     break;
                 case 'BUTTON':
-                    switch (form.elements[i].type) {
+                    switch (elm.type) {
                         case 'reset':
                         case 'submit':
                         case 'button':
-                            q.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+                            if(q){
+                                q.push(elm.name + "=" + val);
+                            }else{
+                                if(!p[elm.name]){
+                                    p[elm.name] = [];
+                                }
+                                p[elm.name]['push'](val);
+                            }
                             break;
                     }
                     break;
             }
         }
-        return q.join("&");
+        if(q){
+            return q.join("&");
+        }else{
+            return p;
+        }
+
     }
     function validateInputElement(inputEl: HTMLInputElement){
         const val = inputEl.value;
@@ -119,8 +171,7 @@ module crystal.elements{
                     set: function(v) {
                         this._value = v;
                         if(!validateInputElement(this as HTMLInputElement)) return;
-                        const formData = serialize(formElm);
-
+                        const formData = serialize(formElm, true);
                         target['body'] = formData;
                         //if(_thisForm['auto'] && formElm.checkValidity()) {
                         if(_thisForm['auto'] && nativeAndCustomValidatorFn()) {
@@ -140,7 +191,7 @@ module crystal.elements{
             }
 
            if(_thisForm['auto'] && nativeAndCustomValidatorFn()){
-               const formData = serialize(formElm);
+               const formData = serialize(formElm, true);
                target['body'] = formData;
                target['generateRequest']();
            }
