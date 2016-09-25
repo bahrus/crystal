@@ -12,7 +12,7 @@
     <template is="dom-bind">
         <input type="text" value="{{hostValue::input}}">
 
-        <xtal-form auto>
+        <xtal-form auto cache-all>
             <js-validator hidden>[frmObject => frmObject['myTest2'].length < 5]</js-validator>
             <form hidden>
                 <input required type="text" name="myTest2" value="[[hostValue]]" hidden>

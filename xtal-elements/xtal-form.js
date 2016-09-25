@@ -148,6 +148,7 @@ var crystal;
                     type: Boolean
                 }
             },
+            _cachedResponses: {},
             attached: function () {
                 var target = this.$$('iron-ajax');
                 var validator = this.$$('js-validator');
@@ -175,8 +176,23 @@ var crystal;
                     }
                     return true;
                 };
+                var _thisForm = this;
+                if (this.cacheAll) {
+                    target.addEventListener('response', function (e) {
+                        var cacheKey = JSON.stringify(target['body']);
+                        _thisForm['_cachedResponses'][cacheKey] = target.lastResponse;
+                    });
+                }
                 var submit = function () {
                     var formData = serialize(formElm, true);
+                    if (_thisForm['cacheAll']) {
+                        var reqString = JSON.stringify(formData);
+                        var previousVal = _thisForm['_cachedResponses'][reqString];
+                        if (previousVal) {
+                            target._setLastResponse(previousVal);
+                            return;
+                        }
+                    }
                     target['body'] = formData;
                     if (_thisForm['auto'] && nativeAndCustomValidatorFn()) {
                         var debounceDuration = target['debounceDuration'];
@@ -191,7 +207,6 @@ var crystal;
                     }
                 };
                 var childInputs = formElm.querySelectorAll('input');
-                var _thisForm = this;
                 for (var i = 0, ii = childInputs.length; i < ii; i++) {
                     var childInput = childInputs[i];
                     childInput['_value'] = childInput.value;

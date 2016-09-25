@@ -138,6 +138,7 @@ module crystal.elements{
                 type: Boolean
             }
         },
+        _cachedResponses: {},
         attached: function() {
             const target = this.$$('iron-ajax');
             const validator = this.$$('js-validator');
@@ -162,8 +163,23 @@ module crystal.elements{
                 }
                 return true;
             };
+            const _thisForm = this as polymer.Base;
+            if(this.cacheAll){
+                target.addEventListener('response', e => {
+                    const cacheKey = JSON.stringify(target['body']);
+                    _thisForm['_cachedResponses'][ cacheKey ] = target.lastResponse;
+                });
+            }
             const submit = () =>{
                 const formData = serialize(formElm, true);
+                if(_thisForm['cacheAll']){
+                    const reqString = JSON.stringify(formData);
+                    const previousVal = _thisForm['_cachedResponses'][reqString];
+                    if(previousVal){
+                        target._setLastResponse(previousVal);
+                        return;
+                    }
+                }
                 target['body'] = formData;
                 if(_thisForm['auto'] && nativeAndCustomValidatorFn()) {
                     const debounceDuration = target['debounceDuration'];
@@ -178,7 +194,7 @@ module crystal.elements{
                 }
             };
             const childInputs = formElm.querySelectorAll('input');
-            const _thisForm = this as polymer.Base;
+
             for(let i = 0, ii = childInputs.length; i < ii; i++){
                 const childInput = childInputs[i] as HTMLInputElement;
 
@@ -197,7 +213,7 @@ module crystal.elements{
                 });
             }
             submit();
-           
+
 
 
         }
