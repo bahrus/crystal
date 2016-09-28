@@ -22,7 +22,13 @@ var crystal;
                 if (elm.name === "") {
                     continue;
                 }
-                var val = encodeURIComponent(elm.value);
+                var val = void 0;
+                if (q) {
+                    val = encodeURIComponent(elm.value);
+                }
+                else {
+                    val = elm.value;
+                }
                 switch (elm.nodeName) {
                     case 'INPUT':
                         switch (elm.type) {
@@ -80,7 +86,13 @@ var crystal;
                                 var options = selm.options;
                                 for (var j = options.length - 1; j >= 0; j = j - 1) {
                                     if (options[j]['selected']) {
-                                        var val2 = encodeURIComponent(options[j]['value']);
+                                        var val2 = void 0;
+                                        if (q) {
+                                            val2 = encodeURIComponent(options[j]['value']);
+                                        }
+                                        else {
+                                            val2 = options[j]['value'];
+                                        }
                                         if (q) {
                                             q.push(elm.name + "=" + val);
                                         }

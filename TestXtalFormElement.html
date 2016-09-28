@@ -1,0 +1,39 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="xtal-elements/xtal-form.html" />
+<link rel="import" href="xtal-elements/js-transformer.html"/>
+<link rel="import" href="bower_components/iron-ajax/iron-ajax.html" />
+
+<dom-module id="test-xform">
+    <template is="dom-bind">
+        <input type="text" value="{{hostValue::input}}">
+
+        <xtal-form auto cache-all>
+            <js-validator hidden>[frmObject => frmObject['myTest2'].length < 5]</js-validator>
+            <form hidden>
+                <input required type="text" name="myTest2" value="[[hostValue]]" hidden>
+            </form>
+            <iron-ajax
+                    url="tsconfig.json"
+                    method="POST"
+                    content-type="application/x-www-form-urlencoded"
+                    handle-as="json"
+                    debounce-duration="2000"
+                    last-response="{{tsConfig}}"
+            >
+            </iron-ajax>
+            <js-transformer hidden on-transform="handleTransformerEvent" watch="{{tsConfig}}" result="{{iah}}" argument='{"myArg": "test"}'>
+                [function(tsConfig){ return {hello:'world'}}]
+            </js-transformer>
+        </xtal-form>
+        <div>[[tsConfig]]</div>
+
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 'test-xform',
+        handleTransformerEvent: function(e){
+            debugger;
+        }
+    })
+</script>

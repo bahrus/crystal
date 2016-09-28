@@ -19,7 +19,12 @@ module crystal.elements{
             if (elm.name === "") {
                 continue;
             }
-            const val = encodeURIComponent(elm.value);
+            let val: string;
+            if(q){
+                val = encodeURIComponent(elm.value);
+            }else{
+                val = elm.value;
+            }
             switch (elm.nodeName) {
                 case 'INPUT':
                     switch (elm.type) {
@@ -74,7 +79,12 @@ module crystal.elements{
                             const options = selm.options;
                             for (let j = options.length - 1; j >= 0; j = j - 1) {
                                 if (options[j]['selected']) {
-                                    const val2 =  encodeURIComponent(options[j]['value']);
+                                    let val2: string;
+                                    if(q){
+                                        val2 =  encodeURIComponent(options[j]['value']);
+                                    }else{
+                                        val2 = options[j]['value'];
+                                    }
                                     if(q){
                                         q.push(elm.name + "=" + val);
                                     }else{

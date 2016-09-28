@@ -29,9 +29,15 @@ module crystal.elements{
             arg.context = {
                 element: this
             };
+            const detail = {obj: transformedObj, arg: arg};
+            this.fire('transform', detail);
+            transformedObj = detail.obj;
             for(let i  = 0, ii = this._transformerFns.length; i < ii; i++)
             {
                 const transformerFn = this._transformerFns[i];
+                if(typeof(transformerFn) !== 'function'){
+                    console.error("Cannot resolve function specified in position " + i + " from " + this.innerText);
+                }
                 transformedObj = transformerFn(transformedObj, arg);
                 delete arg.context;
             }
