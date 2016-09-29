@@ -231,6 +231,8 @@ module crystal.elements{
 
         },
         handleTap: function(e: Event){
+            const srcElement = e.srcElement as HTMLButtonElement;
+            const isSubmit = (srcElement.type === 'submit') || (srcElement.getAttribute('type') === 'submit')
             if(e.srcElement['type'] === 'submit'){
                 //TODO:  add validation
                 const target = this.$$('iron-ajax');

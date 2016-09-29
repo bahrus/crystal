@@ -239,6 +239,8 @@ var crystal;
                 submit();
             },
             handleTap: function (e) {
+                var srcElement = e.srcElement;
+                var isSubmit = (srcElement.type === 'submit') || (srcElement.getAttribute('type') === 'submit');
                 if (e.srcElement['type'] === 'submit') {
                     //TODO:  add validation
                     var target = this.$$('iron-ajax');
