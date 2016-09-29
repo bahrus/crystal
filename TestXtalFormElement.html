@@ -24,6 +24,7 @@
             <js-transformer hidden on-transform="handleTransformerEvent" watch="{{tsConfig}}" result="{{iah}}" argument='{"myArg": "test"}'>
                 [function(tsConfig){ return {hello:'world'}}]
             </js-transformer>
+            <button type="submit">I am here</button>
         </xtal-form>
         <div>[[tsConfig]]</div>
 
@@ -33,7 +34,8 @@
     Polymer({
         is: 'test-xform',
         handleTransformerEvent: function(e){
-            debugger;
+
+
         }
     })
 </script>

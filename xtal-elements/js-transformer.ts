@@ -2,7 +2,17 @@
 
 module crystal.elements{
     const onWatchChange = 'onWatchChange';
-
+    export interface ITransformEventDetail{
+        obj: Object;
+        arg: IArgumentContext;
+    };
+    export interface IArgumentContext{
+        context?: IContext;
+    };
+    export interface IContext{
+        element: HTMLElement;
+        count: number;
+    }
     Polymer({
         is: 'js-transformer',
         _transformerFns: null,
@@ -22,30 +32,45 @@ module crystal.elements{
         },
         [onWatchChange]: function(newVal){
             let transformedObj = newVal;
-            let arg = this.argument;
+            let arg : IArgumentContext = this.argument;
             if(!arg){
                 arg = {};
             };
             arg.context = {
-                element: this
+                element: this,
+                count: 0,
             };
-            const detail = {obj: transformedObj, arg: arg};
+            const detail : ITransformEventDetail = {obj: transformedObj, arg: arg};
             this.fire('transform', detail);
+            arg.context.count++;
             transformedObj = detail.obj;
-            for(let i  = 0, ii = this._transformerFns.length; i < ii; i++)
-            {
-                const transformerFn = this._transformerFns[i];
-                if(typeof(transformerFn) !== 'function'){
-                    console.error("Cannot resolve function specified in position " + i + " from " + this.innerText);
+            if(this._transformerFns ){
+                for(let i  = 0, ii = this._transformerFns.length; i < ii; i++)
+                {
+                    const transformerFn = this._transformerFns[i];
+                    if(typeof(transformerFn) !== 'function'){
+                        console.error("Cannot resolve function specified in position " + i + " from " + this.innerText);
+                    }
+                    transformedObj = transformerFn(transformedObj, arg);
+                    arg.context.count++;
+
                 }
-                transformedObj = transformerFn(transformedObj, arg);
-                delete arg.context;
             }
 
+
+            detail.obj = transformedObj;
+            this.fire('transform', detail);
+            delete arg.context;
             this['_setResult'](transformedObj);
+
         },
         attached: function(){
-           this._transformerFns = eval(this.innerText);
+            try{
+                this._transformerFns = eval(this.innerText);
+            }catch(e){
+                console.error("Unable to parse " + this.innerText);
+            }
+            if(!Array.isArray(this._transformerFns)) delete this._transformerFns;
         }
     });
 }

@@ -160,6 +160,9 @@ var crystal;
                     type: Boolean
                 }
             },
+            listeners: {
+                'tap': 'handleTap'
+            },
             _cachedResponses: {},
             attached: function () {
                 var target = this.$$('iron-ajax');
@@ -234,6 +237,14 @@ var crystal;
                     });
                 }
                 submit();
+            },
+            handleTap: function (e) {
+                if (e.srcElement['type'] === 'submit') {
+                    //TODO:  add validation
+                    var target = this.$$('iron-ajax');
+                    target['generateRequest']();
+                }
+                //if(e.srcElement.get)
             }
         });
     })(elements = crystal.elements || (crystal.elements = {}));

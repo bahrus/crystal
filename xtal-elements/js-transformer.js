@@ -4,6 +4,8 @@ var crystal;
     var elements;
     (function (elements) {
         var onWatchChange = 'onWatchChange';
+        ;
+        ;
         Polymer((_a = {
                 is: 'js-transformer',
                 _transformerFns: null,
@@ -30,23 +32,37 @@ var crystal;
                 }
                 ;
                 arg.context = {
-                    element: this
+                    element: this,
+                    count: 0,
                 };
                 var detail = { obj: transformedObj, arg: arg };
                 this.fire('transform', detail);
+                arg.context.count++;
                 transformedObj = detail.obj;
-                for (var i = 0, ii = this._transformerFns.length; i < ii; i++) {
-                    var transformerFn = this._transformerFns[i];
-                    if (typeof (transformerFn) !== 'function') {
-                        console.error("Cannot resolve function specified in position " + i + " from " + this.innerText);
+                if (this._transformerFns) {
+                    for (var i = 0, ii = this._transformerFns.length; i < ii; i++) {
+                        var transformerFn = this._transformerFns[i];
+                        if (typeof (transformerFn) !== 'function') {
+                            console.error("Cannot resolve function specified in position " + i + " from " + this.innerText);
+                        }
+                        transformedObj = transformerFn(transformedObj, arg);
+                        arg.context.count++;
                     }
-                    transformedObj = transformerFn(transformedObj, arg);
-                    delete arg.context;
                 }
+                detail.obj = transformedObj;
+                this.fire('transform', detail);
+                delete arg.context;
                 this['_setResult'](transformedObj);
             },
             _a.attached = function () {
-                this._transformerFns = eval(this.innerText);
+                try {
+                    this._transformerFns = eval(this.innerText);
+                }
+                catch (e) {
+                    console.error("Unable to parse " + this.innerText);
+                }
+                if (!Array.isArray(this._transformerFns))
+                    delete this._transformerFns;
             },
             _a
         ));

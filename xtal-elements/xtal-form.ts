@@ -148,6 +148,9 @@ module crystal.elements{
                 type: Boolean
             }
         },
+        listeners:{
+            'tap': 'handleTap'
+        },
         _cachedResponses: {},
         attached: function() {
             const target = this.$$('iron-ajax');
@@ -226,8 +229,15 @@ module crystal.elements{
 
 
 
+        },
+        handleTap: function(e: Event){
+            if(e.srcElement['type'] === 'submit'){
+                //TODO:  add validation
+                const target = this.$$('iron-ajax');
+                target['generateRequest']();
+            }
+            //if(e.srcElement.get)
         }
-
 
     });
 
