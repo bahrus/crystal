@@ -22,6 +22,9 @@ var crystal;
                 if (elm.name === "") {
                     continue;
                 }
+                if (elm.name.indexOf('_ignore_') === 0) {
+                    continue;
+                }
                 var val = void 0;
                 if (q) {
                     val = encodeURIComponent(elm.value);
@@ -166,6 +169,9 @@ var crystal;
             _cachedResponses: {},
             attached: function () {
                 var target = this.$$('iron-ajax');
+                if (window['isInStaticMode'] && target.handleAs === 'json') {
+                    target.url += '.json';
+                }
                 var validator = this.$$('js-validator');
                 var customValidatorFns;
                 if (validator) {

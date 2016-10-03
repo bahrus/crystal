@@ -19,6 +19,9 @@ module crystal.elements{
             if (elm.name === "") {
                 continue;
             }
+            if(elm.name.indexOf('_ignore_') === 0){
+                continue;
+            }
             let val: string;
             if(q){
                 val = encodeURIComponent(elm.value);
@@ -154,6 +157,9 @@ module crystal.elements{
         _cachedResponses: {},
         attached: function() {
             const target = this.$$('iron-ajax');
+            if(window['isInStaticMode'] && target.handleAs === 'json'){
+                target.url += '.json';
+            }
             const validator = this.$$('js-validator');
             let  customValidatorFns;
             if(validator){
