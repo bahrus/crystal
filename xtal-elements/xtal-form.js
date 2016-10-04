@@ -172,6 +172,10 @@ var crystal;
                 if (window['isInStaticMode'] && target.handleAs === 'json') {
                     target.url += '.json';
                 }
+                var urlManipulator = window['urlManipulator'];
+                if (urlManipulator && (typeof (urlManipulator) === 'function')) {
+                    target.url = urlManipulator(target.url);
+                }
                 var validator = this.$$('js-validator');
                 var customValidatorFns;
                 if (validator) {

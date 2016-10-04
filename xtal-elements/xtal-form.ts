@@ -160,6 +160,10 @@ module crystal.elements{
             if(window['isInStaticMode'] && target.handleAs === 'json'){
                 target.url += '.json';
             }
+            const urlManipulator = window['urlManipulator'];
+            if(urlManipulator && (typeof(urlManipulator) === 'function')){
+                target.url = urlManipulator(target.url);
+            }
             const validator = this.$$('js-validator');
             let  customValidatorFns;
             if(validator){
