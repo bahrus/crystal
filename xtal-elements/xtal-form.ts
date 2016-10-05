@@ -140,6 +140,8 @@ module crystal.elements{
     }
     const xtalForm = Polymer({
         is: 'xtal-form',
+        submit: null,
+        submitOnEnable: false,
         properties:{
             auto:{
                 type: Boolean
@@ -149,6 +151,10 @@ module crystal.elements{
             },
             cacheAll:{
                 type: Boolean
+            },
+            disabled:{
+                type: Boolean,
+                observer: 'onDisabledChange'
             }
         },
         listeners:{
@@ -194,6 +200,10 @@ module crystal.elements{
                 });
             }
             const submit = () =>{
+                if(_thisForm['disabled']){
+                    _thisForm['submitOnEnable'] = true;
+                    return;
+                }
                 const formData = serialize(formElm, true);
                 if(_thisForm['cacheAll']){
                     const reqString = JSON.stringify(formData);
@@ -216,6 +226,7 @@ module crystal.elements{
 
                 }
             };
+            this.submit = submit;
             const childInputs = formElm.querySelectorAll('input');
 
             for(let i = 0, ii = childInputs.length; i < ii; i++){
@@ -249,6 +260,13 @@ module crystal.elements{
                 target['generateRequest']();
             }
             //if(e.srcElement.get)
+        },
+        onDisabledChange: function(disabled){
+            if(disabled) return;
+            if(this.submitOnEnable){
+                this.submitOnEnable = false;
+                this.submit();
+            }
         }
 
     });

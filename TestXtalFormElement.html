@@ -7,7 +7,7 @@
     <template is="dom-bind">
         <input type="text" value="{{hostValue::input}}">
 
-        <xtal-form auto cache-all>
+        <xtal-form auto cache-all id="myXform">
             <js-validator hidden>[frmObject => frmObject['myTest2'].length < 5]</js-validator>
             <form hidden>
                 <input required type="text" name="myTest2" value="[[hostValue]]" hidden>
@@ -26,16 +26,23 @@
             </js-transformer>
             <button type="submit">I am here</button>
         </xtal-form>
-        <div>[[tsConfig]]</div>
-
+        <button on-click="disableXForm">disable</button>
+        <button on-click="enableXForm">enable</button>
     </template>
+
+
 </dom-module>
 <script>
     Polymer({
         is: 'test-xform',
         handleTransformerEvent: function(e){
 
-
+        },
+        disableXForm: function(){
+            this.$.myXform.disabled = true;
+        },
+        enableXForm: function(){
+            this.$.myXform.disabled = false;
         }
     })
 </script>

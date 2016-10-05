@@ -152,6 +152,8 @@ var crystal;
         }
         var xtalForm = Polymer({
             is: 'xtal-form',
+            submit: null,
+            submitOnEnable: false,
             properties: {
                 auto: {
                     type: Boolean
@@ -161,6 +163,10 @@ var crystal;
                 },
                 cacheAll: {
                     type: Boolean
+                },
+                disabled: {
+                    type: Boolean,
+                    observer: 'onDisabledChange'
                 }
             },
             listeners: {
@@ -209,6 +215,10 @@ var crystal;
                     });
                 }
                 var submit = function () {
+                    if (_thisForm['disabled']) {
+                        _thisForm['submitOnEnable'] = true;
+                        return;
+                    }
                     var formData = serialize(formElm, true);
                     if (_thisForm['cacheAll']) {
                         var reqString = JSON.stringify(formData);
@@ -231,6 +241,7 @@ var crystal;
                         }
                     }
                 };
+                this.submit = submit;
                 var childInputs = formElm.querySelectorAll('input');
                 for (var i = 0, ii = childInputs.length; i < ii; i++) {
                     var childInput = childInputs[i];
@@ -257,6 +268,14 @@ var crystal;
                     target['generateRequest']();
                 }
                 //if(e.srcElement.get)
+            },
+            onDisabledChange: function (disabled) {
+                if (disabled)
+                    return;
+                if (this.submitOnEnable) {
+                    this.submitOnEnable = false;
+                    this.submit();
+                }
             }
         });
     })(elements = crystal.elements || (crystal.elements = {}));
