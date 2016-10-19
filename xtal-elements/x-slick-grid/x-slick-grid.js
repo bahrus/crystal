@@ -1,6 +1,7 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
+///<reference path='js/treeGridHelper.ts'/>
 var crystal;
 (function (crystal) {
     var elements;
@@ -50,6 +51,7 @@ var crystal;
                 return this._dataProvider;
             },
             wcOptions: null,
+            _data: null,
             grid: null,
             gridDiv: null,
             _dataProvider: null,
@@ -129,6 +131,9 @@ var crystal;
                 useSlickEditors: {
                     type: Boolean,
                     value: false
+                },
+                useTreeGridHelper: {
+                    type: Boolean,
                 }
             },
             readyFnInitialized: false,
@@ -149,7 +154,8 @@ var crystal;
                     this.useDataViewDataProvider ? { importURL: 'Slick.DataView.html' } : null,
                     this.useSlickPaging ? { importURL: 'controls/SlickPager.html' } : null,
                     this.useSlickColumnPicker ? { importURL: 'controls/SlickColumnPicker.html' } : null,
-                    this.useSlickFormatters ? { importURL: 'SlickFormatters.html' } : null
+                    this.useSlickFormatters ? { importURL: 'SlickFormatters.html' } : null,
+                    this.useTreeGridHelper ? { importURL: 'TreeGridHelper.html' } : null
                 ];
                 importHrefs(slickDependencies, this, function () {
                     var thisGrid = _this.$$('[role]');
@@ -223,25 +229,39 @@ var crystal;
                 }
                 this.setEditorAndFormatter(columns);
                 //this.gridOptions = gridOptions;
+                if (!gridOptions)
+                    gridOptions = {};
+                gridOptions['_container'] = this;
                 if (data['addItem']) {
                     var dataProvider = data;
+                    dataProvider['container'] = this;
                     this._dataProvider = dataProvider;
                     this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                 }
                 else {
+                    if (this.useTreeGridHelper) {
+                        this._data = data;
+                    }
                     if (wcOptions && wcOptions.dataProvider) {
                         var dataProvider = wcOptions.dataProvider(data);
+                        dataProvider['container'] = this;
                         this._dataProvider = dataProvider;
                         this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                     }
                     else if (this.useDataViewDataProvider) {
                         var dataProvider = new Slick.Data.DataView({ inlineFilters: true });
+                        dataProvider['container'] = this;
                         this._dataProvider = dataProvider;
                         this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                     }
                     else {
                         this.grid = new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                     }
+                }
+                if (this.useTreeGridHelper) {
+                    elements.attachToggleClickEvent(this);
+                    this.collapseAll = elements.collapseAll;
+                    this.expandAll = elements.expandAll;
                 }
                 var grid = this.grid;
                 switch (this.selectionModel) {

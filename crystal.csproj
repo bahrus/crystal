@@ -149,7 +149,7 @@
     <TypeScriptCompile Include="xtal-elements\js-xtal-set.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-lite-dom-proc.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-include.ts" />
-    <TypeScriptCompile Include="xtal-elements\js-xtal-init.ts" />
+    <TypeScriptCompile Include="xtal-elements\js-js-xtal-init.ts" />
     <TypeScriptCompile Include="xtal-elements\xtal-vscroll.ts" />
   </ItemGroup>
   <ItemGroup />

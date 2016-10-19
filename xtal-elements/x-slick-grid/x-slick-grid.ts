@@ -1,6 +1,7 @@
 ///<reference path='../../bower_components/polymer/polymer.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
+///<reference path='js/treeGridHelper.ts'/>
 
 module crystal.elements {
     type SelectionModel = 'Cell' | 'Row';
@@ -37,6 +38,9 @@ module crystal.elements {
     export interface IXSlickGridElement<T> extends polymer.Base{
         grid: Slick.Grid<T>;
         options: ISlickGridOptions<T>;
+        data: T[];
+        _data: T[];
+        dataProvider: any;
     }
     export interface ISlickGridEventHandlers<T>{
         onScroll?: (eventData: Slick.OnScrollEventArgs<T>, data?: T) => void;
@@ -118,6 +122,7 @@ module crystal.elements {
             return this._dataProvider;
         },
         wcOptions: null,
+        _data: null,
         grid: null,
         gridDiv: null,
         _dataProvider: null,
@@ -197,6 +202,9 @@ module crystal.elements {
             useSlickEditors:{
                 type: Boolean,
                 value: false
+            },
+            useTreeGridHelper:{
+                type:  Boolean,
             }
         },
         readyFnInitialized: false,
@@ -216,7 +224,8 @@ module crystal.elements {
                 this.useDataViewDataProvider    ? {importURL: 'Slick.DataView.html'}             : null,
                 this.useSlickPaging             ? {importURL: 'controls/SlickPager.html'}        : null,
                 this.useSlickColumnPicker       ? {importURL: 'controls/SlickColumnPicker.html'} : null,
-                this.useSlickFormatters         ? {importURL: 'SlickFormatters.html'}            : null
+                this.useSlickFormatters         ? {importURL: 'SlickFormatters.html'}            : null,
+                this.useTreeGridHelper          ? {importURL: 'TreeGridHelper.html'}             : null
             ];
             importHrefs(slickDependencies, this, () =>{
                 const thisGrid = this.$$('[role]');
@@ -290,17 +299,25 @@ module crystal.elements {
             }
             this.setEditorAndFormatter(columns);
             //this.gridOptions = gridOptions;
+            if(!gridOptions) gridOptions = {};
+            gridOptions['_container'] = this;
             if(data['addItem']){
                 const dataProvider = data;
+                dataProvider['container'] = this;
                 this._dataProvider = dataProvider;
                 this.grid =  new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
             }else{
+                if(this.useTreeGridHelper){
+                    this._data = data;
+                }
                 if(wcOptions && wcOptions.dataProvider){
                     const dataProvider = wcOptions.dataProvider(data);
+                    dataProvider['container'] = this;
                     this._dataProvider = dataProvider;
                     this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                 }else if(this.useDataViewDataProvider){
                     const dataProvider = new Slick.Data.DataView({ inlineFilters: true });
+                    dataProvider['container'] = this;
                     this._dataProvider = dataProvider;
                     this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                 }
@@ -308,7 +325,11 @@ module crystal.elements {
                     this.grid =  new Slick.Grid(this.gridDiv, data, columns, gridOptions);
                 }
             }
-
+            if(this.useTreeGridHelper){
+                attachToggleClickEvent<any>(this as IXSlickGridElement<any>);
+                this.collapseAll = collapseAll;
+                this.expandAll = expandAll;
+            }
             const grid = this.grid;
             switch(this.selectionModel){
                 case 'Cell':

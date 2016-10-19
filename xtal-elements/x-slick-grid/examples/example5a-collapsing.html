@@ -13,19 +13,7 @@
       text-align: center;
     }
 
-    .toggle {
-      height: 9px;
-      width: 9px;
-      display: inline-block;
-    }
 
-    .toggle.expand {
-      background: url(../images/expand.gif) no-repeat center center;
-    }
-
-    .toggle.collapse {
-      background: url(../images/collapse.gif) no-repeat center center;
-    }
 
   </style>
 </head>
@@ -48,6 +36,12 @@
         <br/>
         <label>And title including:</label>
         <input type=text id="txtSearch">
+
+        <div>
+          <a href="javascript:xslick.collapseAll();">Collapse All</a> |
+          <a href="javascript:xslick.expandAll();">Expand All</a>
+        </div>
+
       </div>
       <br/>
 
@@ -56,6 +50,7 @@
               use-slick-formatters
               selection-model="Cell"
               use-data-view-data-provider
+              use-tree-grid-helper
       ></x-slick-grid>
     </td>
     <td valign="top">
@@ -85,26 +80,12 @@
   }
 
 
-  var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
-    value = value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
-    var idx = xslick.dataProvider.getIdxById(dataContext.id);
-    if (data[idx + 1] && data[idx + 1].indent > data[idx].indent) {
-      if (dataContext._collapsed) {
-        return spacer + " <span class='toggle expand'></span>&nbsp;" + value;
-      } else {
-        return spacer + " <span class='toggle collapse'></span>&nbsp;" + value;
-      }
-    } else {
-      return spacer + " <span class='toggle'></span>&nbsp;" + value;
-    }
-  };
 
-  //var dataView;
-  //var grid;
+
+
   var data = [];
   var columns = [
-    {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: TaskNameFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
+    {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: crystal.elements.nodeColumnFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
     {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text},
     {id: "%", name: "% Complete", field: "percentComplete", width: 80, resizable: false, formatter: Slick.Formatters.PercentCompleteBar, editor: Slick.Editors.PercentComplete},
     {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date},
@@ -113,6 +94,8 @@
   ];
 
   function myFilter(item) {
+    var container = _items.container;
+    if(!crystal.elements.filterOutCollapsedNodes(item, container)) return false;
     if (item["percentComplete"] < percentCompleteThreshold) {
       return false;
     }
@@ -125,7 +108,7 @@
       var parent = data[item.parent];
 
       while (parent) {
-        if (parent._collapsed || (parent["percentComplete"] < percentCompleteThreshold) || (searchString != "" && parent["title"].indexOf(searchString) == -1)) {
+        if ( (parent["percentComplete"] < percentCompleteThreshold) || (searchString != "" && parent["title"].indexOf(searchString) == -1)) {
           return false;
         }
 
@@ -147,7 +130,7 @@
     dataProvider: function(data){
       return crystal.elements.createDataViewWithFilter(data, myFilter, {
         addStandardRowHandling: true,
-        gridFinder: function(){return xslick.grid;}
+        containerFinder: function(){return xslick;}
       })
     },
     eventHandlers:{
@@ -166,21 +149,6 @@
                 "effortDriven": false};
             $.extend(item, args.item);
             xslick.dataProvider.addItem(item);
-        },
-        onClick: function(e, args){
-            if ($(e.target).hasClass("toggle")) {
-                var item = xslick.dataProvider.getItem(args.row);
-                if (item) {
-                    if (!item._collapsed) {
-                        item._collapsed = true;
-                    } else {
-                        item._collapsed = false;
-                    }
-
-                    xslick.dataProvider.updateItem(item.id, item);
-                }
-                e.stopImmediatePropagation();
-            }
         }
     }
   };
@@ -232,7 +200,6 @@
 
 
   // initialize the grid
-  //grid = new Slick.Grid("#myGrid", dataView, columns, options);
   var xslick = document.querySelector('x-slick-grid');
   if(xslick.setInitialData){
     xslick.setInitialData(data, columns, options, wcOptions);
@@ -255,7 +222,7 @@
 
         if (percentCompleteThreshold != ui.value) {
           window.clearTimeout(h_runfilters);
-          h_runfilters = window.setTimeout(xslick.dataProvider.refresh, 10);
+          h_runfilters = window.setTimeout(function(){xslick.dataProvider.refresh(xslick)}, 10);
           percentCompleteThreshold = ui.value;
         }
       }
@@ -272,8 +239,10 @@
       }
 
       searchString = this.value;
-        xslick.dataProvider.refresh();
-    })
+        xslick.dataProvider.refresh(xslick);
+    });
+
+
   }
 
 </script>

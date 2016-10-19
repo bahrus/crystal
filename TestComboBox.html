@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        (function() {
+            if ('registerElement' in document
+                    && 'import' in document.createElement('link')
+                    && 'content' in document.createElement('template')) {
+                // platform is good!
+            } else {
+                // polyfill the platform!
+                var e = document.createElement('script');
+                e.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+                document.body.appendChild(e);
+            }
+        })();
+
+    </script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="bower_components/vaadin-combo-box/vaadin-combo-box.html">
+
+    <vaadin-combo-box
+            label="Element"
+            items='["Bohrium", "Boron", "Bromine", "Cadmium", "Caesium", "Calcium"]'
+            value="Bromine">
+    </vaadin-combo-box>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function test(){
+            var frm = document.querySelector('#test');
+            var isValid = frm.checkValidity();
+            alert(isValid);
+        }
+    </script>
+</head>
+<body>
+` <form id="test">
+    <input type="text" name="myInput" required hidden>
+</form>
+<button onclick="test()">Test</button>
+</body>
+</html>

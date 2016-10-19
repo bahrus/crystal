@@ -56,4 +56,4 @@ var crystal;
         TSXtalInit.register();
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
-//# sourceMappingURL=ts-xtal-init.js.map
+//# sourceMappingURL=ts-js-xtal-init.js.js.map
