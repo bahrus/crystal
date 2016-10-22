@@ -1,7 +1,78 @@
-<!--<link rel="design-time" href="crystal.ts"/>-->
-<!--<script src="crystal.js"></script>-->
+<script>
+    'use strict';
+    Polymer({
+        is: 'js-transformer',
+        /**
+        * Fired when a transform is in progress.
+        *
+        * @event transform
+        */
+        _transformerFns: null,
+        properties:{
+            /**
+            * The expression to observe and transform when it changes.
+            */
+            watch:{
+                type: Object,
+                observer: 'onWatchChange'
+            },
+            /**
+            * The expression for where to place the result.
+            */
+            result:{
+                type: Object,
+                notify: true,
+                readOnly: true
+            },
+            /**
+            * Configuration argument to pass to the transformer
+            */
+            argument:{
+                type: Object
+            }
+        },
+        onWatchChange: function(newVal){
+            var transformedObj = newVal;
+            var arg = this.argument;
+            if(!arg){
+                arg = {};
+            };
+            arg.context = {
+                element: this,
+                count: 0,
+            };
+            var detail = {obj: transformedObj, arg: arg};
+            this.fire('transform', detail);
+            arg.context.count++;
+            transformedObj = detail.obj;
+            if(this._transformerFns ){
+                for(let i  = 0, ii = this._transformerFns.length; i < ii; i++)
+                {
+                    var transformerFn = this._transformerFns[i];
+                    if(typeof(transformerFn) !== 'function'){
+                        console.error("Cannot resolve function specified in position " + i + " from " + this.innerText);
+                    }
+                    transformedObj = transformerFn(transformedObj, arg);
+                    arg.context.count++;
 
-<link rel="design-time" href="js-transformer.ts"/>
-<script src="js-transformer.js"></script>
+                }
+            }
 
-<dom-module id="js-transformer"></dom-module>
+
+            detail.obj = transformedObj;
+            this.fire('transform', detail);
+            delete arg.context;
+            this['_setResult'](transformedObj);
+
+        },
+        attached: function(){
+            try{
+                this._transformerFns = eval(this.innerText);
+            }catch(e){
+                console.error("Unable to parse " + this.innerText);
+            }
+            if(!Array.isArray(this._transformerFns)) delete this._transformerFns;
+        }
+    });
+</script>
+

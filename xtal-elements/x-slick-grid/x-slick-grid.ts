@@ -35,13 +35,7 @@ module crystal.elements {
     export interface ISlickGridOptions<T> extends Slick.GridOptions<T>{
         frozenColumn: number;
     }
-    export interface IXSlickGridElement<T> extends polymer.Base{
-        grid: Slick.Grid<T>;
-        options: ISlickGridOptions<T>;
-        data: T[];
-        _data: T[];
-        dataProvider: any;
-    }
+    
     export interface ISlickGridEventHandlers<T>{
         onScroll?: (eventData: Slick.OnScrollEventArgs<T>, data?: T) => void;
         onSort?: (eventData: Slick.OnSortEventArgs<T>, data?: T) => void
@@ -78,7 +72,7 @@ module crystal.elements {
         onViewportChanged?: (eventData: Slick.OnViewportChangedEventArgs<T>, data?: T) => void;
         onFooterRowCellRendered?: (eventData: any, data?: any) => void;
     }
-    function importHrefs(importStep: IDynamicImportStep[], polymerElement: polymer.Base, callBack?: () => void){
+    export function importHrefs(importStep: IDynamicImportStep[], polymerElement: polymer.Base, callBack?: () => void){
         if(importStep.length === 0) {
             if(callBack) callBack();
             return;
@@ -93,7 +87,7 @@ module crystal.elements {
             importHrefs(importStep, polymerElement, callBack);
         })
     }
-    function attachEventHandlers<T>(grid: Slick.Grid<T>, handlers: ISlickGridEventHandlers<T>){
+    export function attachEventHandlers<T>(grid: Slick.Grid<T>, handlers: ISlickGridEventHandlers<T>){
         if(!handlers) return;
         for(const key in handlers){
             const handler = handlers[key];
@@ -101,8 +95,22 @@ module crystal.elements {
         }
 
     }
+    export interface IXSlickGridElement<T> extends polymer.Base{
+        grid: Slick.Grid<T>;
+        options: ISlickGridOptions<T>;
+        data: T[];
+        _data: T[];
+        dataProvider: any;
+        columns: Slick.Column<T>[];
+        selectedRow: T;
+    }
+    
+    
 
-    Polymer({
+
+}
+
+Polymer({
         is: 'x-slick-grid',
         get columns(){
             return this.grid.getColumns();
@@ -127,6 +135,9 @@ module crystal.elements {
         gridDiv: null,
         _dataProvider: null,
         properties:{
+            /**
+            * The height of the grid.
+            */
             height:{
                 type: String,
                 value: '500px',
@@ -210,7 +221,7 @@ module crystal.elements {
         readyFnInitialized: false,
         ready: function() {
             const $IsDefined = (typeof($) !== 'undefined');
-            const slickDependencies : IDynamicImportStep[] = [
+            const slickDependencies : crystal.elements.IDynamicImportStep[] = [
                 !$IsDefined ? {importURL: 'JQuery.html'} : null,
                 !$IsDefined || !$['ui'] ? {importURL: 'JQueryUI.html'} : null,
                 !$IsDefined || !$.fn.drag ? {importURL: 'Jquery.Event.DragDrop.html'} : null,
@@ -227,7 +238,7 @@ module crystal.elements {
                 this.useSlickFormatters         ? {importURL: 'SlickFormatters.html'}            : null,
                 this.useTreeGridHelper          ? {importURL: 'TreeGridHelper.html'}             : null
             ];
-            importHrefs(slickDependencies, this, () =>{
+            crystal.elements.importHrefs(slickDependencies, this, () =>{
                 const thisGrid = this.$$('[role]');
                 const $thisGrid = $(thisGrid);
                 $thisGrid
@@ -274,7 +285,7 @@ module crystal.elements {
 
             }
         },
-        setEditorAndFormatter(columns: IXSlickGridColumn<any>[]){
+        setEditorAndFormatter(columns: crystal.elements.IXSlickGridColumn<any>[]){
             for(let i = 0, ii = columns.length; i < ii; i++){
                 let col = columns[i];
                 if(col.editorFn){
@@ -287,7 +298,7 @@ module crystal.elements {
                 if(childColumns) this.setEditorAndFormatter(childColumns);
             }
         },
-        setInitialData<T>(data: T[], columns: IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: IXSlickGridOptions<T>){
+        setInitialData<T>(data: T[], columns: crystal.elements.IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: crystal.elements.IXSlickGridOptions<T>){
             //this.data = data;
             //this.columns = columns;
             if(!this.readyFnInitialized){
@@ -326,9 +337,9 @@ module crystal.elements {
                 }
             }
             if(this.useTreeGridHelper){
-                attachToggleClickEvent<any>(this as IXSlickGridElement<any>);
-                this.collapseAll = collapseAll;
-                this.expandAll = expandAll;
+                crystal.elements.attachToggleClickEvent<any>(this as crystal.elements.IXSlickGridElement<any>);
+                this.collapseAll = crystal.elements.collapseAll;
+                this.expandAll = crystal.elements.expandAll;
             }
             const grid = this.grid;
             switch(this.selectionModel){
@@ -342,7 +353,7 @@ module crystal.elements {
             this.wcOptions = wcOptions;
 
             if(wcOptions){
-                attachEventHandlers(grid, wcOptions.eventHandlers);
+                crystal.elements.attachEventHandlers(grid, wcOptions.eventHandlers);
                 // if(wcOptions.trackRowHover){
                 //     this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), () =>{
                 //         enableMouseOverSlickGrid(this);
@@ -405,6 +416,3 @@ module crystal.elements {
 
 
     });
-
-
-}

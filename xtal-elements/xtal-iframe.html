@@ -1,9 +1,22 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
 <dom-module id="xtal-iframe">
     <template>
         <iframe role="container"></iframe>
     </template>
+    <script>
+        Polymer({
+            is: 'xtal-iframe',
+            ready: function () {
+                var _this = this;
+                this.async(function () {
+                    var targetChildren = _this.getEffectiveChildren();
+                    var htmlToEmbed = document.importNode(targetChildren[0], true);
+                    var iframe = _this.$$("iframe");
+                    iframe.contentWindow.document.open();
+                    iframe.contentWindow.document.write(htmlToEmbed['innerHTML']);
+                    iframe.contentWindow.document.close();
+                }, 1);
+            }
+        });
+    </script>
 </dom-module>
-
-<link rel="design-time" href="xtal-iframe.ts">
-<script src="xtal-iframe.js"></script>
