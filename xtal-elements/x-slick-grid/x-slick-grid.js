@@ -32,199 +32,230 @@ var crystal;
             }
         }
         elements.attachEventHandlers = attachEventHandlers;
+        elements.onNewGridRenderParams = 'onNewGridRenderParams';
     })(elements = crystal.elements || (crystal.elements = {}));
 })(crystal || (crystal = {}));
-Polymer({
-    is: 'x-slick-grid',
-    get columns() {
-        return this.grid.getColumns();
-    },
-    get data() {
-        return this.grid.getData();
-    },
-    get selectedRow() {
-        if (this.clickedRowIndex === -1)
-            return null;
-        return this.data[this.clickedRowIndex];
-    },
-    get options() {
-        return this.grid.getOptions();
-    },
-    get dataProvider() {
-        //const grid = this.grid as Slick.Grid<any>;
-        return this._dataProvider;
-    },
-    wcOptions: null,
-    _data: null,
-    grid: null,
-    gridDiv: null,
-    _dataProvider: null,
-    properties: {
-        /**
-        * The height of the grid.
-        */
-        height: {
-            type: String,
-            value: '500px',
+Polymer((_a = {
+        is: 'x-slick-grid',
+        get columns() {
+            return this.grid.getColumns();
         },
-        width: {
-            type: String,
-            value: '600px'
+        get data() {
+            return this.grid.getData();
         },
-        fillContainerHeight: {
-            type: Boolean,
-            value: false
+        get selectedRow() {
+            if (this.clickedRowIndex === -1)
+                return null;
+            return this.data[this.clickedRowIndex];
         },
-        fillContainerWidth: {
-            type: Boolean,
-            value: false
+        get options() {
+            return this.grid.getOptions();
         },
-        renderCount: {
-            type: Number,
-            value: 0,
-            notify: true,
-            reflectToAttribute: true,
+        get dataProvider() {
+            //const grid = this.grid as Slick.Grid<any>;
+            return this._dataProvider;
         },
-        clickedCellIndex: {
-            type: Number,
-            notify: true,
-            reflectToAttribute: true
+        wcOptions: null,
+        _data: null,
+        grid: null,
+        gridDiv: null,
+        _dataProvider: null,
+        properties: {
+            /**
+            * The height of the grid.
+            */
+            height: {
+                type: String,
+                value: '500px',
+            },
+            /**
+             * The width of the grid
+             */
+            width: {
+                type: String,
+                value: '600px'
+            },
+            /**
+             *  If attribute is present, stretch the grid to the bottom edge of the containing element
+            */
+            fillContainerHeight: {
+                type: Boolean,
+                value: false
+            },
+            /**
+             * If attribute is present, stretch the grid to the right edge of the containing element
+             */
+            fillContainerWidth: {
+                type: Boolean,
+                value: false
+            },
+            /**
+             * Count of how many times the grid has been rendered.
+             */
+            renderCount: {
+                type: Number,
+                value: 0,
+                notify: true,
+                reflectToAttribute: true,
+            },
+            /**
+             * Indicates the last clicked cell index
+             */
+            clickedCellIndex: {
+                type: Number,
+                notify: true,
+                reflectToAttribute: true,
+                readOnly: true,
+            },
+            /**
+             * Indicates the last clicked row index
+             */
+            clickedRowIndex: {
+                type: Number,
+                notify: true,
+                reflectToAttribute: true
+            },
+            numberOfWidthDeltas: {
+                type: Number,
+                notify: true,
+                reflectToAttribute: true
+            },
+            numberOfOrderChanges: {
+                type: Number,
+                notify: true,
+                reflectToAttribute: true
+            },
+            isContextMenuOpen: {
+                type: Boolean,
+                notify: true,
+                reflectToAttribute: true
+            },
+            lastClickedXValue: {
+                type: Number,
+                notify: true,
+                reflectToAttribute: true
+            },
+            lastClickedYValue: {
+                type: Number,
+                notify: true,
+                reflectToAttribute: true
+            },
+            /**
+             * Possible values are 'Cell' and 'Row'
+             */
+            selectionModel: {
+                type: String,
+            },
+            useDataViewDataProvider: {
+                type: Boolean,
+            },
+            useSlickPaging: {
+                type: Boolean,
+            },
+            useSlickColumnPicker: {
+                type: Boolean
+            },
+            useSlickFormatters: {
+                type: Boolean
+            },
+            useSlickEditors: {
+                type: Boolean,
+                value: false
+            },
+            useTreeGridHelper: {
+                type: Boolean,
+            },
+            gridRenderParams: {
+                type: Object,
+                observer: crystal.elements.onNewGridRenderParams
+            }
         },
-        clickedRowIndex: {
-            type: Number,
-            notify: true,
-            reflectToAttribute: true
+        readyFnInitialized: false,
+        ready: function () {
+            var _this = this;
+            var $IsDefined = (typeof ($) !== 'undefined');
+            var slickDependencies = [
+                !$IsDefined ? { importURL: 'JQuery.html' } : null,
+                !$IsDefined || !$['ui'] ? { importURL: 'JQueryUI.html' } : null,
+                !$IsDefined || !$.fn.drag ? { importURL: 'Jquery.Event.DragDrop.html' } : null,
+                { importURL: 'SlickCore.html' },
+                { importURL: 'SlickGrid.html' },
+                this.useSlickEditors ? { importURL: 'SlickEditors.html' } : null,
+                this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeSelector.html' } : null,
+                this.selectionModel === 'Cell' ? { importURL: 'Slick.CellSelectionModel.html' } : null,
+                this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeDecorator.html' } : null,
+                this.selectionModel === 'Row' ? { importURL: 'Slick.RowSelectionModel.html' } : null,
+                this.useDataViewDataProvider ? { importURL: 'Slick.DataView.html' } : null,
+                this.useSlickPaging ? { importURL: 'controls/SlickPager.html' } : null,
+                this.useSlickColumnPicker ? { importURL: 'controls/SlickColumnPicker.html' } : null,
+                this.useSlickFormatters ? { importURL: 'SlickFormatters.html' } : null,
+                this.useTreeGridHelper ? { importURL: 'TreeGridHelper.html' } : null
+            ];
+            crystal.elements.importHrefs(slickDependencies, this, function () {
+                var thisGrid = _this.$$('[role]');
+                var $thisGrid = $(thisGrid);
+                $thisGrid
+                    .css('height', _this.height)
+                    .css('width', _this.width);
+                _this.gridDiv = $thisGrid;
+                if (_this.fillContainerWidth || _this.fillContainerHeight) {
+                    window.addEventListener('resize', function (e) {
+                        if (_this.fillContainerWidth && _this.fillContainerHeight) {
+                            _this.debounce('fillContainerBothDim', _this.fillContainerBothDimImpl, 500);
+                        }
+                        else if (_this.fillContainerHeight) {
+                            _this.debounce('fillContainerHeight', _this.fillContainerHeightImpl, 500);
+                        }
+                        else {
+                            _this.debounce('fillContainerWidth', _this.fillContainerWidthImpl, 500);
+                        }
+                    });
+                }
+                _this.readyFnInitialized = true;
+            });
         },
-        numberOfWidthDeltas: {
-            type: Number,
-            notify: true,
-            reflectToAttribute: true
+        fillContainerBothDimImpl: function () {
+            this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
+            this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
         },
-        numberOfOrderChanges: {
-            type: Number,
-            notify: true,
-            reflectToAttribute: true
+        fillContainerHeightImpl: function () {
+            this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', true);
         },
-        isContextMenuOpen: {
-            type: Boolean,
-            notify: true,
-            reflectToAttribute: true
+        fillContainerWidthImpl: function () {
+            this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
         },
-        lastClickedXValue: {
-            type: Number,
-            notify: true,
-            reflectToAttribute: true
-        },
-        lastClickedYValue: {
-            type: Number,
-            notify: true,
-            reflectToAttribute: true
-        },
-        selectionModel: {
-            type: String,
-        },
-        useDataViewDataProvider: {
-            type: Boolean,
-        },
-        useSlickPaging: {
-            type: Boolean,
-        },
-        useSlickColumnPicker: {
-            type: Boolean
-        },
-        useSlickFormatters: {
-            type: Boolean
-        },
-        useSlickEditors: {
-            type: Boolean,
-            value: false
-        },
-        useTreeGridHelper: {
-            type: Boolean,
-        }
-    },
-    readyFnInitialized: false,
-    ready: function () {
-        var _this = this;
-        var $IsDefined = (typeof ($) !== 'undefined');
-        var slickDependencies = [
-            !$IsDefined ? { importURL: 'JQuery.html' } : null,
-            !$IsDefined || !$['ui'] ? { importURL: 'JQueryUI.html' } : null,
-            !$IsDefined || !$.fn.drag ? { importURL: 'Jquery.Event.DragDrop.html' } : null,
-            { importURL: 'SlickCore.html' },
-            { importURL: 'SlickGrid.html' },
-            this.useSlickEditors ? { importURL: 'SlickEditors.html' } : null,
-            this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeSelector.html' } : null,
-            this.selectionModel === 'Cell' ? { importURL: 'Slick.CellSelectionModel.html' } : null,
-            this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeDecorator.html' } : null,
-            this.selectionModel === 'Row' ? { importURL: 'Slick.RowSelectionModel.html' } : null,
-            this.useDataViewDataProvider ? { importURL: 'Slick.DataView.html' } : null,
-            this.useSlickPaging ? { importURL: 'controls/SlickPager.html' } : null,
-            this.useSlickColumnPicker ? { importURL: 'controls/SlickColumnPicker.html' } : null,
-            this.useSlickFormatters ? { importURL: 'SlickFormatters.html' } : null,
-            this.useTreeGridHelper ? { importURL: 'TreeGridHelper.html' } : null
-        ];
-        crystal.elements.importHrefs(slickDependencies, this, function () {
-            var thisGrid = _this.$$('[role]');
+        fillContainerXImpl: function (offsetDim, clientDim, cssDim, resize) {
+            var thisGrid = this.$$('[role="grid"]');
             var $thisGrid = $(thisGrid);
-            $thisGrid
-                .css('height', _this.height)
-                .css('width', _this.width);
-            _this.gridDiv = $thisGrid;
-            if (_this.fillContainerWidth || _this.fillContainerHeight) {
-                window.addEventListener('resize', function (e) {
-                    if (_this.fillContainerWidth && _this.fillContainerHeight) {
-                        _this.debounce('fillContainerBothDim', _this.fillContainerBothDimImpl, 500);
-                    }
-                    else if (_this.fillContainerHeight) {
-                        _this.debounce('fillContainerHeight', _this.fillContainerHeightImpl, 500);
-                    }
-                    else {
-                        _this.debounce('fillContainerWidth', _this.fillContainerWidthImpl, 500);
-                    }
-                });
+            var offset = this[offsetDim];
+            var containerLength = this.parentElement[clientDim];
+            var thisLength = containerLength - offset;
+            if (thisLength > 0) {
+                $thisGrid.css(cssDim, thisLength);
+                if (resize && this.grid) {
+                    this.grid.resizeCanvas();
+                }
             }
-            _this.readyFnInitialized = true;
-        });
-    },
-    fillContainerBothDimImpl: function () {
-        this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
-        this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
-    },
-    fillContainerHeightImpl: function () {
-        this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', true);
-    },
-    fillContainerWidthImpl: function () {
-        this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
-    },
-    fillContainerXImpl: function (offsetDim, clientDim, cssDim, resize) {
-        var thisGrid = this.$$('[role="grid"]');
-        var $thisGrid = $(thisGrid);
-        var offset = this[offsetDim];
-        var containerLength = this.parentElement[clientDim];
-        var thisLength = containerLength - offset;
-        if (thisLength > 0) {
-            $thisGrid.css(cssDim, thisLength);
-            if (resize && this.grid) {
-                this.grid.resizeCanvas();
+        },
+        setEditorAndFormatter: function (columns) {
+            for (var i = 0, ii = columns.length; i < ii; i++) {
+                var col = columns[i];
+                if (col.editorFn) {
+                    col.editor = col.editorFn(col);
+                }
+                if (col.formatterFn) {
+                    col.formatter = col.formatterFn(col);
+                }
+                var childColumns = col.columns;
+                if (childColumns)
+                    this.setEditorAndFormatter(childColumns);
             }
         }
     },
-    setEditorAndFormatter: function (columns) {
-        for (var i = 0, ii = columns.length; i < ii; i++) {
-            var col = columns[i];
-            if (col.editorFn) {
-                col.editor = col.editorFn(col);
-            }
-            if (col.formatterFn) {
-                col.formatter = col.formatterFn(col);
-            }
-            var childColumns = col.columns;
-            if (childColumns)
-                this.setEditorAndFormatter(childColumns);
-        }
+    _a[crystal.elements.onNewGridRenderParams] = function (newVal) {
+        this.setInitialData(newVal.data, newVal.columns, newVal.gridOptions, newVal.wcOptions);
     },
-    setInitialData: function (data, columns, gridOptions, wcOptions) {
+    _a.setInitialData = function (data, columns, gridOptions, wcOptions) {
         var _this = this;
         //this.data = data;
         //this.columns = columns;
@@ -339,5 +370,7 @@ Polymer({
         this.renderCount++;
         return grid;
     },
-});
+    _a
+));
+var _a;
 //# sourceMappingURL=x-slick-grid.js.map

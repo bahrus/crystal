@@ -105,8 +105,13 @@ module crystal.elements {
         selectedRow: T;
     }
     
-    
-
+    export interface IGridRenderParams<T>{
+        data: T[]; 
+        columns: IXSlickGridColumn<any>[];
+        gridOptions?: Slick.GridOptions<any>;  
+        wcOptions?: crystal.elements.IXSlickGridOptions<T>;
+    }
+    export const onNewGridRenderParams = 'onNewGridRenderParams';
 
 }
 
@@ -142,29 +147,48 @@ Polymer({
                 type: String,
                 value: '500px',
             },
+            /**
+             * The width of the grid
+             */
             width:{
                 type: String,
                 value: '600px'
-            },          
+            },
+            /**
+             *  If attribute is present, stretch the grid to the bottom edge of the containing element 
+            */          
             fillContainerHeight:{
                 type: Boolean,
                 value: false
             },
+            /**
+             * If attribute is present, stretch the grid to the right edge of the containing element
+             */
             fillContainerWidth:{
                 type: Boolean,
                 value: false
             },
+            /**
+             * Count of how many times the grid has been rendered. 
+             */
             renderCount:{
                 type: Number,
                 value: 0,
                 notify: true,
                 reflectToAttribute: true,
             },
+            /**
+             * Indicates the last clicked cell index
+             */
             clickedCellIndex:{
                 type: Number,
                 notify: true,
-                reflectToAttribute: true
+                reflectToAttribute: true,
+                readOnly: true,
             },
+            /**
+             * Indicates the last clicked row index
+             */
             clickedRowIndex:{
                 type: Number,
                 notify: true,
@@ -195,6 +219,9 @@ Polymer({
                 notify: true,
                 reflectToAttribute: true
             },
+            /**
+             * Possible values are 'Cell' and 'Row'
+             */
             selectionModel:{
                 type: String,
             },
@@ -216,6 +243,10 @@ Polymer({
             },
             useTreeGridHelper:{
                 type:  Boolean,
+            },
+            gridRenderParams:{
+                type: Object,
+                observer: crystal.elements.onNewGridRenderParams
             }
         },
         readyFnInitialized: false,
@@ -285,7 +316,7 @@ Polymer({
 
             }
         },
-        setEditorAndFormatter(columns: crystal.elements.IXSlickGridColumn<any>[]){
+        setEditorAndFormatter: function(columns: crystal.elements.IXSlickGridColumn<any>[]){
             for(let i = 0, ii = columns.length; i < ii; i++){
                 let col = columns[i];
                 if(col.editorFn){
@@ -297,6 +328,9 @@ Polymer({
                 const childColumns = col.columns;
                 if(childColumns) this.setEditorAndFormatter(childColumns);
             }
+        },
+        [crystal.elements.onNewGridRenderParams]<T>(newVal: crystal.elements.IGridRenderParams<T>){
+            this.setInitialData(newVal.data, newVal.columns, newVal.gridOptions, newVal.wcOptions);
         },
         setInitialData<T>(data: T[], columns: crystal.elements.IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: crystal.elements.IXSlickGridOptions<T>){
             //this.data = data;
