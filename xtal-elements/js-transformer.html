@@ -31,6 +31,37 @@
                 type: Object
             }
         },
+        //Inspired by Stackoverflow.com/questions/27936772/deep-object-merging-in-es6-es7
+        /**
+         *  * Simple is object check. * @param item * @returns {boolean}
+         */
+        isObject: function(item) {
+            return (item && typeof item === 'object' && !Array.isArray(item));
+        },
+        /**
+         * Deep merge two objects.
+         * @param target
+         * @param source
+         */
+        mergeDeep: function(target, source) {
+            if (this.isObject(target) && this.isObject(source)) {
+                for (var key in source) {
+                    if (this.isObject(source[key])) {
+                        if (!target[key]) {
+                            target[key] = source[key];
+                        }else if(this.isObject(target[key])){
+                            this.mergeDeep(target[key], source[key]);
+                        }else{
+                            target[key] = source[key];
+                        }
+
+                    } else {
+                        target[key] = source[key];
+                    }
+                }
+            }
+            return target;
+        },
         onWatchChange: function(newVal){
             var transformedObj = newVal;
             var arg = this.argument;
@@ -46,13 +77,17 @@
             arg.context.count++;
             transformedObj = detail.obj;
             if(this._transformerFns ){
-                for(let i  = 0, ii = this._transformerFns.length; i < ii; i++)
+                for(var i  = 0, ii = this._transformerFns.length; i < ii; i++)
                 {
-                    var transformerFn = this._transformerFns[i];
-                    if(typeof(transformerFn) !== 'function'){
-                        console.error("Cannot resolve function specified in position " + i + " from " + this.innerText);
+                    var transformerFnOrObj = this._transformerFns[i];
+                    switch(typeof(transformerFnOrObj)){
+                        case 'function':
+                            transformedObj = transformerFnOrObj(transformedObj, arg);
+                            break;
+                        case 'object':
+                            this.mergeDeep(transformedObj, transformerFnOrObj);
+                            break;
                     }
-                    transformedObj = transformerFn(transformedObj, arg);
                     arg.context.count++;
 
                 }
