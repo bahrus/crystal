@@ -6,6 +6,23 @@
     <script>
         Polymer({
             is: 'xtal-iframe',
+            properties:{
+                /**
+                 *  If attribute is present, stretch the grid to the bottom edge of the containing element
+                 */
+                fillContainerHeight:{
+                    type: Boolean,
+                    value: false
+                },
+                /**
+                 * If attribute is present, stretch the grid to the right edge of the containing element
+                 */
+                fillContainerWidth:{
+                    type: Boolean,
+                    value: false
+                }
+            },
+
             ready: function () {
                 var _this = this;
                 this.async(function () {
@@ -16,6 +33,38 @@
                     iframe.contentWindow.document.write(htmlToEmbed['innerHTML']);
                     iframe.contentWindow.document.close();
                 }, 1);
+                if(this.fillContainerWidth || this.fillContainerHeight){
+                    var _this = this;
+                    window.addEventListener('resize', function(e) {
+                        if(_this.fillContainerWidth && _this.fillContainerHeight) {
+                        _this.debounce('fillContainerBothDim', _this.fillContainerBothDimImpl, 500);
+                    }else if(_this.fillContainerHeight){
+                        _this.debounce('fillContainerHeight', _this.fillContainerHeightImpl, 500);
+                    }else{ //width only
+                        _this.debounce('fillContainerWidth', _this.fillContainerWidthImpl, 500);
+                    }
+                });
+
+                }
+            },
+            fillContainerBothDimImpl: function(){
+                this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
+                this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
+            },
+            fillContainerHeightImpl: function(){
+                this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', true);
+            },
+            fillContainerWidthImpl: function(){
+                this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
+            },
+            fillContainerXImpl: function(offsetDim, clientDim , cssDim, resize){
+                var thisContainer = this.$$('[role="container"]');
+                var offset = this[offsetDim];
+                var containerLength = this.parentElement[clientDim];
+                var thisLength = containerLength - offset;
+                if(thisLength > 0){
+                    thisContainer[cssDim] = thisLength;
+                }
             }
         });
     </script>
