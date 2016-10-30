@@ -37,17 +37,17 @@
                     last-response="{{generatedJSON}}"
             >
             </iron-ajax>
-            <js-transformer watch="[[generatedJSON]]" on-transform="onNewGeneratedJSON" result="{{gridInfoAndData}}" hidden>
+            <js-transformer watch="[[generatedJSON]]" wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
                 [{
                     columns:[
-                        {id: 'index', name: 'Index', field: 'index'},
-                        {id: 'isActive', name: 'Active', field: 'isActive'},
-                        {id: 'balance', name: 'Balance', field: 'balance'},
-                        {id: 'age', name: 'Age', field: 'age'},
-                        {id: 'eyeColor', name: 'Eye Color', field:'eyeColor'},
-                        {id: 'name', name: 'Name', field: 'name'},
-                        {id: 'gender', name: 'Gender', field: 'gender'},
-                        {id: 'company', name:'Company', field: 'company'}
+                        {id: 'index',       name: 'Index',      field: 'index'},
+                        {id: 'isActive',    name: 'Active',     field: 'isActive'},
+                        {id: 'balance',     name: 'Balance',    field: 'balance'},
+                        {id: 'age',         name: 'Age',        field: 'age'},
+                        {id: 'eyeColor',    name: 'Eye Color',  field: 'eyeColor'},
+                        {id: 'name',        name: 'Name',       field: 'name'},
+                        {id: 'gender',      name: 'Gender',     field: 'gender'},
+                        {id: 'company',     name:'Company',     field: 'company'}
                     ],
                     gridOptions:{
                         enableCellNavigation: true,
@@ -62,17 +62,6 @@
 <script>
     Polymer({
         is: 'example1a-component',
-        onNewGeneratedJSON: function(evt, data){
-            var returnObj = {
-                data: data.obj,
-            };
-            data.obj = returnObj;
-        },
-        ready: function(){
-            
-        }
     })
-
-
 </script>
 </dom-module>

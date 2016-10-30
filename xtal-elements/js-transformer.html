@@ -29,6 +29,9 @@
             */
             argument:{
                 type: Object
+            },
+            wrapObjectWithPath:{
+                type: String
             }
         },
         //Inspired by Stackoverflow.com/questions/27936772/deep-object-merging-in-es6-es7
@@ -82,7 +85,13 @@
             return target;
         },
         onWatchChange: function(newVal){
-            var transformedObj = newVal;
+            var transformedObj;
+            if(this.wrapObjectWithPath) {
+                transformedObj  = {};
+                transformedObj[this.wrapObjectWithPath] = newVal;
+            }else{
+                transformedObj = newVal;
+            }
             var arg = this.argument;
             if(!arg){
                 arg = {};
