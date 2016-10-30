@@ -32,32 +32,51 @@
             }
         },
         //Inspired by Stackoverflow.com/questions/27936772/deep-object-merging-in-es6-es7
-        /**
-         *  * Simple is object check. * @param item * @returns {boolean}
-         */
-        isObject: function(item) {
-            return (item && typeof item === 'object' && !Array.isArray(item));
-        },
+
         /**
          * Deep merge two objects.
          * @param target
          * @param source
          */
         mergeDeep: function(target, source) {
-            if (this.isObject(target) && this.isObject(source)) {
-                for (var key in source) {
-                    if (this.isObject(source[key])) {
-                        if (!target[key]) {
-                            target[key] = source[key];
-                        }else if(this.isObject(target[key])){
-                            this.mergeDeep(target[key], source[key]);
+            if(typeof target !== 'object') return;
+            if(typeof source !== 'object') return;
+            for (var key in source) {
+                var sourceVal = source[key];
+                var targetVal = target[key];
+                if(!sourceVal) continue; //TODO:  null out property?
+                if(!targetVal){
+                    target[key] = sourceVal;
+                    continue;
+                }
+                if(Array.isArray(sourceVal) && Array.isArray(targetVal)){
+                    //warning!! code below not yet tested
+                    if(targetVal.length > 0 && typeof targetVal[0].id === 'undefined') continue;
+                    for(var i = 0, ii = sourceVal.length; i < ii; i++){
+                        var srcEl = sourceVal[i];
+                        if(typeof srcEl.id === 'undefined') continue;
+                        var targetEl = targetVal.find(function(el){return el.id === srcEl.id;});
+                        if(tartetEl){
+                            this.mergeDeep(targetEl, srcEl);
                         }else{
-                            target[key] = source[key];
+                            targetVal.push(srcEl);
                         }
-
-                    } else {
-                        target[key] = source[key];
                     }
+                    continue;
+                }
+                switch(typeof val){
+                    case 'object':
+                        switch(typeof targetVal){
+                            case 'object':
+                                this.mergeDeep(targetVal, sourceVal);
+                                break;
+                            default:
+                                target[key] = sourceVal;
+                                break;
+                        }
+                        break;
+                    default:
+                        target[key] = sourceVal;
                 }
             }
             return target;
