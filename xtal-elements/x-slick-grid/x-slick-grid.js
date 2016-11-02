@@ -297,9 +297,9 @@ Polymer((_a = {
             }
         }
         if (this.useTreeGridHelper) {
-            crystal.elements.attachToggleClickEvent(this);
-            this.collapseAll = crystal.elements.collapseAll;
-            this.expandAll = crystal.elements.expandAll;
+            crystal.elements.xslickgrid.attachToggleClickEvent(this);
+            this.collapseAll = crystal.elements.xslickgrid.collapseAll;
+            this.expandAll = crystal.elements.xslickgrid.expandAll;
         }
         var grid = this.grid;
         switch (this.selectionModel) {

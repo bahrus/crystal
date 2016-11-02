@@ -268,7 +268,7 @@ function addEventHandlers(grid, dataView){
           .appendTo(grid.getTopPanel())
           .show();
 
-  crystal.elements.addStandardRowHandling(dataView, {
+  crystal.elements.xslickgrid.addStandardRowHandling(dataView, {
       //gridFinder: function(){return xslick.grid;}
     containerFinder: function(){return xslick;}
   });

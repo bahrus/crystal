@@ -1,11 +1,12 @@
 ///<reference path='SlickGrid.d.ts'/>
 ///<reference path='../x-slick-grid.ts'/>
 
-module crystal.elements{
+module crystal.elements.xslickgrid{
     export interface ITreeNode{
         indent: number;
         id: string;
         parent: number;
+        children?: number[];
         _collapsed: boolean;
     }
 
@@ -14,7 +15,7 @@ module crystal.elements{
     export function filterOutCollapsedNodes<T>(item: T, container: IXSlickGridElement<T>) {
         let treeNode = (item as any) as ITreeNode;
         const data = container._data;
-        if (treeNode.parent != null) {
+        if (treeNode.parent !== null) {
             let parent = (data[treeNode.parent] as any) as ITreeNode;
             while (parent) {
                 if (parent._collapsed ) {
@@ -24,6 +25,26 @@ module crystal.elements{
             }
         }
         return true;
+    }
+
+    export function linkChildren<T>(container: IXSlickGridElement<T>){
+        //const nodeLookup: {[key: string] : ITreeNode[]} = {};
+        const data = (container._data as any) as ITreeNode[];
+        //children always come after parent
+        for(let i = 0, ii = data.length; i < ii; i++){
+            const node = data[i];
+            if(node.parent !== null) {
+                const parent = (data[node.parent] as any) as ITreeNode;
+                if(parent){
+                    if(!parent.children) parent.children = [];
+                    parent.children.push(i);
+                }
+            }
+        }
+    }
+
+    export function filterNode<T>(item: T, container: IXSlickGridElement<T>, test: (item: T) => boolean){
+
     }
 
     export function collapseAndHideNodes<T>(container: IXSlickGridElement<T>, searchString: string,
@@ -55,7 +76,6 @@ module crystal.elements{
     const gtRegExp = />/g;
     export function nodeColumnFormatter<T extends ITreeNode>(row: number, cell: number, value: any,
                                            columnDef : Slick.Column<T>, dataContext: ITreeNode, container: IXSlickGridElement<T>){
-        console.log('in nodeColumnFormatter');
         value = value.replace(ampRegExp, "&amp;").replace(ltRegExp, "&lt;").replace(gtRegExp, "&gt;");
         var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
         const data = container._data;
@@ -74,7 +94,7 @@ module crystal.elements{
     function setAllItemsToValue<T>(container: IXSlickGridElement<T>, fieldName: string, value: any){
         const items = container.dataProvider.getItems();
         items.forEach(item => {
-            item._collapsed = true;
+            item._collapsed = value;
         })
         container.dataProvider.refresh(container);
         container.grid.invalidate();

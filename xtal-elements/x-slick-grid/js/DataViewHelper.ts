@@ -1,7 +1,7 @@
 ///<reference path='SlickGrid.d.ts'/>
 ///<reference path='../x-slick-grid.ts'/>
 
-module crystal.elements{
+module crystal.elements.xslickgrid{
     export interface ICreateDataViewOptions<T>{
         addStandardRowHandling?:  boolean;
         //gridFinder?: () => Slick.Grid<T>;

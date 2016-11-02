@@ -371,9 +371,9 @@ Polymer({
                 }
             }
             if(this.useTreeGridHelper){
-                crystal.elements.attachToggleClickEvent<any>(this as crystal.elements.IXSlickGridElement<any>);
-                this.collapseAll = crystal.elements.collapseAll;
-                this.expandAll = crystal.elements.expandAll;
+                crystal.elements.xslickgrid.attachToggleClickEvent<any>(this as crystal.elements.IXSlickGridElement<any>);
+                this.collapseAll = crystal.elements.xslickgrid.collapseAll;
+                this.expandAll = crystal.elements.xslickgrid.expandAll;
             }
             const grid = this.grid;
             switch(this.selectionModel){
