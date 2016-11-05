@@ -238,7 +238,8 @@
       var test = function(item){
         return item.title.indexOf(searchString) !== -1;
       }
-        crystal.elements.xslickgrid.analyzeTreeNodes(xslick, test);
+        //crystal.elements.xslickgrid.analyzeTreeNodes(xslick, test);
+        xslick.analyzeTreeNodes(test);
         analyzedTreeData = true;
         xslick.dataProvider.refresh(xslick);
     });

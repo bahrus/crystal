@@ -55,7 +55,8 @@ module crystal.elements.xslickgrid{
         }
     }
 
-    export function analyzeTreeNodes<T>(container: IXSlickGridElement<T>, itemFilter: (item: T) => boolean){
+    export function analyzeTreeNodes<T>(itemFilter: (item: T) => boolean){
+        const container = this;
         linkChildren(container);
         const data = (container._data as any) as ITreeNode[];
         for(let i = 0, ii = data.length; i < ii; i++) {

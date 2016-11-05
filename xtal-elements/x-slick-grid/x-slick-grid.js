@@ -211,6 +211,9 @@ Polymer((_a = {
                         }
                     });
                 }
+                if (_this.useTreeGridHelper) {
+                    _this.analyzeTreeNodes = crystal.elements.xslickgrid.analyzeTreeNodes;
+                }
                 _this.readyFnInitialized = true;
             });
         },

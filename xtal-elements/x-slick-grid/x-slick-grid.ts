@@ -288,6 +288,9 @@ Polymer({
                     });
 
                 }
+                if(this.useTreeGridHelper){
+                    this.analyzeTreeNodes = crystal.elements.xslickgrid.analyzeTreeNodes;
+                }
                 this.readyFnInitialized = true;
             });
 

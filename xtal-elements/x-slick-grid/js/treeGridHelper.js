@@ -50,7 +50,8 @@ var crystal;
                 }
             }
             xslickgrid.linkChildren = linkChildren;
-            function analyzeTreeNodes(container, itemFilter) {
+            function analyzeTreeNodes(itemFilter) {
+                var container = this;
                 linkChildren(container);
                 var data = container._data;
                 for (var i = 0, ii = data.length; i < ii; i++) {
