@@ -38,9 +38,22 @@ var crystal;
                 }
             }
             xslickgrid.linkChildren = linkChildren;
-            function filterNode(item, container, test) {
+            function filterTreeNodes(container, itemFilter) {
+                linkChildren(container);
+                var data = container._data;
+                for (var i = 0, ii = data.length; i < ii; i++) {
+                    var node = data[i];
+                    var item = node;
+                    node._matchesFilter = itemFilter(item);
+                    if (node._matchesFilter)
+                        node._collapsed = true;
+                }
+                var nodesThatMatchFilter = data.filter(function (node) { return node._matchesFilter; });
+                for (var i = 0, ii = nodesThatMatchFilter.length; i < ii; i++) {
+                    var node = data[i];
+                }
             }
-            xslickgrid.filterNode = filterNode;
+            xslickgrid.filterTreeNodes = filterTreeNodes;
             function collapseAndHideNodes(container, searchString, test) {
             }
             xslickgrid.collapseAndHideNodes = collapseAndHideNodes;

@@ -8,6 +8,8 @@ module crystal.elements.xslickgrid{
         parent: number;
         children?: number[];
         _collapsed: boolean;
+        _matchesFilter: boolean;
+        _hasChildThatMatchesFilter: boolean;
     }
 
 
@@ -24,6 +26,7 @@ module crystal.elements.xslickgrid{
                 parent = (data[parent.parent] as any) as ITreeNode;
             }
         }
+        if(!treeNode._matchesFilter && !treeNode._hasChildThatMatchesFilter) return false;
         return true;
     }
 
@@ -43,8 +46,37 @@ module crystal.elements.xslickgrid{
         }
     }
 
-    export function filterNode<T>(item: T, container: IXSlickGridElement<T>, test: (item: T) => boolean){
-
+    export function filterTreeNodes<T>(container: IXSlickGridElement<T>, itemFilter: (item: T) => boolean){
+        linkChildren(container);
+        const data = (container._data as any) as ITreeNode[];
+        for(let i = 0, ii = data.length; i < ii; i++) {
+            const node = data[i];
+            const item = (node as any) as T;
+            node._matchesFilter = itemFilter(item);
+            node._hasChildThatMatchesFilter = false;
+            if(node._matchesFilter) node._collapsed = true;
+        }
+        const nodesThatMatchFilter = data.filter(node => node._matchesFilter);
+        for(let i = 0, ii = nodesThatMatchFilter.length; i < ii; i++){
+            const node = data[i];
+            if(node.parent !== null){
+                let parent = (data[node.parent] as any) as ITreeNode;
+                while(parent){
+                    if(!parent._matchesFilter){
+                        parent._collapsed = false;
+                        parent._hasChildThatMatchesFilter = true;
+                    }else{
+                        break;
+                    }
+                    if(parent.parent !==null){
+                        parent = (data[parent.parent] as any) as ITreeNode;
+                    }else{
+                        parent = null;
+                    }
+                }
+                
+            }
+        }
     }
 
     export function collapseAndHideNodes<T>(container: IXSlickGridElement<T>, searchString: string,
