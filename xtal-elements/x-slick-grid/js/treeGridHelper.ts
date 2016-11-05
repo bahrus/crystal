@@ -39,6 +39,7 @@ module crystal.elements.xslickgrid{
 
     export function linkChildren<T>(container: IXSlickGridElement<T>){
         //const nodeLookup: {[key: string] : ITreeNode[]} = {};
+
         const data = (container._data as any) as ITreeNode[];
         //children always come after parent
         data.forEach(row => delete row.children);
@@ -93,7 +94,6 @@ module crystal.elements.xslickgrid{
     }
 
     function markChildren(node: ITreeNode, nodes: ITreeNode[]){
-        console.log(nodes.length);
         const children = node.children;
         if(!children) return;
         for(let i = 0, ii = children.length; i < ii; i++){

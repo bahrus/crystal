@@ -91,7 +91,6 @@ var crystal;
             }
             xslickgrid.analyzeTreeNodes = analyzeTreeNodes;
             function markChildren(node, nodes) {
-                console.log(nodes.length);
                 var children = node.children;
                 if (!children)
                     return;
