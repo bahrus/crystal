@@ -10,11 +10,12 @@ module crystal.elements.xslickgrid{
         _collapsed: boolean;
         _matchesFilter: boolean;
         _hasChildThatMatchesFilter: boolean;
+        _hasParentThatMatchesFilter: boolean;
     }
 
 
 
-    export function filterOutCollapsedNodes<T>(item: T, container: IXSlickGridElement<T>) {
+    export function filterNode<T>(item: T, container: IXSlickGridElement<T>, calledFilterTreeNodes?: boolean) {
         let treeNode = (item as any) as ITreeNode;
         const data = container._data;
         if (treeNode.parent !== null) {
@@ -23,10 +24,16 @@ module crystal.elements.xslickgrid{
                 if (parent._collapsed ) {
                     return false;
                 }
+                if(parent.parent === null) break;
                 parent = (data[parent.parent] as any) as ITreeNode;
             }
         }
-        if(!treeNode._matchesFilter && !treeNode._hasChildThatMatchesFilter) return false;
+        if(calledFilterTreeNodes){
+            if(treeNode._hasParentThatMatchesFilter) return true;
+            if(treeNode._matchesFilter) return true;
+            if(treeNode._hasParentThatMatchesFilter) return true;
+            return false;
+        }
         return true;
     }
 
@@ -34,6 +41,7 @@ module crystal.elements.xslickgrid{
         //const nodeLookup: {[key: string] : ITreeNode[]} = {};
         const data = (container._data as any) as ITreeNode[];
         //children always come after parent
+        data.forEach(row => delete row.children);
         for(let i = 0, ii = data.length; i < ii; i++){
             const node = data[i];
             if(node.parent !== null) {
@@ -46,7 +54,7 @@ module crystal.elements.xslickgrid{
         }
     }
 
-    export function filterTreeNodes<T>(container: IXSlickGridElement<T>, itemFilter: (item: T) => boolean){
+    export function analyzeTreeNodes<T>(container: IXSlickGridElement<T>, itemFilter: (item: T) => boolean){
         linkChildren(container);
         const data = (container._data as any) as ITreeNode[];
         for(let i = 0, ii = data.length; i < ii; i++) {
@@ -54,14 +62,17 @@ module crystal.elements.xslickgrid{
             const item = (node as any) as T;
             node._matchesFilter = itemFilter(item);
             node._hasChildThatMatchesFilter = false;
+            node._hasParentThatMatchesFilter = false;
             if(node._matchesFilter) node._collapsed = true;
         }
         const nodesThatMatchFilter = data.filter(node => node._matchesFilter);
         for(let i = 0, ii = nodesThatMatchFilter.length; i < ii; i++){
-            const node = data[i];
+            const node = nodesThatMatchFilter[i];
+            markChildren(node, data);
             if(node.parent !== null){
                 let parent = (data[node.parent] as any) as ITreeNode;
                 while(parent){
+                    if(parent._hasChildThatMatchesFilter) break;
                     if(!parent._matchesFilter){
                         parent._collapsed = false;
                         parent._hasChildThatMatchesFilter = true;
@@ -71,11 +82,24 @@ module crystal.elements.xslickgrid{
                     if(parent.parent !==null){
                         parent = (data[parent.parent] as any) as ITreeNode;
                     }else{
-                        parent = null;
+                        //parent = null;
+                        break;
                     }
                 }
                 
             }
+        }
+
+    }
+
+    function markChildren(node: ITreeNode, nodes: ITreeNode[]){
+        console.log(nodes.length);
+        const children = node.children;
+        if(!children) return;
+        for(let i = 0, ii = children.length; i < ii; i++){
+            const child = nodes[ children[i] ];
+            child._hasParentThatMatchesFilter = true;
+            markChildren(child, nodes);
         }
     }
 

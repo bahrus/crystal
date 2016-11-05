@@ -6,7 +6,7 @@ var crystal;
     (function (elements) {
         var xslickgrid;
         (function (xslickgrid) {
-            function filterOutCollapsedNodes(item, container) {
+            function filterNode(item, container, calledFilterTreeNodes) {
                 var treeNode = item;
                 var data = container._data;
                 if (treeNode.parent !== null) {
@@ -15,16 +15,28 @@ var crystal;
                         if (parent_1._collapsed) {
                             return false;
                         }
+                        if (parent_1.parent === null)
+                            break;
                         parent_1 = data[parent_1.parent];
                     }
                 }
+                if (calledFilterTreeNodes) {
+                    if (treeNode._hasParentThatMatchesFilter)
+                        return true;
+                    if (treeNode._matchesFilter)
+                        return true;
+                    if (treeNode._hasParentThatMatchesFilter)
+                        return true;
+                    return false;
+                }
                 return true;
             }
-            xslickgrid.filterOutCollapsedNodes = filterOutCollapsedNodes;
+            xslickgrid.filterNode = filterNode;
             function linkChildren(container) {
                 //const nodeLookup: {[key: string] : ITreeNode[]} = {};
                 var data = container._data;
                 //children always come after parent
+                data.forEach(function (row) { return delete row.children; });
                 for (var i = 0, ii = data.length; i < ii; i++) {
                     var node = data[i];
                     if (node.parent !== null) {
@@ -38,22 +50,57 @@ var crystal;
                 }
             }
             xslickgrid.linkChildren = linkChildren;
-            function filterTreeNodes(container, itemFilter) {
+            function analyzeTreeNodes(container, itemFilter) {
                 linkChildren(container);
                 var data = container._data;
                 for (var i = 0, ii = data.length; i < ii; i++) {
                     var node = data[i];
                     var item = node;
                     node._matchesFilter = itemFilter(item);
+                    node._hasChildThatMatchesFilter = false;
+                    node._hasParentThatMatchesFilter = false;
                     if (node._matchesFilter)
                         node._collapsed = true;
                 }
                 var nodesThatMatchFilter = data.filter(function (node) { return node._matchesFilter; });
                 for (var i = 0, ii = nodesThatMatchFilter.length; i < ii; i++) {
-                    var node = data[i];
+                    var node = nodesThatMatchFilter[i];
+                    markChildren(node, data);
+                    if (node.parent !== null) {
+                        var parent_3 = data[node.parent];
+                        while (parent_3) {
+                            if (parent_3._hasChildThatMatchesFilter)
+                                break;
+                            if (!parent_3._matchesFilter) {
+                                parent_3._collapsed = false;
+                                parent_3._hasChildThatMatchesFilter = true;
+                            }
+                            else {
+                                break;
+                            }
+                            if (parent_3.parent !== null) {
+                                parent_3 = data[parent_3.parent];
+                            }
+                            else {
+                                //parent = null;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-            xslickgrid.filterTreeNodes = filterTreeNodes;
+            xslickgrid.analyzeTreeNodes = analyzeTreeNodes;
+            function markChildren(node, nodes) {
+                console.log(nodes.length);
+                var children = node.children;
+                if (!children)
+                    return;
+                for (var i = 0, ii = children.length; i < ii; i++) {
+                    var child = nodes[children[i]];
+                    child._hasParentThatMatchesFilter = true;
+                    markChildren(child, nodes);
+                }
+            }
             function collapseAndHideNodes(container, searchString, test) {
             }
             xslickgrid.collapseAndHideNodes = collapseAndHideNodes;

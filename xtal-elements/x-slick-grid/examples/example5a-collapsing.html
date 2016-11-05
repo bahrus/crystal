@@ -92,31 +92,10 @@
     {id: "finish", name: "Finish", field: "finish", minWidth: 60, editor: Slick.Editors.Date},
     {id: "effort-driven", name: "Effort Driven", width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.Checkmark, editor: Slick.Editors.Checkbox, cannotTriggerInsert: true}
   ];
-
+  var analyzedTreeData = false;
   function myFilter(item) {
     var container = _items.container;
- //   if(!crystal.elements.xslickgrid.filterOutCollapsedNodes(item, container)) return false;
-//    if (item["percentComplete"] < percentCompleteThreshold) {
-//      return false;
-//    }
-
-    if (searchString != "" && item["title"].indexOf(searchString) == -1) {
-      return false;
-    }
-
-//    if (item.parent != null) {
-//      var parent = data[item.parent];
-//
-//      while (parent) {
-//        if ( (parent["percentComplete"] < percentCompleteThreshold) || (searchString != "" && parent["title"].indexOf(searchString) == -1)) {
-//          return false;
-//        }
-//
-//        parent = data[parent.parent];
-//      }
-//    }
-
-    return true;
+    return crystal.elements.xslickgrid.filterNode(item, container, analyzedTreeData);
   }
 
   var options = {
@@ -212,6 +191,23 @@
   }
 
   function addEventHandlers(grid){
+
+    grid.onClick.subscribe(function (e, args) {
+      if ($(e.target).hasClass("toggle")) {
+        var item = dataView.getItem(args.row);
+        if (item) {
+          if (!item._collapsed) {
+            item._collapsed = true;
+          } else {
+            item._collapsed = false;
+          }
+
+          dataView.updateItem(item.id, item);
+        }
+        e.stopImmediatePropagation();
+      }
+    });
+
     var h_runfilters = null;
 
     // wire up the slider to apply the filter to the model
@@ -239,6 +235,11 @@
       }
 
       searchString = this.value;
+      var test = function(item){
+        return item.title.indexOf(searchString) !== -1;
+      }
+        crystal.elements.xslickgrid.analyzeTreeNodes(xslick, test);
+        analyzedTreeData = true;
         xslick.dataProvider.refresh(xslick);
     });
 
