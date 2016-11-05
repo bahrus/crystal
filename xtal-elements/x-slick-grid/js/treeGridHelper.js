@@ -21,11 +21,11 @@ var crystal;
                     }
                 }
                 if (calledFilterTreeNodes) {
-                    if (treeNode._hasParentThatMatchesFilter)
+                    if (treeNode._hasAncestorThatMatchesFilter)
                         return true;
                     if (treeNode._matchesFilter)
                         return true;
-                    if (treeNode._hasParentThatMatchesFilter)
+                    if (treeNode._hasDescendantThatMatchesFilter)
                         return true;
                     return false;
                 }
@@ -57,10 +57,9 @@ var crystal;
                     var node = data[i];
                     var item = node;
                     node._matchesFilter = itemFilter(item);
-                    node._hasChildThatMatchesFilter = false;
-                    node._hasParentThatMatchesFilter = false;
-                    if (node._matchesFilter)
-                        node._collapsed = true;
+                    node._hasDescendantThatMatchesFilter = false;
+                    node._hasAncestorThatMatchesFilter = false;
+                    node._collapsed = true;
                 }
                 var nodesThatMatchFilter = data.filter(function (node) { return node._matchesFilter; });
                 for (var i = 0, ii = nodesThatMatchFilter.length; i < ii; i++) {
@@ -69,11 +68,11 @@ var crystal;
                     if (node.parent !== null) {
                         var parent_3 = data[node.parent];
                         while (parent_3) {
-                            if (parent_3._hasChildThatMatchesFilter)
+                            if (parent_3._hasDescendantThatMatchesFilter)
                                 break;
+                            parent_3._hasDescendantThatMatchesFilter = true;
                             if (!parent_3._matchesFilter) {
                                 parent_3._collapsed = false;
-                                parent_3._hasChildThatMatchesFilter = true;
                             }
                             else {
                                 break;
@@ -96,7 +95,7 @@ var crystal;
                     return;
                 for (var i = 0, ii = children.length; i < ii; i++) {
                     var child = nodes[children[i]];
-                    child._hasParentThatMatchesFilter = true;
+                    child._hasAncestorThatMatchesFilter = true;
                     markChildren(child, nodes);
                 }
             }
