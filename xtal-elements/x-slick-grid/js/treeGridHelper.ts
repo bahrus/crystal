@@ -116,8 +116,8 @@ module crystal.elements.xslickgrid{
         linkChildren(container);
         const fieldName = args.sortCol.field;
         const data = (container._data as any) as ITreeNode[];
-        debugger;
-        console.log('data', data);
+        // debugger;
+        // console.log('data', data);
         //const data_clone = data.slice(0); //Internet explorer starts modifying the order of an array while sorting
         const compareFn = (lhs: number, rhs: number) => {
             const lhsVal = data[lhs][fieldName];
@@ -141,8 +141,8 @@ module crystal.elements.xslickgrid{
             currentIndx: 0,
             //isArtificial: true
         });
-        console.log('newData', newData);
-        debugger;
+        // console.log('newData', newData);
+        // debugger;
         container._data = (newData as any) as T[];
         //console.log(container._data);
         linkChildren(container);
