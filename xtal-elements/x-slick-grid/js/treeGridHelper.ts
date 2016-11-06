@@ -2,11 +2,15 @@
 ///<reference path='../x-slick-grid.ts'/>
 
 module crystal.elements.xslickgrid{
-    export interface ITreeNode{
+
+    export interface IHaveChildIndices{
+        childIndices?: number[];
+        sortedChildIndices?: number[];
+    }
+    export interface ITreeNode extends IHaveChildIndices{
         indent: number;
         id: string;
         parent: number;
-        children?: number[];
         _collapsed: boolean;
         _matchesFilter: boolean;
         _hasDescendantThatMatchesFilter: boolean;
@@ -37,26 +41,28 @@ module crystal.elements.xslickgrid{
         return true;
     }
 
+    
+
     export function linkChildren<T>(container: IXSlickGridElement<T>){
         //const nodeLookup: {[key: string] : ITreeNode[]} = {};
 
         const data = (container._data as any) as ITreeNode[];
         //children always come after parent
-        data.forEach(row => delete row.children);
+        data.forEach(row => delete row.childIndices);
         for(let i = 0, ii = data.length; i < ii; i++){
             const node = data[i];
             if(node.parent !== null) {
                 const parent = (data[node.parent] as any) as ITreeNode;
                 if(parent){
-                    if(!parent.children) parent.children = [];
-                    parent.children.push(i);
+                    if(!parent.childIndices) parent.childIndices = [];
+                    parent.childIndices.push(i);
                 }
             }
         }
     }
 
     export function analyzeTreeNodes<T>(itemFilter: (item: T) => boolean){
-        const container = this;
+        const container = this as IXSlickGridElement<T>;
         linkChildren(container);
         const data = (container._data as any) as ITreeNode[];
         for(let i = 0, ii = data.length; i < ii; i++) {
@@ -96,7 +102,7 @@ module crystal.elements.xslickgrid{
     }
 
     function markChildren(node: ITreeNode, nodes: ITreeNode[]){
-        const children = node.children;
+        const children = node.childIndices;
         if(!children) return;
         for(let i = 0, ii = children.length; i < ii; i++){
             const child = nodes[ children[i] ];
@@ -104,6 +110,85 @@ module crystal.elements.xslickgrid{
             markChildren(child, nodes);
         }
     }
+
+    export function sortColumn<T>(args: Slick.SortColumn<T>){
+        const container = this as IXSlickGridElement<T>;
+        const fieldName = args.sortCol.field;
+        const data = (container._data as any) as ITreeNode[];
+        //const data_clone = data.slice(0); //Internet explorer starts modifying the order of an array while sorting
+        const compareFn = (lhs: number, rhs: number) => {
+            const lhsVal = data[lhs][fieldName];
+            const rhsVal = data[rhs][fieldName];
+            if(lhsVal === rhsVal) return 0;
+            if(lhsVal > rhsVal) return args.sortAsc ? 1 : -1;
+            return args.sortAsc ? -1 : 1;
+        }
+        const root : IHaveChildIndices = {
+            childIndices: []
+        };
+        for(let i = 0, ii = data.length; i < ii; i++){
+            const row = data[i];
+            if(row.parent === null) root.childIndices.push(i);
+        }
+        sortChildIndices(root, compareFn, data);
+        const newData : ITreeNode[] = [];
+        addData(root, newData, data, {
+            parentIdx: -1,
+            currentIndx: 0
+        });
+        debugger;
+        container._data = (newData as any) as T[];
+        const dataProvider = container.dataProvider;
+        dataProvider.beginUpdate();
+        dataProvider.setItems(newData);
+        container._data = (newData as any) as T[];
+        dataProvider.endUpdate();
+        linkChildren(container);
+        console.log('rerender');
+        const grid = container.grid;
+        grid.invalidate();
+        grid.render();
+    }
+
+    function sortChildIndices(node: IHaveChildIndices, compareFn: (lhs:number, rhs: number) => number, data: IHaveChildIndices[]){
+        const childIndices = node.childIndices;
+        if(!childIndices) return;
+        node.sortedChildIndices = childIndices.slice(0);
+        node.sortedChildIndices.sort(compareFn);
+        for(let i = 0, ii = childIndices.length; i < ii; i++){
+            const childIdx = childIndices[i];
+            const child = data[childIdx];
+            sortChildIndices(child, compareFn, data);
+        }
+    }
+
+    interface IListPointer{
+        parentIdx: number,
+        currentIndx: number,
+    }
+
+    function addData(node:IHaveChildIndices, newData: ITreeNode[], data: ITreeNode[], listPointer: IListPointer){
+        const sortedChildIndices = node.sortedChildIndices;
+        const parentIdx = listPointer.parentIdx;
+        if(!sortedChildIndices) return;
+        for(let i = 0, ii = sortedChildIndices.length; i < ii; i++){
+            const childIdx = sortedChildIndices[i];
+            const child = data[childIdx];
+            if(parentIdx !== -1){
+                child.parent = parentIdx;
+            }
+            newData.push(child);
+            listPointer.currentIndx++;
+            listPointer.parentIdx = listPointer.currentIndx;
+            addData(child, newData, data, listPointer);
+        }
+    }
+
+    // function compare(LHS: ITreeNode, RHS: ITreeNode, fieldName: string){
+    //     if(LHS.parent === LHS.parent){
+    //         if(LHS[fieldName] === RHS[fieldName]) return 0;
+    //     }
+    // }
 
     export function collapseAndHideNodes<T>(container: IXSlickGridElement<T>, searchString: string,
                                             test: (container: IXSlickGridElement<T>, item: T, searchString: string) => boolean){

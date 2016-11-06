@@ -213,6 +213,7 @@ Polymer((_a = {
                 }
                 if (_this.useTreeGridHelper) {
                     _this.analyzeTreeNodes = crystal.elements.xslickgrid.analyzeTreeNodes;
+                    _this.sortColumn = crystal.elements.xslickgrid.sortColumn;
                 }
                 _this.readyFnInitialized = true;
             });

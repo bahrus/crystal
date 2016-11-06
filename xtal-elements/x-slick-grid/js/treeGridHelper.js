@@ -36,15 +36,15 @@ var crystal;
                 //const nodeLookup: {[key: string] : ITreeNode[]} = {};
                 var data = container._data;
                 //children always come after parent
-                data.forEach(function (row) { return delete row.children; });
+                data.forEach(function (row) { return delete row.childIndices; });
                 for (var i = 0, ii = data.length; i < ii; i++) {
                     var node = data[i];
                     if (node.parent !== null) {
                         var parent_2 = data[node.parent];
                         if (parent_2) {
-                            if (!parent_2.children)
-                                parent_2.children = [];
-                            parent_2.children.push(i);
+                            if (!parent_2.childIndices)
+                                parent_2.childIndices = [];
+                            parent_2.childIndices.push(i);
                         }
                     }
                 }
@@ -91,7 +91,7 @@ var crystal;
             }
             xslickgrid.analyzeTreeNodes = analyzeTreeNodes;
             function markChildren(node, nodes) {
-                var children = node.children;
+                var children = node.childIndices;
                 if (!children)
                     return;
                 for (var i = 0, ii = children.length; i < ii; i++) {
@@ -100,6 +100,82 @@ var crystal;
                     markChildren(child, nodes);
                 }
             }
+            function sortColumn(args) {
+                var container = this;
+                var fieldName = args.sortCol.field;
+                var data = container._data;
+                //const data_clone = data.slice(0); //Internet explorer starts modifying the order of an array while sorting
+                var compareFn = function (lhs, rhs) {
+                    var lhsVal = data[lhs][fieldName];
+                    var rhsVal = data[rhs][fieldName];
+                    if (lhsVal === rhsVal)
+                        return 0;
+                    if (lhsVal > rhsVal)
+                        return args.sortAsc ? 1 : -1;
+                    return args.sortAsc ? -1 : 1;
+                };
+                var root = {
+                    childIndices: []
+                };
+                for (var i = 0, ii = data.length; i < ii; i++) {
+                    var row = data[i];
+                    if (row.parent === null)
+                        root.childIndices.push(i);
+                }
+                sortChildIndices(root, compareFn, data);
+                var newData = [];
+                addData(root, newData, data, {
+                    parentIdx: -1,
+                    currentIndx: 0
+                });
+                debugger;
+                container._data = newData;
+                var dataProvider = container.dataProvider;
+                dataProvider.beginUpdate();
+                dataProvider.setItems(newData);
+                container._data = newData;
+                dataProvider.endUpdate();
+                linkChildren(container);
+                console.log('rerender');
+                var grid = container.grid;
+                grid.invalidate();
+                grid.render();
+            }
+            xslickgrid.sortColumn = sortColumn;
+            function sortChildIndices(node, compareFn, data) {
+                var childIndices = node.childIndices;
+                if (!childIndices)
+                    return;
+                node.sortedChildIndices = childIndices.slice(0);
+                node.sortedChildIndices.sort(compareFn);
+                for (var i = 0, ii = childIndices.length; i < ii; i++) {
+                    var childIdx = childIndices[i];
+                    var child = data[childIdx];
+                    sortChildIndices(child, compareFn, data);
+                }
+            }
+            function addData(node, newData, data, listPointer) {
+                var sortedChildIndices = node.sortedChildIndices;
+                var parentIdx = listPointer.parentIdx;
+                if (!sortedChildIndices)
+                    return;
+                for (var i = 0, ii = sortedChildIndices.length; i < ii; i++) {
+                    var childIdx = sortedChildIndices[i];
+                    var child = data[childIdx];
+                    if (parentIdx !== -1) {
+                        child.parent = parentIdx;
+                    }
+                    newData.push(child);
+                    listPointer.currentIndx++;
+                    listPointer.parentIdx = listPointer.currentIndx;
+                    addData(child, newData, data, listPointer);
+                }
+            }
+            // function compare(LHS: ITreeNode, RHS: ITreeNode, fieldName: string){
+            //     if(LHS.parent === LHS.parent){
+            //         if(LHS[fieldName] === RHS[fieldName]) return 0;
+            //     }
+            // }
             function collapseAndHideNodes(container, searchString, test) {
             }
             xslickgrid.collapseAndHideNodes = collapseAndHideNodes;
