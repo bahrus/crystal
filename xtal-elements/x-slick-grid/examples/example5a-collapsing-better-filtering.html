@@ -87,8 +87,8 @@
   var columns = [
     {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: crystal.elements.xslickgrid.nodeColumnFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
     {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text},
-    {id: "%", name: "% Complete", field: "percentComplete", width: 80, sortable: true, resizable: false, formatter: Slick.Formatters.PercentCompleteBar, editor: Slick.Editors.PercentComplete},
-    {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date, sortable: true},
+    {id: "%", name: "% Complete", field: "percentComplete", width: 80,  resizable: false, formatter: Slick.Formatters.PercentCompleteBar, editor: Slick.Editors.PercentComplete},
+    {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date},
     {id: "finish", name: "Finish", field: "finish", minWidth: 60, editor: Slick.Editors.Date},
     {id: "effort-driven", name: "Effort Driven", width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.Checkmark, editor: Slick.Editors.Checkbox, cannotTriggerInsert: true}
   ];
@@ -129,8 +129,14 @@
             $.extend(item, args.item);
             xslick.dataProvider.addItem(item);
         },
-        onSort: function(e, args){
-          xslick.sortColumn(args);
+        onHeaderClick: function(e, args){
+          var sortArgs = {
+            sortCol:{
+              field: 'percentComplete'
+            },
+            sortAsc: true
+          }
+          xslick.sortColumn(sortArgs);
         }
     }
   };
@@ -153,10 +159,10 @@
     var d = (data[i] = {});
     var parent;
 
-    if (Math.random() > 0.8 && i > 0) {
+    if (Math.random() > 0.5 && i > 0) {
       indent++;
       parents.push(i - 1);
-    } else if (Math.random() < 0.3 && indent > 0) {
+    } else if (Math.random() < 0.5 && indent > 0) {
       indent--;
       parents.pop();
     }

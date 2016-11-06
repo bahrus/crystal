@@ -113,8 +113,11 @@ module crystal.elements.xslickgrid{
 
     export function sortColumn<T>(args: Slick.SortColumn<T>){
         const container = this as IXSlickGridElement<T>;
+        linkChildren(container);
         const fieldName = args.sortCol.field;
         const data = (container._data as any) as ITreeNode[];
+        debugger;
+        console.log('data', data);
         //const data_clone = data.slice(0); //Internet explorer starts modifying the order of an array while sorting
         const compareFn = (lhs: number, rhs: number) => {
             const lhsVal = data[lhs][fieldName];
@@ -124,26 +127,33 @@ module crystal.elements.xslickgrid{
             return args.sortAsc ? -1 : 1;
         }
         const root : IHaveChildIndices = {
-            childIndices: []
+            childIndices: [],
         };
         for(let i = 0, ii = data.length; i < ii; i++){
             const row = data[i];
             if(row.parent === null) root.childIndices.push(i);
         }
         sortChildIndices(root, compareFn, data);
+        console.log('root', root);
         const newData : ITreeNode[] = [];
         addData(root, newData, data, {
             parentIdx: -1,
-            currentIndx: 0
+            currentIndx: 0,
+            //isArtificial: true
         });
+        console.log('newData', newData);
         debugger;
         container._data = (newData as any) as T[];
+        //console.log(container._data);
+        linkChildren(container);
+        console.log(container._data);
         const dataProvider = container.dataProvider;
         dataProvider.beginUpdate();
         dataProvider.setItems(newData);
         container._data = (newData as any) as T[];
         dataProvider.endUpdate();
-        linkChildren(container);
+        
+        //container.setInitialData()
         console.log('rerender');
         const grid = container.grid;
         grid.invalidate();
@@ -163,11 +173,17 @@ module crystal.elements.xslickgrid{
     }
 
     interface IListPointer{
-        parentIdx: number,
-        currentIndx: number,
+        parentIdx: number;
+        currentIndx: number;
+        //isArtificial?: boolean;
     }
 
     function addData(node:IHaveChildIndices, newData: ITreeNode[], data: ITreeNode[], listPointer: IListPointer){
+        // if(!listPointer.isArtificial){
+        //     newData.push(node);
+        // }else{
+        //     listPointer.isArtificial = false;
+        // }
         const sortedChildIndices = node.sortedChildIndices;
         const parentIdx = listPointer.parentIdx;
         if(!sortedChildIndices) return;
@@ -178,8 +194,8 @@ module crystal.elements.xslickgrid{
                 child.parent = parentIdx;
             }
             newData.push(child);
-            listPointer.currentIndx++;
             listPointer.parentIdx = listPointer.currentIndx;
+            listPointer.currentIndx++;
             addData(child, newData, data, listPointer);
         }
     }

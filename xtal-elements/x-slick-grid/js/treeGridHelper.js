@@ -102,8 +102,11 @@ var crystal;
             }
             function sortColumn(args) {
                 var container = this;
+                linkChildren(container);
                 var fieldName = args.sortCol.field;
                 var data = container._data;
+                debugger;
+                console.log('data', data);
                 //const data_clone = data.slice(0); //Internet explorer starts modifying the order of an array while sorting
                 var compareFn = function (lhs, rhs) {
                     var lhsVal = data[lhs][fieldName];
@@ -115,7 +118,7 @@ var crystal;
                     return args.sortAsc ? -1 : 1;
                 };
                 var root = {
-                    childIndices: []
+                    childIndices: [],
                 };
                 for (var i = 0, ii = data.length; i < ii; i++) {
                     var row = data[i];
@@ -123,19 +126,24 @@ var crystal;
                         root.childIndices.push(i);
                 }
                 sortChildIndices(root, compareFn, data);
+                console.log('root', root);
                 var newData = [];
                 addData(root, newData, data, {
                     parentIdx: -1,
-                    currentIndx: 0
+                    currentIndx: 0,
                 });
+                console.log('newData', newData);
                 debugger;
                 container._data = newData;
+                //console.log(container._data);
+                linkChildren(container);
+                console.log(container._data);
                 var dataProvider = container.dataProvider;
                 dataProvider.beginUpdate();
                 dataProvider.setItems(newData);
                 container._data = newData;
                 dataProvider.endUpdate();
-                linkChildren(container);
+                //container.setInitialData()
                 console.log('rerender');
                 var grid = container.grid;
                 grid.invalidate();
@@ -155,6 +163,11 @@ var crystal;
                 }
             }
             function addData(node, newData, data, listPointer) {
+                // if(!listPointer.isArtificial){
+                //     newData.push(node);
+                // }else{
+                //     listPointer.isArtificial = false;
+                // }
                 var sortedChildIndices = node.sortedChildIndices;
                 var parentIdx = listPointer.parentIdx;
                 if (!sortedChildIndices)
@@ -166,8 +179,8 @@ var crystal;
                         child.parent = parentIdx;
                     }
                     newData.push(child);
-                    listPointer.currentIndx++;
                     listPointer.parentIdx = listPointer.currentIndx;
+                    listPointer.currentIndx++;
                     addData(child, newData, data, listPointer);
                 }
             }
