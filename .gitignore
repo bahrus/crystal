@@ -7,3 +7,4 @@ obj
 /*.user
 /.idea
 bower_components
+/*.pem
