@@ -6,5 +6,4 @@ obj
 /.vs/crystal/v14/*.suo
 /*.user
 /.idea
-bower_components
 /*.pem
