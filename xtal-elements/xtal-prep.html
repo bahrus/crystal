@@ -1,0 +1,35 @@
+<import rel="import" href="../bower_components/polymer/polymer.html"
+<dom-module id="xtal-prep">
+    <script>
+    Polymer({
+        is: 'xtal-prep',
+        properties:{
+            /**
+             * CSS selector for an element to dump the inner contents of the tag
+             */
+            selector:{
+                type: String
+            },
+            /**
+             * check if property exists on element.  When it does, element is ready to dump contents
+            */
+            testProp:{
+                type: String
+            }
+        },
+        ready: function(){
+            this.checkAndDumpWhenReady();
+        },
+        checkAndDumpWhenReady: function(){
+            const containerElement = document.querySelector(this.selector);
+            if(containerElement && (typeof containerElement[this.testProp] !== 'undefined')){
+                Polymer.dom(containerElement).innerHTML = this.innerHTML;
+                this.innerHTML = ''
+            }else{
+                this.async(this.checkAndDumpWhenReady, 100);
+            }
+
+        }
+    })
+    </script>
+</dom-module>
