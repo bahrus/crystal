@@ -5,7 +5,7 @@
         is: 'xtal-prep',
         properties:{
             /**
-             * CSS selector for an element to dump the inner contents of the tag
+             * CSS selector for a target element to dump the inner contents of the tag
              */
             selector:{
                 type: String
@@ -15,7 +15,16 @@
             */
             testProp:{
                 type: String
-            }
+            },
+            /**
+             * Name of a global variable where model for inner contents is derived
+            */
+            jsModel:{
+                type: String
+            },
+
+            
+
         },
         ready: function(){
             this.checkAndDumpWhenReady();
@@ -23,7 +32,14 @@
         checkAndDumpWhenReady: function(){
             const containerElement = document.querySelector(this.selector);
             if(containerElement && (typeof containerElement[this.testProp] !== 'undefined')){
-                Polymer.dom(containerElement).innerHTML = this.innerHTML;
+                if(this.jsModel){
+                    if(typeof global === 'undefined') global = window;
+                    const model = global[this.jsModel];
+                    containerElement[this.testProp] = model;
+                }else{
+                    Polymer.dom(containerElement).innerHTML = this.innerHTML;
+                }
+                
                 this.innerHTML = ''
             }else{
                 this.async(this.checkAndDumpWhenReady, 100);
