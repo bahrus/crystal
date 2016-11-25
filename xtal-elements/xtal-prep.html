@@ -33,8 +33,7 @@
             const containerElement = document.querySelector(this.selector);
             if(containerElement && (typeof containerElement[this.testProp] !== 'undefined')){
                 if(this.jsModel){
-                    if(typeof global === 'undefined') global = window;
-                    const model = global[this.jsModel];
+                    const model = eval(this.jsModel);
                     containerElement[this.testProp] = model;
                 }else{
                     Polymer.dom(containerElement).innerHTML = this.innerHTML;

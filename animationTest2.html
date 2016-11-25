@@ -138,11 +138,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.selected = this.selected === 0 ? 4 : (this.selected - 1);
       }
 
-        document.querySelectorAll('xtal-prep[js-model]').forEach(pt=>{
-          const model = eval(pt.getAttribute('js-model'));
-          const html = eval(pt.children[0].innerText)(model);
-          pt.innerHTML = html;
-        })
+        try{document.querySelectorAll('xtal-prep[js-model]').forEach(pt=>pt.innerHTML = eval(pt.children[0].innerText)(eval(pt.getAttribute('js-model')))) }catch(e){console.warn(e)}
+        
         
       
     </script>
