@@ -340,6 +340,7 @@ Polymer((_a = {
                 cssClass: "slick-cell-checkboxsel"
             });
             grid.registerPlugin(checkboxSelector);
+            debugger;
         }
         this.wcOptions = wcOptions;
         if (wcOptions) {

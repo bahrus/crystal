@@ -51,6 +51,7 @@
 
 <script>
   function populateGrid(xslick){
+
     var grid;
     var data = [];
     var options = {
@@ -67,9 +68,9 @@
       d[0] = "Row " + i;
     }
 
-    // var checkboxSelector = new Slick.CheckboxSelectColumn({
-    //   cssClass: "slick-cell-checkboxsel"
-    // });
+    var checkboxSelector = new Slick.CheckboxSelectColumn({
+      cssClass: "slick-cell-checkboxsel"
+    });
 
     columns.push(checkboxSelector.getColumnDefinition());
 
@@ -82,18 +83,32 @@
         editor: Slick.Editors.Text
       });
     }
+    debugger;
     xslick.setInitialData(data, columns, options);
   }
   
     var xslick = document.querySelector('x-slick-grid');
     if(xslick.setInitialData){
-      xslick.addEventListener('ready-F=fn-initialized-changed', function(e){
-        populateGrid(xslick);
-      });
+        if(!xslick.readyFnInitialized){
+          console.log('fn not initalized yet');
+           xslick.addEventListener('ready-fn-initialized-changed', e =>{
+             console.log('waited long enough');
+              populateGrid(xslick);
+            });
+          
+          
+        }else{
+          console.log('alreadyInitialized');
+          populateGrid(xslick);
+        }
+        
+      
         
     }else{
+      debugger;
         window.addEventListener('WebComponentsReady', function(e){
-            xslick.addEventListener('ready-F=fn-initialized-changed', function(e){
+            console.log('webcomponentsready');
+            xslick.addEventListener('ready-fn-initialized-changed', function(e){
               populateGrid(xslick);
             });
         });
