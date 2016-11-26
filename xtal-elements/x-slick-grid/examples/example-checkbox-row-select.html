@@ -50,17 +50,18 @@
 
 
 <script>
-  var grid;
-  var data = [];
-  var options = {
-    editable: true,
-    enableCellNavigation: true,
-    asyncEditorLoading: false,
-    autoEdit: false
-  };
-  var columns = [];
+  function populateGrid(xslick){
+    var grid;
+    var data = [];
+    var options = {
+      editable: true,
+      enableCellNavigation: true,
+      asyncEditorLoading: false,
+      autoEdit: false
+    };
+    var columns = [];
 
-  $(function () {
+    
     for (var i = 0; i < 100; i++) {
       var d = (data[i] = {});
       d[0] = "Row " + i;
@@ -81,12 +82,20 @@
         editor: Slick.Editors.Text
       });
     }
+    xslick.setInitialData(data, columns, options);
+  }
+  
     var xslick = document.querySelector('x-slick-grid');
     if(xslick.setInitialData){
-        xslick.setInitialData(data, columns, options);
+      xslick.addEventListener('ready-F=fn-initialized-changed', function(e){
+        populateGrid(xslick);
+      });
+        
     }else{
         window.addEventListener('WebComponentsReady', function(e){
-            xslick.setInitialData(data, columns, options);
+            xslick.addEventListener('ready-F=fn-initialized-changed', function(e){
+              populateGrid(xslick);
+            });
         });
     }
     //grid = new Slick.Grid("#myGrid", data, columns, options);
@@ -94,7 +103,7 @@
     // grid.registerPlugin(checkboxSelector);
 
     // var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
-  })
+  
 </script>
 </body>
 </html>

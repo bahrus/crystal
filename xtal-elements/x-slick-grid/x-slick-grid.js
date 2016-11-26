@@ -177,9 +177,13 @@ Polymer((_a = {
             gridRenderParams: {
                 type: Object,
                 observer: crystal.elements.onNewGridRenderParams
+            },
+            readyFnInitialized: {
+                type: Boolean,
+                notify: true,
             }
         },
-        readyFnInitialized: false,
+        //readyFnInitialized: false,
         ready: function () {
             var _this = this;
             this.innerHTML = "\n            <div role=\"grid\"></div>\n            ";
