@@ -1,4 +1,4 @@
-///<reference path='../bower_components/polymer/polymer.d.ts'/>
+///<reference path='../node_modules/@types/polymer/index.d.ts'/>
 var crystal;
 (function (crystal) {
     var elements;

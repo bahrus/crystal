@@ -1,4 +1,4 @@
-///<reference path='../../bower_components/polymer/polymer.d.ts'/>
+///<reference path='../../node_modules/@types/polymer/index.d.ts'/>
 ///<reference path='js/SlickGrid.d.ts'/>
 ///<reference path='../../bower_components/jquery/jquery.d.ts'/>
 ///<reference path='js/treeGridHelper.ts'/>
@@ -173,6 +173,7 @@ Polymer((_a = {
         readyFnInitialized: false,
         ready: function () {
             var _this = this;
+            this.innerHTML = "\n            <link rel=\"stylesheet\" href=\"css/slick.grid.css\" type=\"text/css\"/>\n            <div role=\"grid\"></div>\n            ";
             var $IsDefined = (typeof ($) !== 'undefined');
             var slickDependencies = [
                 !$IsDefined ? { importURL: 'JQuery.html' } : null,
