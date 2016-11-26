@@ -23,7 +23,6 @@ var crystal;
             }
             xslickgrid.createDataViewWithFilter = createDataViewWithFilter;
             function addStandardRowHandling(dataView, options) {
-                console.log('in addStandardRowHandling');
                 if (!options.containerFinder) {
                     throw 'containerFinder required';
                 }

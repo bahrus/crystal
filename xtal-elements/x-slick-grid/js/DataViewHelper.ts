@@ -24,7 +24,6 @@ module crystal.elements.xslickgrid{
     }
 
     export function addStandardRowHandling<T>(dataView:  Slick.Data.DataView<T>, options: ICreateDataViewOptions<T>){
-        console.log('in addStandardRowHandling');
         if(!options.containerFinder){
             throw 'containerFinder required';
         }
