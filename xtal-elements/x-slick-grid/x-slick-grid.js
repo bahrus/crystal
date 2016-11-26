@@ -141,10 +141,19 @@ Polymer((_a = {
                 reflectToAttribute: true
             },
             /**
-             * Possible values are 'Cell' and 'Row'
+             * Possible values are 'Cell', 'Row' 'RowPlus'
              */
             selectionModel: {
                 type: String,
+            },
+            useSlickAutoToolTips: {
+                type: Boolean,
+            },
+            useSlickCellCopyManager: {
+                type: Boolean,
+            },
+            useSlickCheckboxSelectColumn: {
+                type: Boolean,
             },
             useDataViewDataProvider: {
                 type: Boolean,
@@ -175,6 +184,9 @@ Polymer((_a = {
             var _this = this;
             this.innerHTML = "\n            <div role=\"grid\"></div>\n            ";
             var $IsDefined = (typeof ($) !== 'undefined');
+            var sm = this.selectionModel;
+            var incCell = ((sm === 'Cell') || (sm === 'RowPlus'));
+            var incRow = ((sm === 'Row') || (sm === 'RowPlus'));
             var slickDependencies = [
                 !$IsDefined ? { importURL: 'JQuery.html' } : null,
                 !$IsDefined || !$['ui'] ? { importURL: 'JQueryUI.html' } : null,
@@ -182,10 +194,13 @@ Polymer((_a = {
                 { importURL: 'SlickCore.html' },
                 { importURL: 'SlickGrid.html' },
                 this.useSlickEditors ? { importURL: 'SlickEditors.html' } : null,
-                this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeSelector.html' } : null,
-                this.selectionModel === 'Cell' ? { importURL: 'Slick.CellSelectionModel.html' } : null,
-                this.selectionModel === 'Cell' ? { importURL: 'Slick.CellRangeDecorator.html' } : null,
-                this.selectionModel === 'Row' ? { importURL: 'Slick.RowSelectionModel.html' } : null,
+                incCell ? { importURL: 'Slick.CellRangeSelector.html' } : null,
+                incCell ? { importURL: 'Slick.CellSelectionModel.html' } : null,
+                incCell ? { importURL: 'Slick.CellRangeDecorator.html' } : null,
+                this.useSlickCellCopyManager ? { importURL: 'Slick.CellSelectionModel.html' } : null,
+                this.useSlickAutoToolTips ? { importURL: 'Slick.AutoToolTips.html' } : null,
+                this.useSlickCheckboxSelectColumn ? { importURL: 'Slick.CheckboxSelectColumn.html' } : null,
+                incCell ? { importURL: 'Slick.RowSelectionModel.html' } : null,
                 this.useDataViewDataProvider ? { importURL: 'Slick.DataView.html' } : null,
                 this.useSlickPaging ? { importURL: 'controls/SlickPager.html' } : null,
                 this.useSlickColumnPicker ? { importURL: 'controls/SlickColumnPicker.html' } : null,
@@ -311,9 +326,16 @@ Polymer((_a = {
             case 'Cell':
                 grid.setSelectionModel((new Slick.CellSelectionModel()));
                 break;
+            case 'RowPlus':
             case 'Row':
                 grid.setSelectionModel(new Slick.RowSelectionModel());
                 break;
+        }
+        if (this.useSlickCheckboxSelectorColumn) {
+            var checkboxSelector = new Slick['CheckboxSelectColumn']({
+                cssClass: "slick-cell-checkboxsel"
+            });
+            grid.registerPlugin(checkboxSelector);
         }
         this.wcOptions = wcOptions;
         if (wcOptions) {

@@ -407,6 +407,12 @@ Polymer({
                     grid.setSelectionModel(new Slick.RowSelectionModel());
                     break;
             }
+            if(this.useSlickCheckboxSelectorColumn){
+                const checkboxSelector = new Slick['CheckboxSelectColumn']({
+                    cssClass: "slick-cell-checkboxsel"
+                });
+                grid.registerPlugin(checkboxSelector);
+            }
             this.wcOptions = wcOptions;
 
             if(wcOptions){
