@@ -4,7 +4,7 @@
 ///<reference path='js/treeGridHelper.ts'/>
 
 module crystal.elements {
-    type SelectionModel = 'Cell' | 'Row';
+    type SelectionModel = 'Cell' | 'Row' | 'RowPlus';
 
     export interface IXSlickGridEnableAddRowOptions{
         autoCommit?: boolean;
@@ -220,10 +220,19 @@ Polymer({
                 reflectToAttribute: true
             },
             /**
-             * Possible values are 'Cell' and 'Row'
+             * Possible values are 'Cell', 'Row' 'RowPlus'
              */
             selectionModel:{
                 type: String,
+            },
+            useSlickAutoToolTips:{
+                type: Boolean,
+            },
+            useSlickCellCopyManager:{
+                type: Boolean,
+            },
+            useSlickCheckboxSelectColumn:{
+                type: Boolean,
             },
             useDataViewDataProvider:{
                 type:  Boolean,
@@ -255,22 +264,28 @@ Polymer({
             <div role="grid"></div>
             `;
             const $IsDefined = (typeof($) !== 'undefined');
+            const sm = this.selectionModel;
+            const incCell = ((sm === 'Cell') || (sm === 'RowPlus'));
+            const incRow = ((sm === 'Row') || (sm === 'RowPlus'));
             const slickDependencies : crystal.elements.IDynamicImportStep[] = [
                 !$IsDefined ? {importURL: 'JQuery.html'} : null,
                 !$IsDefined || !$['ui'] ? {importURL: 'JQueryUI.html'} : null,
                 !$IsDefined || !$.fn.drag ? {importURL: 'Jquery.Event.DragDrop.html'} : null,
                 {importURL: 'SlickCore.html'},
                 {importURL: 'SlickGrid.html'},
-                this.useSlickEditors        ? {importURL: 'SlickEditors.html'}               : null,
-                this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeSelector.html'}    : null,
-                this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellSelectionModel.html'}   : null,
-                this.selectionModel === 'Cell'  ? {importURL: 'Slick.CellRangeDecorator.html'}   : null,
-                this.selectionModel === 'Row'   ? {importURL: 'Slick.RowSelectionModel.html'}    : null,
-                this.useDataViewDataProvider    ? {importURL: 'Slick.DataView.html'}             : null,
-                this.useSlickPaging             ? {importURL: 'controls/SlickPager.html'}        : null,
-                this.useSlickColumnPicker       ? {importURL: 'controls/SlickColumnPicker.html'} : null,
-                this.useSlickFormatters         ? {importURL: 'SlickFormatters.html'}            : null,
-                this.useTreeGridHelper          ? {importURL: 'TreeGridHelper.html'}             : null
+                this.useSlickEditors ? {importURL: 'SlickEditors.html'}               : null,
+                incCell ? {importURL: 'Slick.CellRangeSelector.html'}    : null,
+                incCell ? {importURL: 'Slick.CellSelectionModel.html'}   : null,
+                incCell ? {importURL: 'Slick.CellRangeDecorator.html'}   : null,
+                this.useSlickCellCopyManager ? {importURL: 'Slick.CellSelectionModel.html'} : null,
+                this.useSlickAutoToolTips ? {importURL: 'Slick.AutoToolTips.html'} : null,
+                this.useSlickCheckboxSelectColumn ? {importURL: 'Slick.CheckboxSelectColumn.html'} : null,
+                incCell  ? {importURL: 'Slick.RowSelectionModel.html'}    : null,
+                this.useDataViewDataProvider ? {importURL: 'Slick.DataView.html'}             : null,
+                this.useSlickPaging ? {importURL: 'controls/SlickPager.html'}        : null,
+                this.useSlickColumnPicker  ? {importURL: 'controls/SlickColumnPicker.html'} : null,
+                this.useSlickFormatters ? {importURL: 'SlickFormatters.html'}            : null,
+                this.useTreeGridHelper ? {importURL: 'TreeGridHelper.html'}             : null
             ];
             crystal.elements.importHrefs(slickDependencies, this, () =>{
                 const thisGrid = this.$$('[role]');
@@ -387,6 +402,7 @@ Polymer({
                 case 'Cell':
                     grid.setSelectionModel((new Slick.CellSelectionModel()));
                     break;
+                case 'RowPlus':
                 case 'Row':
                     grid.setSelectionModel(new Slick.RowSelectionModel());
                     break;
