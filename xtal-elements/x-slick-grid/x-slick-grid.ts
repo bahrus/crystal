@@ -252,7 +252,6 @@ Polymer({
         readyFnInitialized: false,
         ready: function() {
             this.innerHTML = `
-            <link rel="stylesheet" href="css/slick.grid.css" type="text/css"/>
             <div role="grid"></div>
             `;
             const $IsDefined = (typeof($) !== 'undefined');
