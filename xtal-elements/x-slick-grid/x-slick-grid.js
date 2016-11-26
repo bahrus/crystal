@@ -289,6 +289,14 @@ Polymer((_a = {
             }, 10);
             return;
         }
+        var checkboxSelector = null;
+        if (this.useSlickCheckboxSelectColumn) {
+            console.log('add checkbox selector');
+            checkboxSelector = new Slick['CheckboxSelectColumn']({
+                cssClass: "slick-cell-checkboxsel"
+            });
+            columns.unshift(checkboxSelector.getColumnDefinition());
+        }
         this.setEditorAndFormatter(columns);
         //this.gridOptions = gridOptions;
         if (!gridOptions)
@@ -335,12 +343,7 @@ Polymer((_a = {
                 grid.setSelectionModel(new Slick.RowSelectionModel());
                 break;
         }
-        if (this.useSlickCheckboxSelectorColumn) {
-            var checkboxSelector = new Slick['CheckboxSelectColumn']({
-                cssClass: "slick-cell-checkboxsel"
-            });
-            grid.registerPlugin(checkboxSelector);
-            debugger;
+        if (checkboxSelector) {
         }
         this.wcOptions = wcOptions;
         if (wcOptions) {

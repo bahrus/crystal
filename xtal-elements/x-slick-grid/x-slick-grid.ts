@@ -368,6 +368,16 @@ Polymer({
                 }, 10);
                 return;
             }
+            let checkboxSelector = null;
+
+            if(this.useSlickCheckboxSelectColumn){
+                console.log('add checkbox selector');
+                checkboxSelector = new Slick['CheckboxSelectColumn']({
+                    cssClass: "slick-cell-checkboxsel"
+                });
+                columns.unshift(checkboxSelector.getColumnDefinition());
+                //grid.registerPlugin(checkboxSelector);
+            }
             this.setEditorAndFormatter(columns);
             //this.gridOptions = gridOptions;
             if(!gridOptions) gridOptions = {};
@@ -411,12 +421,8 @@ Polymer({
                     grid.setSelectionModel(new Slick.RowSelectionModel());
                     break;
             }
-            if(this.useSlickCheckboxSelectorColumn){
-                const checkboxSelector = new Slick['CheckboxSelectColumn']({
-                    cssClass: "slick-cell-checkboxsel"
-                });
-                grid.registerPlugin(checkboxSelector);
-                debugger;
+            if(checkboxSelector){
+                //grid.registerPlugin(checkboxSelector);
             }
             this.wcOptions = wcOptions;
 
