@@ -1,0 +1,33 @@
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<dom-module id="xtal-browser-window">
+    <template>
+        <content></content><button on-click="loadIFrame">Load</button>
+        <div id="div_iframe" 
+            style="border-style: inset;border-color: grey;overflow: scroll;height: 500px;width: 90%"
+        >
+            <iframe id="iframe" on-load="handleOnLoad" style="width:100%;height:1000%"></iframe>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            properties:{
+                // href:{
+                //     type: String
+
+                // }
+            },
+            loadIFrame: function(){
+                var aLink = this.children[0];
+                this.$.iframe.src = aLink.href;
+            },
+            ready: function(){
+                //this.$.iframe.src = this.href;
+            },
+            handleOnLoad: function(){
+                //this.$.iframe.contentWindow.scrollTo(0, 1000);
+                this.$.div_iframe.scrollTop = 1000;
+            }
+        })
+    </script>
+</dom-module>
