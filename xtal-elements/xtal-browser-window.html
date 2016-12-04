@@ -4,7 +4,7 @@
     <template>
         <content></content><button on-click="loadIFrame">Load</button>
         <div id="div_iframe" 
-            style="border-style: inset;border-color: grey;overflow: scroll;height: 500px;width: 90%"
+            style$="border-style: inset;border-color: grey;overflow: scroll;height: 500px;width: {{width}}"
         >
             <iframe id="iframe" on-load="handleOnLoad" style="width:100%;height:1000%"></iframe>
         </div>
@@ -12,10 +12,13 @@
     <script>
         Polymer({
             properties:{
-                // href:{
-                //     type: String
-
-                // }
+                windowTop:{
+                    type: Number
+                },
+                width:{
+                    type: String,
+                    value: '90%'
+                }
             },
             loadIFrame: function(){
                 var aLink = this.children[0];
@@ -26,7 +29,7 @@
             },
             handleOnLoad: function(){
                 //this.$.iframe.contentWindow.scrollTo(0, 1000);
-                this.$.div_iframe.scrollTop = 1000;
+                this.$.div_iframe.scrollTop = this.windowTop;
             }
         })
     </script>
