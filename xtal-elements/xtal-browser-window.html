@@ -3,12 +3,11 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <dom-module id="xtal-browser-window">
     <template>
-        <content></content>
-        <paper-button raised on-click="loadIFrame">Go</paper-button>
+        <paper-button id="toggle_button" raised on-click="toggleIFrame">►</paper-button> <content></content>
         <div id="div_iframe" 
             style$="border-style: inset;border-color: grey;overflow: scroll;height: 500px;width: {{width}}"
         >
-            <iframe id="iframe" on-load="handleOnLoad" style="width:100%;height:1000%"></iframe>
+            <iframe id="iframe" on-load="handleOnLoad" style="display:none;width:100%;height:1000%"></iframe>
         </div>
     </template>
     <script>
@@ -22,13 +21,25 @@
                     value: '90%'
                 }
             },
-            loadIFrame: function(){
-                var aLink = this.children[0];
-                this.$.iframe.src = aLink.href;
+            toggleIFrame: function(){
+                var iFrame = this.$.iframe;
+                var toggleButton = this.$.toggle_button;
+                if(iFrame.style.display ==='none'){
+                    iFrame.style.display = 'block'
+                    var aLink = this.children[1];
+                    iFrame.src = aLink.href;
+                    toggleButton.innerText = '▼';
+                }else{
+                    iFrame.src='about:blank';
+                    iFrame.style.display = 'none';
+                    toggleButton.innerText = '►';
+                }
+                
             },
             ready: function(){
                 var aLink = this.children[0];
                 aLink.target = '_blank';
+                toggleButton.innerText = '▼';
             },
             handleOnLoad: function(){
                 //this.$.iframe.contentWindow.scrollTo(0, 1000);
