@@ -3,7 +3,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <dom-module id="xtal-browser-window">
     <template>
-        <span id="toggle_button" raised on-click="toggleIFrame">►</span> 
+        <span style="cursor:pointer" id="toggle_button" raised on-click="toggleIFrame">►</span> 
         <content></content>
         <div id="div_iframe" 
             style$="display:none;border-style: inset;border-color: grey;overflow: scroll;height: 500px;width: {{width}}"
@@ -31,7 +31,12 @@
                 if(divIFrame.style.display ==='none'){
                     divIFrame.style.display = 'block';
                     div_noFrame.style.display = 'none';
-                    var aLink = this.children[1];
+                    var aLink;
+                    if(Polymer.Settings.useShadow){
+                        aLink = this.getEffectiveChildNodes()[1];
+                    }else{
+                        aLink = this.children[1];
+                    }
                     iFrame.src = aLink.href;
                     toggleButton.innerText = '▼';
                 }else{
@@ -45,7 +50,7 @@
             ready: function(){
                 var aLink = this.children[0];
                 aLink.target = '_blank';
-                toggleButton.innerText = '▼';
+                //toggleButton.innerText = '▼';
             },
             handleOnLoad: function(){
                 //this.$.iframe.contentWindow.scrollTo(0, 1000);
