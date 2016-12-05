@@ -1,8 +1,10 @@
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <dom-module id="xtal-browser-window">
     <template>
-        <content></content><button on-click="loadIFrame">Load</button>
+        <content></content>
+        <paper-button raised on-click="loadIFrame">Go</paper-button>
         <div id="div_iframe" 
             style$="border-style: inset;border-color: grey;overflow: scroll;height: 500px;width: {{width}}"
         >
@@ -25,7 +27,8 @@
                 this.$.iframe.src = aLink.href;
             },
             ready: function(){
-                //this.$.iframe.src = this.href;
+                var aLink = this.children[0];
+                aLink.target = '_blank';
             },
             handleOnLoad: function(){
                 //this.$.iframe.contentWindow.scrollTo(0, 1000);
