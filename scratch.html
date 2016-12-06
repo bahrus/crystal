@@ -10,11 +10,19 @@
             alert(isValid);
         }
     </script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-item/paper-item.html">
+<link rel="import" href="bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="bower_components/paper-menu/paper-menu.html">
 </head>
 <body>
-` <form id="test">
-    <input type="text" name="myInput" required hidden>
-</form>
-<button onclick="test()">Test</button>
+<paper-menu>
+    <paper-item>One</paper-item>
+    <paper-item>Two</paper-item>
+    <paper-item>Three</paper-item>
+    <paper-item>Four</paper-item>
+  </paper-menu>
+  
+  <button onClick=" Polymer.dom(document.querySelector('paper-menu')).removeChild(document.querySelector('paper-item'));">Remove first menu item</button>
 </body>
 </html>
