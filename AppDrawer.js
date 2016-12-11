@@ -7,19 +7,20 @@ var AppDrawer = (function (_super) {
     __extends(AppDrawer, _super);
     // Can define constructor arguments if you wish.
     function AppDrawer() {
-        var _this = this;
+        var _this = 
         // If you define a ctor, always call super() first!
         // This is specific to CE and required by the spec.
-        _super.call(this);
+        _super.call(this) || this;
         console.log('in constructor');
         // Setup a click listener on <app-drawer> itself.
-        this.addEventListener('click', function (e) {
+        _this.addEventListener('click', function (e) {
             // Don't toggle the drawer if it's disabled.
             if (_this.disabled) {
                 return;
             }
             _this.toggleDrawer();
         });
+        return _this;
     }
     Object.defineProperty(AppDrawer.prototype, "open", {
         // A getter/setter for an open property.

@@ -17,7 +17,8 @@ var crystal;
                 importHrefs(importStep, polymerElement, callBack);
                 return;
             }
-            var resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
+            var cdnPath = polymerElement['basePath'] ? polymerElement['basePath'] : '';
+            var resolvedURL = polymerElement.resolveUrl(cdnPath + nextStep.importURL);
             polymerElement.importHref(resolvedURL, function () {
                 importHrefs(importStep, polymerElement, callBack);
             });
@@ -118,12 +119,10 @@ Polymer((_a = {
             numberOfWidthDeltas: {
                 type: Number,
                 notify: true,
-                reflectToAttribute: true
             },
             numberOfOrderChanges: {
                 type: Number,
                 notify: true,
-                reflectToAttribute: true
             },
             isContextMenuOpen: {
                 type: Boolean,
@@ -133,18 +132,23 @@ Polymer((_a = {
             lastClickedXValue: {
                 type: Number,
                 notify: true,
-                reflectToAttribute: true
             },
             lastClickedYValue: {
                 type: Number,
                 notify: true,
-                reflectToAttribute: true
             },
             /**
              * Possible values are 'Cell', 'Row' 'RowPlus'
              */
             selectionModel: {
                 type: String,
+            },
+            /**
+             * If specified, then the needed references, will try to load from the cdn from the specified base path.
+             * If that fails, then it will load from the local web service
+             */
+            basePath: {
+                type: String
             },
             useSlickAutoToolTips: {
                 type: Boolean,
@@ -405,7 +409,6 @@ Polymer((_a = {
         this.renderCount++;
         return grid;
     },
-    _a
-));
+    _a));
 var _a;
 //# sourceMappingURL=x-slick-grid.js.map

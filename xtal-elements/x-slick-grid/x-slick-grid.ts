@@ -30,7 +30,7 @@ module crystal.elements {
     }
 
     export interface IDynamicImportStep{
-        importURL: string;
+        importURL?: string;
     }
     export interface ISlickGridOptions<T> extends Slick.GridOptions<T>{
         frozenColumn: number;
@@ -82,7 +82,8 @@ module crystal.elements {
             importHrefs(importStep, polymerElement, callBack);
             return;
         }
-        const resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
+        const cdnPath = polymerElement['basePath'] ? polymerElement['basePath'] : '';
+        const resolvedURL = polymerElement.resolveUrl(cdnPath + nextStep.importURL);
         polymerElement.importHref(resolvedURL, () =>{
             importHrefs(importStep, polymerElement, callBack);
         })
@@ -197,12 +198,12 @@ Polymer({
             numberOfWidthDeltas:{
                 type: Number,
                 notify: true,
-                reflectToAttribute: true
+                //reflectToAttribute: true
             },
             numberOfOrderChanges:{
                 type: Number,
                 notify: true,
-                reflectToAttribute: true
+                //reflectToAttribute: true
             },
             isContextMenuOpen:{
                 type:  Boolean,
@@ -212,18 +213,25 @@ Polymer({
             lastClickedXValue:{
                 type: Number,
                 notify: true,
-                reflectToAttribute: true
+                //reflectToAttribute: true
             },
             lastClickedYValue:{
                 type: Number,
                 notify: true,
-                reflectToAttribute: true
+                //reflectToAttribute: true
             },
             /**
              * Possible values are 'Cell', 'Row' 'RowPlus'
              */
             selectionModel:{
                 type: String,
+            },
+            /**
+             * If specified, then the needed references, will try to load from the cdn from the specified base path.
+             * If that fails, then it will load from the local web service 
+             */
+            basePath:{
+                type: String
             },
             useSlickAutoToolTips:{
                 type: Boolean,
