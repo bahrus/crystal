@@ -19,11 +19,17 @@ var crystal;
             }
             var cdnPath = polymerElement['basePath'] ? polymerElement['basePath'] : '';
             var resolvedURL = polymerElement.resolveUrl(cdnPath + nextStep.importURL);
-            polymerElement.importHref(resolvedURL, function () {
-                importHrefs(importStep, polymerElement, callBack);
-            });
+            polymerElement.importHref(resolvedURL, function () { return importHrefs(importStep, polymerElement, callBack); }, function () { return tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement); });
         }
         elements.importHrefs = importHrefs;
+        function tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement) {
+            if (!cdnPath) {
+                importHrefs(importStep, polymerElement, callBack);
+                return;
+            }
+            var resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
+            polymerElement.importHref(resolvedURL, function () { return importHrefs(importStep, polymerElement, callBack); });
+        }
         function attachEventHandlers(grid, handlers) {
             if (!handlers)
                 return;

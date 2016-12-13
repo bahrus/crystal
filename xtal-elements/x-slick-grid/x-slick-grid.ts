@@ -84,9 +84,19 @@ module crystal.elements {
         }
         const cdnPath = polymerElement['basePath'] ? polymerElement['basePath'] : '';
         const resolvedURL = polymerElement.resolveUrl(cdnPath + nextStep.importURL);
-        polymerElement.importHref(resolvedURL, () =>{
+        polymerElement.importHref(resolvedURL, 
+            () => importHrefs(importStep, polymerElement, callBack), 
+            () => tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement)
+        );
+    }
+    function tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement){
+        if(!cdnPath) {
             importHrefs(importStep, polymerElement, callBack);
-        })
+            return;
+        }
+        const resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
+        polymerElement.importHref(resolvedURL, 
+            () => importHrefs(importStep, polymerElement, callBack));
     }
     export function attachEventHandlers<T>(grid: Slick.Grid<T>, handlers: ISlickGridEventHandlers<T>){
         if(!handlers) return;
