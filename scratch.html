@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script>
-        function test(){
-            var frm = document.querySelector('#test');
-            var isValid = frm.checkValidity();
-            alert(isValid);
-        }
-    </script>
-    <link rel="import" href="bower_components/polymer/polymer.html">
-<link rel="import" href="bower_components/paper-item/paper-item.html">
-<link rel="import" href="bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="bower_components/paper-menu/paper-menu.html">
-</head>
-<body>
-<paper-menu>
-    <paper-item>One</paper-item>
-    <paper-item>Two</paper-item>
-    <paper-item>Three</paper-item>
-    <paper-item>Four</paper-item>
-  </paper-menu>
-  
-  <button onClick=" Polymer.dom(document.querySelector('paper-menu')).removeChild(document.querySelector('paper-item'));">Remove first menu item</button>
-</body>
+<html>
+    <head>
+        <!--<script src="https://unpkg.com/sigiljs@latest/sigil.min.js"></script>-->
+    </head>
+    <body>
+        <link rel="import" href="hello-world.html">
+        <hello-world greeting="Hola"></hello-world>
+
+        <script>
+            window.addEventListener('WebComponentsReady', function(e) {
+                document.querySelector("hello-world").person = "Richard";
+            });
+        </script>
+    </body>
 </html>

@@ -1,0 +1,47 @@
+<dom-module id="cool-table">
+  <template>
+
+    <div class="table-header">
+      <template is="dom-repeat" items="{{columns}}" as="column">
+        <div class="cell">
+          [[column.heading]]
+        </div>
+      </template>
+    </div>
+
+    <div class="table-content">
+      <template is="dom-repeat" items="{{columns}}" as="column" filter="{{isPropertyEqName('name')}}">
+        <div class="cell">
+          <!-- 
+          here is where I am getting stuck:
+          I want to to display [[ item.[[column.property]] ]]
+          So I need to dynamically generate 
+          the name of the property I'll put in the data binding
+          -->
+          
+            [[column.name]]
+        
+          
+        </div>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'cool-table',
+      properties: {
+        items: {type: Array},
+        columns: {type: Array}
+      },
+      isPropertyEqName: function(search){
+        return function(item){
+          return item.property === 'name';
+        }
+        
+      }
+   });
+  </script>
+
+</dom-module>
