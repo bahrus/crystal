@@ -22,6 +22,29 @@ var crystal;
             polymerElement.importHref(resolvedURL, function () { return importHrefs(importStep, polymerElement, callBack); }, function () { return tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement); });
         }
         elements.importHrefs = importHrefs;
+        function downloadJSFilesInParallelButLoadInSequence(refs, callBack) {
+            //see https://www.html5rocks.com/en/tutorials/speed/script-loading/
+            var notLoadedYet = {};
+            var nonNullRefs = refs.filter(function (ref) { return ref !== null; });
+            nonNullRefs.forEach(function (ref) {
+                notLoadedYet[ref.src] = true;
+            });
+            nonNullRefs.forEach(function (ref) {
+                var script = document.createElement('script');
+                script.src = ref.src;
+                script.async = false;
+                script.onload = function () {
+                    console.log(script.src + ' loaded');
+                    delete notLoadedYet[script.src];
+                    if (Object.keys(notLoadedYet).length === 0) {
+                        if (callBack)
+                            callBack();
+                    }
+                };
+                document.head.appendChild(script);
+            });
+        }
+        elements.downloadJSFilesInParallelButLoadInSequence = downloadJSFilesInParallelButLoadInSequence;
         function tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement) {
             if (!cdnPath) {
                 importHrefs(importStep, polymerElement, callBack);
@@ -202,26 +225,50 @@ Polymer((_a = {
             var incCell = ((sm === 'Cell') || (sm === 'RowPlus'));
             var incRow = ((sm === 'Row') || (sm === 'RowPlus'));
             var slickDependencies = [
-                !$IsDefined ? { importURL: 'JQuery.html' } : null,
-                !$IsDefined || !$['ui'] ? { importURL: 'JQueryUI.html' } : null,
-                !$IsDefined || !$.fn.drag ? { importURL: 'Jquery.Event.DragDrop.html' } : null,
-                { importURL: 'SlickCore.html' },
-                { importURL: 'SlickGrid.html' },
-                this.useSlickEditors ? { importURL: 'SlickEditors.html' } : null,
-                incCell ? { importURL: 'Slick.CellRangeSelector.html' } : null,
-                incCell ? { importURL: 'Slick.CellSelectionModel.html' } : null,
-                incCell ? { importURL: 'Slick.CellRangeDecorator.html' } : null,
-                this.useSlickCellCopyManager ? { importURL: 'Slick.CellSelectionModel.html' } : null,
-                this.useSlickAutoToolTips ? { importURL: 'Slick.AutoToolTips.html' } : null,
-                this.useSlickCheckboxSelectColumn ? { importURL: 'Slick.CheckboxSelectColumn.html' } : null,
-                incCell ? { importURL: 'Slick.RowSelectionModel.html' } : null,
-                this.useDataViewDataProvider ? { importURL: 'Slick.DataView.html' } : null,
+                // !$IsDefined ? {importURL: 'JQuery.html'} : null,
+                // !$IsDefined || !$['ui'] ? {importURL: 'JQueryUI.html'} : null,
+                // !$IsDefined || !$.fn.drag ? {importURL: 'Jquery.Event.DragDrop.html'} : null,
+                // {importURL: 'SlickCore.html'},
+                // {importURL: 'SlickGrid.html'},
+                // this.useSlickEditors ? {importURL: 'SlickEditors.html'}               : null,
+                // incCell ? {importURL: 'Slick.CellRangeSelector.html'}    : null,
+                // incCell ? {importURL: 'Slick.CellSelectionModel.html'}   : null,
+                // incCell ? {importURL: 'Slick.CellRangeDecorator.html'}   : null,
+                // this.useSlickCellCopyManager ? {importURL: 'Slick.CellSelectionModel.html'} : null,
+                // this.useSlickAutoToolTips ? {importURL: 'Slick.AutoToolTips.html'} : null,
+                // this.useSlickCheckboxSelectColumn ? {importURL: 'Slick.CheckboxSelectColumn.html'} : null,
+                // incCell  ? {importURL: 'Slick.RowSelectionModel.html'}    : null,
+                // this.useDataViewDataProvider ? {importURL: 'Slick.DataView.html'}             : null,
                 this.useSlickPaging ? { importURL: 'controls/SlickPager.html' } : null,
                 this.useSlickColumnPicker ? { importURL: 'controls/SlickColumnPicker.html' } : null,
-                this.useSlickFormatters ? { importURL: 'SlickFormatters.html' } : null,
+                //this.useSlickFormatters ? {importURL: 'SlickFormatters.html'}            : null,
                 this.useTreeGridHelper ? { importURL: 'TreeGridHelper.html' } : null
             ];
-            crystal.elements.importHrefs(slickDependencies, this, function () {
+            //const r = this.resolveUrl;
+            var slickJSDependencies = [
+                !$IsDefined ? { src: this.resolveUrl('../../bower_components/jquery/jquery.min.js') } : null,
+                !$IsDefined || !$['ui'] ? { src: this.resolveUrl('../../bower_components/jquery-ui/jquery-ui.min.js') } : null,
+                !$IsDefined || !$.fn.drag ? { src: this.resolveUrl('../../bower_components/jquery.event/event.drag/jquery.event.drag.js') } : null,
+                { src: this.resolveUrl('js/slick.core.js') },
+                { src: this.resolveUrl('js/slick.grid.js') },
+                this.useSlickEditors ? { src: this.resolveUrl('js/slick.editors.js') } : null,
+                incCell ? { src: this.resolveUrl('js/plugins/slick.cellrangeselector.js') } : null,
+                incCell ? { src: this.resolveUrl('js/plugins/slick.cellselectionmodel.js') } : null,
+                incCell ? { src: this.resolveUrl('js/plugins/slick.cellrangedecorator.js') } : null,
+                this.useSlickCellCopyManager ? { src: this.resolveUrl('js/plugins/slick.cellselectionmodel.js') } : null,
+                this.useSlickAutoToolTips ? { src: this.resolveUrl('../../bower_components/handlebars/handlebars.min.js') } : null,
+                this.useSlickAutoToolTips ? { src: this.resolveUrl('js/plugins/slick.autotooltips.js') } : null,
+                this.useSlickCheckboxSelectColumn ? { src: this.resolveUrl('js/plugins/slick.checkboxselectcolumn.js') } : null,
+                incCell ? { src: this.resolveUrl('js/plugins/slick.rowselectionmodel.js') } : null,
+                this.useDataViewDataProvider ? { src: this.resolveUrl('js/slick.dataview.js') } : null,
+                this.useDataViewDataProvider ? { src: this.resolveUrl('js/DataViewHelper.js') } : null,
+                this.useSlickPaging ? { src: this.resolveUrl('controls/slick.pager.js') } : null,
+                this.useSlickColumnPicker ? { src: this.resolveUrl('controls/slick.columnpicker.js') } : null,
+                this.useSlickFormatters ? { src: this.resolveUrl('js/slick.formatters.js') } : null,
+                this.useTreeGridHelper ? { src: this.resolveUrl('js/treeGridHelper.js') } : null,
+            ];
+            crystal.elements.importHrefs(slickDependencies, this);
+            crystal.elements.downloadJSFilesInParallelButLoadInSequence(slickJSDependencies, function () {
                 var thisGrid = _this.$$('[role]');
                 var $thisGrid = $(thisGrid);
                 $thisGrid
@@ -247,6 +294,30 @@ Polymer((_a = {
                 }
                 _this.readyFnInitialized = true;
             });
+            // crystal.elements.importHrefs(slickDependencies, this, () =>{
+            //     const thisGrid = this.$$('[role]');
+            //     const $thisGrid = $(thisGrid);
+            //     $thisGrid
+            //         .css('height', this.height)
+            //         .css('width', this.width);
+            //     this.gridDiv = $thisGrid;
+            //     if(this.fillContainerWidth || this.fillContainerHeight){
+            //         window.addEventListener('resize', e => {
+            //             if(this.fillContainerWidth && this.fillContainerHeight) {
+            //                 this.debounce('fillContainerBothDim', this.fillContainerBothDimImpl, 500);
+            //             }else if(this.fillContainerHeight){
+            //                 this.debounce('fillContainerHeight', this.fillContainerHeightImpl, 500);
+            //             }else{ //width only
+            //                 this.debounce('fillContainerWidth', this.fillContainerWidthImpl, 500);
+            //             }
+            //         });
+            //     }
+            //     if(this.useTreeGridHelper){
+            //         this.analyzeTreeNodes = crystal.elements.xslickgrid.analyzeTreeNodes;
+            //         this.sortColumn = crystal.elements.xslickgrid.sortColumn;
+            //     }
+            //     this.readyFnInitialized = true;
+            // });
         },
         fillContainerBothDimImpl: function () {
             this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
