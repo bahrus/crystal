@@ -464,7 +464,7 @@ Polymer({
             let checkboxSelector = null;
 
             if(this.useSlickCheckboxSelectColumn){
-                console.log('add checkbox selector');
+                //console.log('add checkbox selector');
                 checkboxSelector = new Slick['CheckboxSelectColumn']({
                     cssClass: "slick-cell-checkboxsel"
                 });
@@ -500,7 +500,7 @@ Polymer({
                 }
             }
             if(this.useTreeGridHelper){
-                crystal.elements.xslickgrid.attachToggleClickEvent<any>(this as crystal.elements.IXSlickGridElement<any>);
+                crystal.elements.xslickgrid.attachToggleClickEvent<any>(this as crystal.elements.IXSlickGridElement<any>, this.useSlickCheckboxSelectColumn);
                 this.collapseAll = crystal.elements.xslickgrid.collapseAll;
                 this.expandAll = crystal.elements.xslickgrid.expandAll;
             }

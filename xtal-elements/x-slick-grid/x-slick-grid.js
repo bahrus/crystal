@@ -372,7 +372,7 @@ Polymer((_a = {
         }
         var checkboxSelector = null;
         if (this.useSlickCheckboxSelectColumn) {
-            console.log('add checkbox selector');
+            //console.log('add checkbox selector');
             checkboxSelector = new Slick['CheckboxSelectColumn']({
                 cssClass: "slick-cell-checkboxsel"
             });
@@ -410,7 +410,7 @@ Polymer((_a = {
             }
         }
         if (this.useTreeGridHelper) {
-            crystal.elements.xslickgrid.attachToggleClickEvent(this);
+            crystal.elements.xslickgrid.attachToggleClickEvent(this, this.useSlickCheckboxSelectColumn);
             this.collapseAll = crystal.elements.xslickgrid.collapseAll;
             this.expandAll = crystal.elements.xslickgrid.expandAll;
         }

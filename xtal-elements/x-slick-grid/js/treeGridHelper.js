@@ -192,9 +192,10 @@ var crystal;
             function collapseAndHideNodes(container, searchString, test) {
             }
             xslickgrid.collapseAndHideNodes = collapseAndHideNodes;
-            function attachToggleClickEvent(container) {
+            function attachToggleClickEvent(container, useSlickCheckboxSelectColumn) {
                 container.grid.onClick.subscribe(function (e, args) {
-                    if ($(e['target']).hasClass("xsg_toggle")) {
+                    if ($(e['target']).hasClass('xsg_toggle')) {
+                        console.log('iah3');
                         var item = container.dataProvider.getItem(args.row);
                         if (item) {
                             if (!item._collapsed) {
@@ -206,6 +207,11 @@ var crystal;
                             container.dataProvider.updateItem(item.id, item);
                         }
                         e.stopImmediatePropagation();
+                    }
+                    else if (useSlickCheckboxSelectColumn) {
+                        if ($(e['target'].parentNode).hasClass('slick-cell-checkboxsel')) {
+                            console.log('iah1', { e: e, args: args });
+                        }
                     }
                 });
             }

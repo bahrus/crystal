@@ -212,9 +212,10 @@ module crystal.elements.xslickgrid{
 
     }
 
-    export function attachToggleClickEvent<T>(container: IXSlickGridElement<T>){
+    export function attachToggleClickEvent<T>(container: IXSlickGridElement<T>, useSlickCheckboxSelectColumn: boolean){
         container.grid.onClick.subscribe((e, args) =>{
-            if ($(e['target']).hasClass("xsg_toggle")) {
+            if ($(e['target']).hasClass('xsg_toggle')) {
+                console.log('iah3');
                 var item = container.dataProvider.getItem(args.row);
                 if (item) {
                     if (!item._collapsed) {
@@ -226,7 +227,12 @@ module crystal.elements.xslickgrid{
                     container.dataProvider.updateItem(item.id, item);
                 }
                 e.stopImmediatePropagation();
+            }else if(useSlickCheckboxSelectColumn){
+                if($(e['target'].parentNode).hasClass('slick-cell-checkboxsel')){
+                    console.log('iah1', {e: e, args: args});
+                }
             }
+
         });
     }
 
