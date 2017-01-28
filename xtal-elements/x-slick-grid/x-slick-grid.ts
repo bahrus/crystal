@@ -106,7 +106,7 @@ module crystal.elements {
             script.src = ref.src;
             script.async = false;
             script.onload = () =>{
-                console.log(script.src + ' loaded');
+                //console.log(script.src + ' loaded');
                 delete notLoadedYet[script.src];
                 if(Object.keys(notLoadedYet).length === 0){
                     if(callBack) callBack();

@@ -22,7 +22,7 @@
 <script>(function() {if ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')) {} else {var e = document.createElement('script'); e.src = '../../../bower_components/webcomponentsjs/webcomponents-lite.min.js';document.body.appendChild(e);}})();</script>
 
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
-<link rel="import" href="../x-slick-grid.html" />
+
 <table width="100%">
   <tr>
     <td valign="top" width="50%">
@@ -43,7 +43,7 @@
 
       </div>
       <br/>
-
+      <link rel="import" href="../x-slick-grid.html" />
       <x-slick-grid
               use-slick-editors
               use-slick-formatters
@@ -133,15 +133,6 @@
         onSort: function(e, args){
           xslick.sortColumn(args);
         },
-        // onHeaderClick: function(e, args){
-        //   var sortArgs = {
-        //     sortCol:{
-        //       field: 'percentComplete'
-        //     },
-        //     sortAsc: true
-        //   }
-        //   xslick.sortColumn(sortArgs);
-        // }
     }
   };
 

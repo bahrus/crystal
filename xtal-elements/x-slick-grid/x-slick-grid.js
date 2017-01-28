@@ -34,7 +34,7 @@ var crystal;
                 script.src = ref.src;
                 script.async = false;
                 script.onload = function () {
-                    console.log(script.src + ' loaded');
+                    //console.log(script.src + ' loaded');
                     delete notLoadedYet[script.src];
                     if (Object.keys(notLoadedYet).length === 0) {
                         if (callBack)
