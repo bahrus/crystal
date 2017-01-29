@@ -233,12 +233,9 @@ module crystal.elements.xslickgrid{
                 if($(target.parentNode).hasClass('slick-cell-checkboxsel')){ //user clicked on a checkbox selector
                     //linkChildren(container);
                     const item = container.dataProvider.getItem(args.row) as ITreeNode;
-
-                    if(target.checked){
-                        target.indeterminate = false;
-                        checkItemAndChildrenRecursively(container.dataProvider, item, true);
-                        
-                    }
+                    target.indeterminate = false;
+                    console.log(target.checked);
+                    checkItemAndChildrenRecursively(container.dataProvider, item, target.checked);
                     
                     const grid = container.grid;
                     grid.invalidate();
@@ -251,7 +248,7 @@ module crystal.elements.xslickgrid{
     }
 
     function checkItemAndChildrenRecursively(dataProvider: any, item: ITreeNode, value: boolean){
-        item._checked = true;
+        item._checked = value;
         if(item.childIndices){
             for(let i = 0, ii = item.childIndices.length; i < ii; i++){
                 const childIdx = item.childIndices[i];

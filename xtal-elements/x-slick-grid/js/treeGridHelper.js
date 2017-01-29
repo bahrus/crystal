@@ -214,10 +214,9 @@ var crystal;
                         if ($(target.parentNode).hasClass('slick-cell-checkboxsel')) {
                             //linkChildren(container);
                             var item = container.dataProvider.getItem(args.row);
-                            if (target.checked) {
-                                target.indeterminate = false;
-                                checkItemAndChildrenRecursively(container.dataProvider, item, true);
-                            }
+                            target.indeterminate = false;
+                            console.log(target.checked);
+                            checkItemAndChildrenRecursively(container.dataProvider, item, target.checked);
                             var grid = container.grid;
                             grid.invalidate();
                             grid.render();
@@ -227,7 +226,7 @@ var crystal;
             }
             xslickgrid.attachToggleClickEvent = attachToggleClickEvent;
             function checkItemAndChildrenRecursively(dataProvider, item, value) {
-                item._checked = true;
+                item._checked = value;
                 if (item.childIndices) {
                     for (var i = 0, ii = item.childIndices.length; i < ii; i++) {
                         var childIdx = item.childIndices[i];
