@@ -140,6 +140,7 @@ module crystal.elements {
         dataProvider: any;
         columns: Slick.Column<T>[];
         selectedRow: T;
+        useSlickCheckboxSelectColumn?: boolean;
     }
     
     export interface IGridRenderParams<T>{
@@ -576,7 +577,14 @@ Polymer({
             if(this.fillContainerWidth){
                 this.fillContainerWidthImpl();
             }
-
+            if(this.useTreeGridHelper){
+                if(this.useSlickCheckboxSelectColumn){
+                    crystal.elements.xslickgrid.linkChildren(this);
+                }
+                crystal.elements.xslickgrid.attachToggleClickEvent<any>(this as crystal.elements.IXSlickGridElement<any>, this.useSlickCheckboxSelectColumn);
+                this.collapseAll = crystal.elements.xslickgrid.collapseAll;
+                this.expandAll = crystal.elements.xslickgrid.expandAll;
+            }
             this.renderCount++;
             return grid;
         },

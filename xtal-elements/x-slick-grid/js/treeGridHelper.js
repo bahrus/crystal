@@ -34,6 +34,7 @@ var crystal;
             xslickgrid.filterNode = filterNode;
             function linkChildren(container) {
                 //const nodeLookup: {[key: string] : ITreeNode[]} = {};
+                var hasCheckBoxSelector = container.useSlickCheckboxSelectColumn;
                 var data = container._data;
                 //children always come after parent
                 data.forEach(function (row) { return delete row.childIndices; });
@@ -194,8 +195,9 @@ var crystal;
             xslickgrid.collapseAndHideNodes = collapseAndHideNodes;
             function attachToggleClickEvent(container, useSlickCheckboxSelectColumn) {
                 container.grid.onClick.subscribe(function (e, args) {
-                    if ($(e['target']).hasClass('xsg_toggle')) {
-                        console.log('iah3');
+                    var target = e['target'];
+                    var $target = $(target);
+                    if ($target.hasClass('xsg_toggle')) {
                         var item = container.dataProvider.getItem(args.row);
                         if (item) {
                             if (!item._collapsed) {
@@ -209,8 +211,23 @@ var crystal;
                         e.stopImmediatePropagation();
                     }
                     else if (useSlickCheckboxSelectColumn) {
-                        if ($(e['target'].parentNode).hasClass('slick-cell-checkboxsel')) {
-                            console.log('iah1', { e: e, args: args });
+                        if ($(target.parentNode).hasClass('slick-cell-checkboxsel')) {
+                            //linkChildren(container);
+                            var item = container.dataProvider.getItem(args.row);
+                            if (target.checked) {
+                                target.indeterminate = false;
+                                item._checked = true;
+                            }
+                            if (item.childIndices) {
+                                for (var i = 0, ii = item.childIndices.length; i < ii; i++) {
+                                    var childIdx = item.childIndices[i];
+                                    var childItem = container.dataProvider.getItem(childIdx);
+                                    childItem._checked = item._checked;
+                                }
+                            }
+                            var grid = container.grid;
+                            grid.invalidate();
+                            grid.render();
                         }
                     }
                 });

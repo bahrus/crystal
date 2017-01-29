@@ -144,9 +144,14 @@
 
     function checkboxSelectionFormatter(row, cell, value, columnDef, dataContext) {
       if (dataContext) {
-        return _selectedRowsLookup[row]
+        if(dataContext._checked){
+          return "<input type='checkbox' checked='checked'>"
+        }else{
+          return _selectedRowsLookup[row]
           ? "<input type='checkbox' checked='checked'>"
           : "<input type='checkbox'>";
+        }
+        
       }
       return null;
     }

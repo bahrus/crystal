@@ -15,6 +15,7 @@ module crystal.elements.xslickgrid{
         _matchesFilter: boolean;
         _hasDescendantThatMatchesFilter: boolean;
         _hasAncestorThatMatchesFilter: boolean;
+        _checked: boolean;
     }
 
 
@@ -45,7 +46,7 @@ module crystal.elements.xslickgrid{
 
     export function linkChildren<T>(container: IXSlickGridElement<T>){
         //const nodeLookup: {[key: string] : ITreeNode[]} = {};
-
+        const hasCheckBoxSelector = container.useSlickCheckboxSelectColumn;
         const data = (container._data as any) as ITreeNode[];
         //children always come after parent
         data.forEach(row => delete row.childIndices);
@@ -214,9 +215,10 @@ module crystal.elements.xslickgrid{
 
     export function attachToggleClickEvent<T>(container: IXSlickGridElement<T>, useSlickCheckboxSelectColumn: boolean){
         container.grid.onClick.subscribe((e, args) =>{
-            if ($(e['target']).hasClass('xsg_toggle')) {
-                console.log('iah3');
-                var item = container.dataProvider.getItem(args.row);
+            const target = e['target'];
+            const $target = $(target);
+            if ($target.hasClass('xsg_toggle')) {
+                const item = container.dataProvider.getItem(args.row) as ITreeNode;
                 if (item) {
                     if (!item._collapsed) {
                         item._collapsed = true;
@@ -228,8 +230,24 @@ module crystal.elements.xslickgrid{
                 }
                 e.stopImmediatePropagation();
             }else if(useSlickCheckboxSelectColumn){
-                if($(e['target'].parentNode).hasClass('slick-cell-checkboxsel')){
-                    console.log('iah1', {e: e, args: args});
+                if($(target.parentNode).hasClass('slick-cell-checkboxsel')){ //user clicked on a checkbox selector
+                    //linkChildren(container);
+                    const item = container.dataProvider.getItem(args.row) as ITreeNode;
+                    if(target.checked){
+                        target.indeterminate = false;
+                        item._checked = true;
+                    }
+                    if(item.childIndices){
+                        for(let i = 0, ii = item.childIndices.length; i < ii; i++){
+                            const childIdx = item.childIndices[i];
+                            const childItem = container.dataProvider.getItem(childIdx) as ITreeNode;
+                            childItem._checked = item._checked;
+                        }
+                    }
+                    const grid = container.grid;
+                    grid.invalidate();
+                    grid.render();
+                    //console.log(item);
                 }
             }
 

@@ -483,6 +483,14 @@ Polymer((_a = {
         if (this.fillContainerWidth) {
             this.fillContainerWidthImpl();
         }
+        if (this.useTreeGridHelper) {
+            if (this.useSlickCheckboxSelectColumn) {
+                crystal.elements.xslickgrid.linkChildren(this);
+            }
+            crystal.elements.xslickgrid.attachToggleClickEvent(this, this.useSlickCheckboxSelectColumn);
+            this.collapseAll = crystal.elements.xslickgrid.collapseAll;
+            this.expandAll = crystal.elements.xslickgrid.expandAll;
+        }
         this.renderCount++;
         return grid;
     },
