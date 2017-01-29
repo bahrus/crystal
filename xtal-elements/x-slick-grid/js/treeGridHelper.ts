@@ -231,16 +231,12 @@ module crystal.elements.xslickgrid{
                 e.stopImmediatePropagation();
             }else if(useSlickCheckboxSelectColumn){
                 if($(target.parentNode).hasClass('slick-cell-checkboxsel')){ //user clicked on a checkbox selector
-                    //linkChildren(container);
                     const item = container.dataProvider.getItem(args.row) as ITreeNode;
                     target.indeterminate = false;
-                    console.log(target.checked);
                     checkItemAndChildrenRecursively(container.dataProvider, item, target.checked);
-                    
                     const grid = container.grid;
                     grid.invalidate();
                     grid.render();
-                    //console.log(item);
                 }
             }
 

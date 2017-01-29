@@ -212,10 +212,8 @@ var crystal;
                     }
                     else if (useSlickCheckboxSelectColumn) {
                         if ($(target.parentNode).hasClass('slick-cell-checkboxsel')) {
-                            //linkChildren(container);
                             var item = container.dataProvider.getItem(args.row);
                             target.indeterminate = false;
-                            console.log(target.checked);
                             checkItemAndChildrenRecursively(container.dataProvider, item, target.checked);
                             var grid = container.grid;
                             grid.invalidate();
