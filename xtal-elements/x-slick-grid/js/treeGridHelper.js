@@ -216,14 +216,7 @@ var crystal;
                             var item = container.dataProvider.getItem(args.row);
                             if (target.checked) {
                                 target.indeterminate = false;
-                                item._checked = true;
-                            }
-                            if (item.childIndices) {
-                                for (var i = 0, ii = item.childIndices.length; i < ii; i++) {
-                                    var childIdx = item.childIndices[i];
-                                    var childItem = container.dataProvider.getItem(childIdx);
-                                    childItem._checked = item._checked;
-                                }
+                                checkItemAndChildrenRecursively(container.dataProvider, item, true);
                             }
                             var grid = container.grid;
                             grid.invalidate();
@@ -233,6 +226,16 @@ var crystal;
                 });
             }
             xslickgrid.attachToggleClickEvent = attachToggleClickEvent;
+            function checkItemAndChildrenRecursively(dataProvider, item, value) {
+                item._checked = true;
+                if (item.childIndices) {
+                    for (var i = 0, ii = item.childIndices.length; i < ii; i++) {
+                        var childIdx = item.childIndices[i];
+                        var childItem = dataProvider.getItem(childIdx);
+                        checkItemAndChildrenRecursively(dataProvider, childItem, value);
+                    }
+                }
+            }
             var ampRegExp = /&/g;
             var ltRegExp = /</g;
             var gtRegExp = />/g;
