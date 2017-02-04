@@ -31,15 +31,22 @@
 
     function init(grid) {
       _grid = grid;
+      console.log('in init');
       _handler
         .subscribe(_grid.onSelectedRowsChanged, handleSelectedRowsChanged)
         .subscribe(_grid.onClick, handleClick)
         .subscribe(_grid.onHeaderClick, handleHeaderClick)
-        .subscribe(_grid.onKeyDown, handleKeyDown);
+        .subscribe(_grid.onKeyDown, handleKeyDown)
+        .subscribe('checked-changed', handleCheck);
+
     }
 
     function destroy() {
       _handler.unsubscribeAll();
+    }
+
+    function handleCheck(e, a){
+      debugger;
     }
 
     function handleSelectedRowsChanged(e, args) {
@@ -147,9 +154,8 @@
         if(dataContext._checked){
           return "<input type='checkbox' checked='checked'>"
         }else{
-          return _selectedRowsLookup[row]
-          ? "<input type='checkbox' checked='checked'>"
-          : "<input type='checkbox'>";
+          const checked  = _selectedRowsLookup[row] ?  'checked' : '';
+          return `<xtal-checkbox data-row=${row} ${checked}></xtal-checkbox>`
         }
         
       }

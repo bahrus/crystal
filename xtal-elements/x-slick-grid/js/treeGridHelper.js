@@ -194,6 +194,17 @@ var crystal;
             }
             xslickgrid.collapseAndHideNodes = collapseAndHideNodes;
             function attachToggleClickEvent(container, useSlickCheckboxSelectColumn) {
+                container['addEventListener']('checkbox-checked', function (e, args) {
+                    //debugger;
+                    var cb = e.target;
+                    var row = parseInt(cb.dataset.row);
+                    var item = container.dataProvider.getItem(row);
+                    cb.indeterminate = false;
+                    checkItemAndChildrenRecursively(container.dataProvider, item, cb.checked);
+                    var grid = container.grid;
+                    grid.invalidate();
+                    grid.render();
+                });
                 container.grid.onClick.subscribe(function (e, args) {
                     var target = e['target'];
                     var $target = $(target);
@@ -209,16 +220,6 @@ var crystal;
                             container.dataProvider.updateItem(item.id, item);
                         }
                         e.stopImmediatePropagation();
-                    }
-                    else if (useSlickCheckboxSelectColumn) {
-                        if ($(target.parentNode).hasClass('slick-cell-checkboxsel')) {
-                            var item = container.dataProvider.getItem(args.row);
-                            target.indeterminate = false;
-                            checkItemAndChildrenRecursively(container.dataProvider, item, target.checked);
-                            var grid = container.grid;
-                            grid.invalidate();
-                            grid.render();
-                        }
                     }
                 });
             }

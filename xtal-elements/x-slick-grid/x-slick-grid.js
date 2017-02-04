@@ -242,7 +242,8 @@ Polymer((_a = {
                 this.useSlickPaging ? { importURL: 'controls/SlickPager.html' } : null,
                 this.useSlickColumnPicker ? { importURL: 'controls/SlickColumnPicker.html' } : null,
                 //this.useSlickFormatters ? {importURL: 'SlickFormatters.html'}            : null,
-                this.useTreeGridHelper ? { importURL: 'TreeGridHelper.html' } : null
+                this.useTreeGridHelper ? { importURL: 'TreeGridHelper.html' } : null,
+                this.useSlickCheckboxSelectColumn ? { importURL: '../xtal-checkbox.html' } : null,
             ];
             //const r = this.resolveUrl;
             var slickJSDependencies = [

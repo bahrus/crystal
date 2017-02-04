@@ -214,6 +214,18 @@ module crystal.elements.xslickgrid{
     }
 
     export function attachToggleClickEvent<T>(container: IXSlickGridElement<T>, useSlickCheckboxSelectColumn: boolean){
+        
+        container['addEventListener']('checkbox-checked', (e, args) =>{
+            //debugger;
+            const cb = e.target;
+            const row = parseInt(cb.dataset.row);
+            const item = container.dataProvider.getItem(row) as ITreeNode;
+            cb.indeterminate = false;
+            checkItemAndChildrenRecursively(container.dataProvider, item, cb.checked);
+            const grid = container.grid;
+            grid.invalidate();
+            grid.render();
+        });
         container.grid.onClick.subscribe((e, args) =>{
             const target = e['target'];
             const $target = $(target);
@@ -229,17 +241,7 @@ module crystal.elements.xslickgrid{
                     container.dataProvider.updateItem(item.id, item);
                 }
                 e.stopImmediatePropagation();
-            }else if(useSlickCheckboxSelectColumn){
-                if($(target.parentNode).hasClass('slick-cell-checkboxsel')){ //user clicked on a checkbox selector
-                    const item = container.dataProvider.getItem(args.row) as ITreeNode;
-                    target.indeterminate = false;
-                    checkItemAndChildrenRecursively(container.dataProvider, item, target.checked);
-                    const grid = container.grid;
-                    grid.invalidate();
-                    grid.render();
-                }
             }
-
         });
     }
 

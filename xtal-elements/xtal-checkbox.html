@@ -1,0 +1,34 @@
+<dom-module id="xtal-checkbox">
+    <template>
+        <input type="checkbox" on-click="handleClickEvent" id="checkbox"/>
+    </template>
+    <script>
+        Polymer({
+            is: 'xtal-checkbox',
+            properties:{
+                checked: {
+                    type: Boolean,
+                    observer: 'checkedChangeHandler',
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                indeterminate:{
+                    type: Boolean,
+                    observer: 'indeterminateChangeHandler',
+                    notify: true,
+                    reflectToAttribute: true,
+                }
+            },
+            checkedChangeHandler: function(newVal){
+                this.$.checkbox.checked = newVal;
+            },
+            indeterminateChangeHandler: function(newVal){
+                this.$.checkbox.indeterminate = newVal;
+            },
+            handleClickEvent : function(newVal, ea){
+                this.checked = this.$.checkbox.checked;
+                this.fire('checkbox-checked', this.checked);
+            }
+        })
+    </script>
+</dom-module>
