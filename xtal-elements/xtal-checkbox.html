@@ -1,12 +1,12 @@
 <dom-module id="xtal-checkbox">
     <template>
-        <input type="checkbox" on-click="handleClickEvent" id="checkbox"/>
+        <input checked$="{{isChecked}}" type="checkbox" on-click="handleClickEvent" id="checkbox"/>
     </template>
     <script>
         Polymer({
             is: 'xtal-checkbox',
             properties:{
-                checked: {
+                isChecked: {
                     type: Boolean,
                     observer: 'checkedChangeHandler',
                     notify: true,
@@ -20,14 +20,15 @@
                 }
             },
             checkedChangeHandler: function(newVal){
-                this.$.checkbox.checked = newVal;
+                //this.$.checkbox.checked = newVal;
             },
             indeterminateChangeHandler: function(newVal){
                 this.$.checkbox.indeterminate = newVal;
             },
-            handleClickEvent : function(newVal, ea){
-                this.checked = this.$.checkbox.checked;
-                this.fire('checkbox-checked', this.checked);
+            handleClickEvent : function(mouseEvent, ea){
+                console.log({handleClickEvent: {mouseEvent: mouseEvent, ea: ea, checked: this.$.checkbox.checked}})
+                this.isChecked = this.$.checkbox.checked;
+                this.fire('checkbox-checked', this.isChecked);
             }
         })
     </script>

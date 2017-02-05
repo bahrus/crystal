@@ -37,7 +37,12 @@ var crystal;
                 var hasCheckBoxSelector = container.useSlickCheckboxSelectColumn;
                 var data = container._data;
                 //children always come after parent
-                data.forEach(function (row) { return delete row.childIndices; });
+                data.forEach(function (row) {
+                    delete row.childIndices;
+                    row._noOfCheckedChildren = 0;
+                    row._noOfIndeterminateChildren = 0;
+                    row._noOfUncheckedChildren = 0;
+                });
                 for (var i = 0, ii = data.length; i < ii; i++) {
                     var node = data[i];
                     if (node.parent !== null) {
@@ -46,6 +51,17 @@ var crystal;
                             if (!parent_2.childIndices)
                                 parent_2.childIndices = [];
                             parent_2.childIndices.push(i);
+                            if (hasCheckBoxSelector) {
+                                if (node._checked) {
+                                    parent_2._noOfCheckedChildren++;
+                                }
+                                else if (node._indeterminate) {
+                                    parent_2._noOfIndeterminateChildren++;
+                                }
+                                else {
+                                    parent_2._noOfUncheckedChildren++;
+                                }
+                            }
                         }
                     }
                 }
@@ -199,8 +215,9 @@ var crystal;
                     var cb = e.target;
                     var row = parseInt(cb.dataset.row);
                     var item = container.dataProvider.getItem(row);
-                    cb.indeterminate = false;
-                    checkItemAndChildrenRecursively(container.dataProvider, item, cb.checked);
+                    //cb.indeterminate = false;
+                    checkItemAndChildrenRecursively(container.dataProvider, item, cb.isChecked);
+                    //debugger;
                     var grid = container.grid;
                     grid.invalidate();
                     grid.render();
@@ -225,9 +242,26 @@ var crystal;
             }
             xslickgrid.attachToggleClickEvent = attachToggleClickEvent;
             function checkItemAndChildrenRecursively(dataProvider, item, value) {
+                //console.log({_checked: item._checked, value: value});
+                if (item._checked === value) {
+                    console.log('no change');
+                    console.log({ checked: item._checked, value: value });
+                    return; // no change
+                }
+                var childIndexCount = item.childIndices ? item.childIndices.length : 0;
+                if (value) {
+                    item._noOfCheckedChildren = childIndexCount;
+                    item._noOfUncheckedChildren = 0;
+                }
+                else {
+                    item._noOfCheckedChildren = 0;
+                    item._noOfUncheckedChildren = childIndexCount;
+                }
+                item._noOfIndeterminateChildren = 0;
                 item._checked = value;
-                if (item.childIndices) {
-                    for (var i = 0, ii = item.childIndices.length; i < ii; i++) {
+                console.log({ item_checked: item._checked });
+                if (childIndexCount > 0) {
+                    for (var i = 0; i < childIndexCount; i++) {
                         var childIdx = item.childIndices[i];
                         var childItem = dataProvider.getItem(childIdx);
                         checkItemAndChildrenRecursively(dataProvider, childItem, value);

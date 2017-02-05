@@ -151,13 +151,11 @@
 
     function checkboxSelectionFormatter(row, cell, value, columnDef, dataContext) {
       if (dataContext) {
-        if(dataContext._checked){
-          return "<input type='checkbox' checked='checked'>"
-        }else{
-          const checked  = _selectedRowsLookup[row] ?  'checked' : '';
-          return `<xtal-checkbox data-row=${row} ${checked}></xtal-checkbox>`
-        }
-        
+        //const checked  = _selectedRowsLookup[row] ?  'is-checked' : '';
+        const checked = dataContext._checked ? 'is-checked' : '';
+        const html = `<xtal-checkbox data-row=${row} ${checked}></xtal-checkbox>`
+        console.log(html);
+        return html;
       }
       return null;
     }

@@ -16,6 +16,10 @@ module crystal.elements.xslickgrid{
         _hasDescendantThatMatchesFilter: boolean;
         _hasAncestorThatMatchesFilter: boolean;
         _checked: boolean;
+        _indeterminate: boolean;
+        _noOfUncheckedChildren: number;
+        _noOfCheckedChildren: number;
+        _noOfIndeterminateChildren: number;
     }
 
 
@@ -49,7 +53,12 @@ module crystal.elements.xslickgrid{
         const hasCheckBoxSelector = container.useSlickCheckboxSelectColumn;
         const data = (container._data as any) as ITreeNode[];
         //children always come after parent
-        data.forEach(row => delete row.childIndices);
+        data.forEach(row => {
+            delete row.childIndices;
+            row._noOfCheckedChildren = 0;
+            row._noOfIndeterminateChildren = 0;
+            row._noOfUncheckedChildren = 0;
+        });
         for(let i = 0, ii = data.length; i < ii; i++){
             const node = data[i];
             if(node.parent !== null) {
@@ -57,6 +66,15 @@ module crystal.elements.xslickgrid{
                 if(parent){
                     if(!parent.childIndices) parent.childIndices = [];
                     parent.childIndices.push(i);
+                    if(hasCheckBoxSelector){
+                        if(node._checked){
+                            parent._noOfCheckedChildren++;
+                        }else if(node._indeterminate){
+                            parent._noOfIndeterminateChildren++;
+                        }else{
+                            parent._noOfUncheckedChildren++;
+                        }
+                    }
                 }
             }
         }
@@ -220,8 +238,9 @@ module crystal.elements.xslickgrid{
             const cb = e.target;
             const row = parseInt(cb.dataset.row);
             const item = container.dataProvider.getItem(row) as ITreeNode;
-            cb.indeterminate = false;
-            checkItemAndChildrenRecursively(container.dataProvider, item, cb.checked);
+            //cb.indeterminate = false;
+            checkItemAndChildrenRecursively(container.dataProvider, item, cb.isChecked);
+            //debugger;
             const grid = container.grid;
             grid.invalidate();
             grid.render();
@@ -246,9 +265,25 @@ module crystal.elements.xslickgrid{
     }
 
     function checkItemAndChildrenRecursively(dataProvider: any, item: ITreeNode, value: boolean){
+        //console.log({_checked: item._checked, value: value});
+        if(item._checked === value) {
+            console.log('no change')
+            console.log({checked: item._checked, value: value});
+            return; // no change
+        }
+        const childIndexCount = item.childIndices ? item.childIndices.length : 0;
+        if(value){
+            item._noOfCheckedChildren = childIndexCount;
+            item._noOfUncheckedChildren = 0;
+        }else{
+            item._noOfCheckedChildren = 0;
+            item._noOfUncheckedChildren = childIndexCount;
+        }
+        item._noOfIndeterminateChildren = 0;
         item._checked = value;
-        if(item.childIndices){
-            for(let i = 0, ii = item.childIndices.length; i < ii; i++){
+        console.log({item_checked: item._checked});
+        if(childIndexCount > 0){
+            for(let i = 0; i < childIndexCount; i++){
                 const childIdx = item.childIndices[i];
                 const childItem = dataProvider.getItem(childIdx) as ITreeNode;
                 checkItemAndChildrenRecursively(dataProvider, childItem, value);
