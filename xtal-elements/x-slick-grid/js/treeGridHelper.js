@@ -332,7 +332,7 @@ var crystal;
                         }
                 }
                 if (needToUpdateParent) {
-                    updateParentRecursively(dataProvider, item, parent._checked, wasIndeterminate);
+                    updateParentRecursively(dataProvider, parent, parent._checked, wasIndeterminate);
                 }
             }
             var ampRegExp = /&/g;
