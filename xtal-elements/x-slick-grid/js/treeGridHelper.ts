@@ -239,7 +239,11 @@ module crystal.elements.xslickgrid{
             const row = parseInt(cb.dataset.row);
             const item = container.dataProvider.getItem(row) as ITreeNode;
             //cb.indeterminate = false;
-            checkItemAndChildrenRecursively(container.dataProvider, item, cb.isChecked);
+            const didAnythingChange = checkItemAndChildrenRecursively(container.dataProvider, item, cb.isChecked);
+            if(didAnythingChange){
+                console.log('call updateParentRecursively');
+                updateParentRecursively(container.dataProvider, item, cb.isChecked, cb.isInterminate);
+            }
             //debugger;
             const grid = container.grid;
             grid.invalidate();
@@ -269,7 +273,7 @@ module crystal.elements.xslickgrid{
         if(item._checked === value) {
             console.log('no change')
             console.log({checked: item._checked, value: value});
-            return; // no change
+            return false; // no change
         }
         const childIndexCount = item.childIndices ? item.childIndices.length : 0;
         if(value){
@@ -289,6 +293,67 @@ module crystal.elements.xslickgrid{
                 checkItemAndChildrenRecursively(dataProvider, childItem, value);
             }
         }
+        return true;
+    }
+
+    function updateParentRecursively(dataProvider: any, item: ITreeNode, value: boolean, wasIndeterminate: boolean){
+        if(typeof item.parent === 'undefined') return;
+        let parent = (dataProvider.getItem(item.parent) as any) as ITreeNode;
+        console.log('parent', parent);
+        if(!parent) return;
+        if(parent._checked && value) return; //nothing changed
+        if(!parent._checked && !parent._indeterminate && !value) return; //nothing changed
+        console.log('updating parent');
+        const parentWasIndeterminate = parent._indeterminate;
+        if(value){
+            parent._noOfCheckedChildren++;
+            if(wasIndeterminate){
+                parent._noOfIndeterminateChildren--;
+            }else{
+                parent._noOfUncheckedChildren--;
+            }
+            //TODO what if clicked checkbox was indeterminate?
+        }else{
+            parent._noOfUncheckedChildren++;
+            if(wasIndeterminate){
+                parent._noOfIndeterminateChildren--;
+            }else{
+                parent._noOfCheckedChildren--;
+            }
+        }
+        const noOfChildren = parent.childIndices.length;
+        let needToUpdateParent = false;
+        switch(noOfChildren){
+            case parent._noOfCheckedChildren:
+                if(!parent._checked || parentWasIndeterminate){
+                    console.log('scenario 1')
+                    needToUpdateParent = true;
+                    parent._checked = true;
+                    parent._indeterminate = false;
+                }
+                
+                break;
+            case parent._noOfUncheckedChildren:
+                if(parent._checked || parentWasIndeterminate){
+                    console.log('scenario 2');
+                    needToUpdateParent = true;
+                    parent._checked = false;
+                    parent._indeterminate = false;
+                }
+                
+                break;
+            default:
+                if(parent._checked || !parentWasIndeterminate){
+                    console.log('scenario 3');
+                    needToUpdateParent = true;
+                    parent._checked = false;
+                    parent._indeterminate = true;
+                }
+                
+        }
+        if(needToUpdateParent){
+            updateParentRecursively(dataProvider, item, parent._checked, wasIndeterminate);
+        } 
     }
 
     const ampRegExp = /&/g;

@@ -29,6 +29,9 @@
                 console.log({handleClickEvent: {mouseEvent: mouseEvent, ea: ea, checked: this.$.checkbox.checked}})
                 this.isChecked = this.$.checkbox.checked;
                 this.fire('checkbox-checked', this.isChecked);
+            },
+            ready: function(){
+                if(this.indeterminate) this.$.checkbox.indeterminate = true;
             }
         })
     </script>

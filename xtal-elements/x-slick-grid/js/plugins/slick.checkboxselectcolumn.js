@@ -153,8 +153,9 @@
       if (dataContext) {
         //const checked  = _selectedRowsLookup[row] ?  'is-checked' : '';
         const checked = dataContext._checked ? 'is-checked' : '';
-        const html = `<xtal-checkbox data-row=${row} ${checked}></xtal-checkbox>`
-        console.log(html);
+        const indeterminate = dataContext._indeterminate ? 'indeterminate' : '';
+        const html = `<xtal-checkbox data-row=${row} ${checked} ${indeterminate}></xtal-checkbox>`
+        //console.log(html);
         return html;
       }
       return null;

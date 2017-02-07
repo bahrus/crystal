@@ -216,7 +216,11 @@ var crystal;
                     var row = parseInt(cb.dataset.row);
                     var item = container.dataProvider.getItem(row);
                     //cb.indeterminate = false;
-                    checkItemAndChildrenRecursively(container.dataProvider, item, cb.isChecked);
+                    var didAnythingChange = checkItemAndChildrenRecursively(container.dataProvider, item, cb.isChecked);
+                    if (didAnythingChange) {
+                        console.log('call updateParentRecursively');
+                        updateParentRecursively(container.dataProvider, item, cb.isChecked, cb.isInterminate);
+                    }
                     //debugger;
                     var grid = container.grid;
                     grid.invalidate();
@@ -246,7 +250,7 @@ var crystal;
                 if (item._checked === value) {
                     console.log('no change');
                     console.log({ checked: item._checked, value: value });
-                    return; // no change
+                    return false; // no change
                 }
                 var childIndexCount = item.childIndices ? item.childIndices.length : 0;
                 if (value) {
@@ -266,6 +270,69 @@ var crystal;
                         var childItem = dataProvider.getItem(childIdx);
                         checkItemAndChildrenRecursively(dataProvider, childItem, value);
                     }
+                }
+                return true;
+            }
+            function updateParentRecursively(dataProvider, item, value, wasIndeterminate) {
+                if (typeof item.parent === 'undefined')
+                    return;
+                var parent = dataProvider.getItem(item.parent);
+                console.log('parent', parent);
+                if (!parent)
+                    return;
+                if (parent._checked && value)
+                    return; //nothing changed
+                if (!parent._checked && !parent._indeterminate && !value)
+                    return; //nothing changed
+                console.log('updating parent');
+                var parentWasIndeterminate = parent._indeterminate;
+                if (value) {
+                    parent._noOfCheckedChildren++;
+                    if (wasIndeterminate) {
+                        parent._noOfIndeterminateChildren--;
+                    }
+                    else {
+                        parent._noOfUncheckedChildren--;
+                    }
+                }
+                else {
+                    parent._noOfUncheckedChildren++;
+                    if (wasIndeterminate) {
+                        parent._noOfIndeterminateChildren--;
+                    }
+                    else {
+                        parent._noOfCheckedChildren--;
+                    }
+                }
+                var noOfChildren = parent.childIndices.length;
+                var needToUpdateParent = false;
+                switch (noOfChildren) {
+                    case parent._noOfCheckedChildren:
+                        if (!parent._checked || parentWasIndeterminate) {
+                            console.log('scenario 1');
+                            needToUpdateParent = true;
+                            parent._checked = true;
+                            parent._indeterminate = false;
+                        }
+                        break;
+                    case parent._noOfUncheckedChildren:
+                        if (parent._checked || parentWasIndeterminate) {
+                            console.log('scenario 2');
+                            needToUpdateParent = true;
+                            parent._checked = false;
+                            parent._indeterminate = false;
+                        }
+                        break;
+                    default:
+                        if (parent._checked || !parentWasIndeterminate) {
+                            console.log('scenario 3');
+                            needToUpdateParent = true;
+                            parent._checked = false;
+                            parent._indeterminate = true;
+                        }
+                }
+                if (needToUpdateParent) {
+                    updateParentRecursively(dataProvider, item, parent._checked, wasIndeterminate);
                 }
             }
             var ampRegExp = /&/g;
