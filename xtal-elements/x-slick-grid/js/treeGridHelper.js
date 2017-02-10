@@ -278,11 +278,12 @@ var crystal;
                     return;
                 var parent = dataProvider.getItem(item.parent);
                 console.log('parent', parent);
+                console.log('args', { value: value, wasIndeterminate: wasIndeterminate });
                 if (!parent)
                     return;
                 if (parent._checked && value)
                     return; //nothing changed
-                if (!parent._checked && !parent._indeterminate && !value)
+                if (!parent._checked && (!parent._indeterminate && (!value && !wasIndeterminate)))
                     return; //nothing changed
                 console.log('updating parent');
                 var parentWasIndeterminate = parent._indeterminate;
@@ -332,7 +333,7 @@ var crystal;
                         }
                 }
                 if (needToUpdateParent) {
-                    updateParentRecursively(dataProvider, parent, parent._checked, wasIndeterminate);
+                    updateParentRecursively(dataProvider, parent, parent._checked, parent._indeterminate);
                 }
             }
             var ampRegExp = /&/g;

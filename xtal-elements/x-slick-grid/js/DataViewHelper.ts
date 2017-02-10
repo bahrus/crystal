@@ -35,7 +35,7 @@ module crystal.elements.xslickgrid{
         });
 
         dataView.onRowsChanged.subscribe(function (e, args) {
-            console.log('onRowsChanged');
+            //console.log('onRowsChanged');
             const grid = options.containerFinder().grid;
             grid.invalidateRows(args.rows);
             grid.render();

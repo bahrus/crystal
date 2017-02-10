@@ -33,7 +33,7 @@ var crystal;
                     grid.render();
                 });
                 dataView.onRowsChanged.subscribe(function (e, args) {
-                    console.log('onRowsChanged');
+                    //console.log('onRowsChanged');
                     var grid = options.containerFinder().grid;
                     grid.invalidateRows(args.rows);
                     grid.render();

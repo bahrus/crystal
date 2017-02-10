@@ -300,9 +300,10 @@ module crystal.elements.xslickgrid{
         if(typeof item.parent === 'undefined') return;
         let parent = (dataProvider.getItem(item.parent) as any) as ITreeNode;
         console.log('parent', parent);
+        console.log('args', {value: value, wasIndeterminate: wasIndeterminate});
         if(!parent) return;
         if(parent._checked && value) return; //nothing changed
-        if(!parent._checked && !parent._indeterminate && !value) return; //nothing changed
+        if(!parent._checked && (!parent._indeterminate && (!value && !wasIndeterminate))) return; //nothing changed
         console.log('updating parent');
         const parentWasIndeterminate = parent._indeterminate;
         if(value){
@@ -352,7 +353,7 @@ module crystal.elements.xslickgrid{
                 
         }
         if(needToUpdateParent){
-            updateParentRecursively(dataProvider, parent, parent._checked, wasIndeterminate);
+            updateParentRecursively(dataProvider, parent, parent._checked, parent._indeterminate);
         } 
     }
 
