@@ -352,7 +352,7 @@ Polymer({
                 this.useSlickAutoToolTips ? {src: this.resolveUrl('../../bower_components/handlebars/handlebars.min.js')} : null,
                 this.useSlickAutoToolTips ? {src: this.resolveUrl('js/plugins/slick.autotooltips.js')}: null,
                 this.useSlickCheckboxSelectColumn ? {src: this.resolveUrl('js/plugins/slick.checkboxselectcolumn.js')}: null,
-                incCell ? {src: this.resolveUrl('js/plugins/slick.rowselectionmodel.js')}: null,
+                (incCell || incRow) ? {src: this.resolveUrl('js/plugins/slick.rowselectionmodel.js')}: null,
                 this.useDataViewDataProvider ? {src: this.resolveUrl('js/slick.dataview.js')}: null,
                 this.useDataViewDataProvider ? {src: this.resolveUrl('js/DataViewHelper.js')}: null,
                 this.useSlickPaging ? {src: this.resolveUrl('controls/slick.pager.js')} : null,
