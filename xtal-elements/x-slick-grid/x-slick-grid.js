@@ -294,6 +294,7 @@ Polymer((_a = {
                     _this.sortColumn = crystal.elements.xslickgrid.sortColumn;
                 }
                 _this.readyFnInitialized = true;
+                _this.fire('loadedDependencies');
             });
             // crystal.elements.importHrefs(slickDependencies, this, () =>{
             //     const thisGrid = this.$$('[role]');
