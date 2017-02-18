@@ -113,123 +113,157 @@
 </div>
 
 
-<script src="../../../bower_components/jquery-mousewheel/jquery.mousewheel.js"></script>
+<!--<script src="../../../bower_components/jquery-mousewheel/jquery.mousewheel.js"></script>-->
+<!-- If we find a need for this file, note that there's a loading timing issue in edge -->
 
 
 
 <script>
-$(function () {
-  $('#frozenColumn').val(options.frozenColumn);
-});
+
 
 
 var dataView;
 var grid;
 var data = [];
 var selectedRowIds = [];
-
-var columns = [
-  {id: "sel", name: "#", field: "num", behavior: "select", cssClass: "cell-selection", width: 40, cannotTriggerInsert: true, resizable: false, unselectable: true }
-  ,
-  {id: "title", name: "Title", field: "title", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true}
-  ,
-  {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text, sortable: true}
-  ,
-  {id: "%", name: "% Complete", field: "percentComplete", width: 80, resizable: false, formatter: Slick.Formatters.PercentComplete, editor: Slick.Editors.PercentComplete, sortable: true}
-  ,
-  {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date, sortable: true}
-  ,
-  {id: "finish", name: "Finish", field: "finish", minWidth: 60, editor: Slick.Editors.Date, sortable: true}
-  ,
-  {id: "effort-driven", name: "Effort Driven", width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.YesNo, editor: Slick.Editors.YesNoSelect, cannotTriggerInsert: true, sortable: true}
-  ,
-  {id: "title1", name: "Title1", field: "title1", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true}
-  ,
-  {id: "title2", name: "Title2", field: "title2", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true}
-  ,
-  {id: "title3", name: "Title3", field: "title3", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true}
-  ,
-  {id: "title4", name: "Title4", field: "title4", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true}
-];
-
-var options = {
-  editable: true, enableAddRow: true, enableCellNavigation: true, asyncEditorLoading: true, forceFitColumns: false, autoEdit: false, topPanelHeight: 25, frozenColumn: 2
-};
-
-var wcOptions = {
-  eventHandlers:{
-    onCellChange: function(e, args){
-      xslick.dataProvider.updateItem(args.item.id, args.item);
-    },
-    onAddNewRow: function(e, args){
-      var item = {"num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false};
-      $.extend(item, args.item);
-      xslick.dataProvider.addItem(item);
-    },
-    onKeyDown: function(e){
-      if (e.which != 65 || !e.ctrlKey)
-      return false;
-      var rows = [];
-      selectedRowIds = [];
-
-      for (var i = 0; i < dataView.getLength(); i++) {
-        rows.push(i);
-        selectedRowIds.push(dataView.getItem(i).id);
-      }
-      xslick.grid.setSelectedRows(rows);
-      e.preventDefault();
-    },
-    onMouseEnter: function(e){
-      var cell = this.getCellFromEvent(e);
-      this.setSelectedRows([cell.row]);
-      e.preventDefault();
-    },
-    onMouseLeave: function(e){
-      this.setSelectedRows([]);
-      e.preventDefault();
-    },
-    onSelectedRowsChanged: function(e){
-      selectedRowIds = [];
-      var rows = xslick.grid.getSelectedRows();
-      for (var i = 0, l = rows.length; i < l; i++) {
-        var item = xslick.dataProvider.getItem(rows[i]);
-        if (item) selectedRowIds.push(item.id);
-      }
-    },
-    onSort: function(e, args){
-      sortdir = args.sortAsc ? 1 : -1;
-      sortcol = args.sortCol.field;
-
-      if ($.browser.msie && $.browser.version <= 8) {
-        // using temporary Object.prototype.toString override
-        // more limited and does lexicographic sort only by default, but can be much faster
-
-        var percentCompleteValueFn = function () {
-          var val = this["percentComplete"];
-          if (val < 10)
-            return "00" + val;
-          else if (val < 100)
-            return "0" + val;
-          else
-            return val;
-        };
-
-        // use numeric sort of % and lexicographic for everything else
-        dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
-      }
-      else {
-        // using native sort with comparer
-        // preferred method but can be very slow in IE with huge datasets
-        dataView.sort(comparer, args.sortAsc);
-      }
-    }
-  }
-}
-
+var columns = [];
+var options = {};
 var sortcol = "title";
 var sortdir = 1;
 var percentCompleteThreshold = 0;
 var searchString = "";
+var wcOptions = {};
+
+function initialize(){
+  columns = [
+    {id: "sel", name: "#", field: "num", behavior: "select", cssClass: "cell-selection", width: 40, cannotTriggerInsert: true, resizable: false, unselectable: true },
+    {id: "title", name: "Title", field: "title", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true},
+    {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text, sortable: true},
+    {id: "%", name: "% Complete", field: "percentComplete", width: 80, resizable: false, formatter: Slick.Formatters.PercentComplete, editor: Slick.Editors.PercentComplete, sortable: true},
+    {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date, sortable: true},
+    {id: "finish", name: "Finish", field: "finish", minWidth: 60, editor: Slick.Editors.Date, sortable: true},
+    {id: "effort-driven", name: "Effort Driven", width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.YesNo, editor: Slick.Editors.YesNoSelect, cannotTriggerInsert: true, sortable: true},
+    {id: "title1", name: "Title1", field: "title1", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true},
+    {id: "title2", name: "Title2", field: "title2", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true},
+    {id: "title3", name: "Title3", field: "title3", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true},
+    {id: "title4", name: "Title4", field: "title4", width: 120, minWidth: 120, cssClass: "cell-title", editor: Slick.Editors.Text, validator: requiredFieldValidator, sortable: true}
+  ];
+  for (var i = 0; i < 50000; i++) {
+    var d = (data[i] = {});
+
+    d["id"] = "id_" + i;
+    d["num"] = i;
+    d["title"] = "Task " + i;
+    d["duration"] = "5 days";
+    d["percentComplete"] = Math.round(Math.random() * 100);
+    d["start"] = "01/01/2009";
+    d["finish"] = "01/05/2009";
+    d["effortDriven"] = (i % 5 == 0);
+    d["title1"] = i;
+    d["title2"] = i;
+    d["title3"] = i;
+    d["title4"] = i;
+  }
+  options = {
+    editable: true, enableAddRow: true, enableCellNavigation: true, asyncEditorLoading: true, forceFitColumns: false, autoEdit: false, topPanelHeight: 25, frozenColumn: 2
+  };
+  wcOptions = {
+    eventHandlers:{
+      onCellChange: function(e, args){
+        xslick.dataProvider.updateItem(args.item.id, args.item);
+      },
+      onAddNewRow: function(e, args){
+        var item = {"num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false};
+        $.extend(item, args.item);
+        xslick.dataProvider.addItem(item);
+      },
+      onKeyDown: function(e){
+        if (e.which != 65 || !e.ctrlKey)
+        return false;
+        var rows = [];
+        selectedRowIds = [];
+
+        for (var i = 0; i < dataView.getLength(); i++) {
+          rows.push(i);
+          selectedRowIds.push(dataView.getItem(i).id);
+        }
+        xslick.grid.setSelectedRows(rows);
+        e.preventDefault();
+      },
+      onMouseEnter: function(e){
+        var cell = this.getCellFromEvent(e);
+        this.setSelectedRows([cell.row]);
+        e.preventDefault();
+      },
+      onMouseLeave: function(e){
+        this.setSelectedRows([]);
+        e.preventDefault();
+      },
+      onSelectedRowsChanged: function(e){
+        selectedRowIds = [];
+        var rows = xslick.grid.getSelectedRows();
+        for (var i = 0, l = rows.length; i < l; i++) {
+          var item = xslick.dataProvider.getItem(rows[i]);
+          if (item) selectedRowIds.push(item.id);
+        }
+      },
+      onSort: function(e, args){
+        sortdir = args.sortAsc ? 1 : -1;
+        sortcol = args.sortCol.field;
+
+        if ($.browser.msie && $.browser.version <= 8) {
+          // using temporary Object.prototype.toString override
+          // more limited and does lexicographic sort only by default, but can be much faster
+
+          var percentCompleteValueFn = function () {
+            var val = this["percentComplete"];
+            if (val < 10)
+              return "00" + val;
+            else if (val < 100)
+              return "0" + val;
+            else
+              return val;
+          };
+
+          // use numeric sort of % and lexicographic for everything else
+          dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
+        }
+        else {
+          // using native sort with comparer
+          // preferred method but can be very slow in IE with huge datasets
+          dataView.sort(comparer, args.sortAsc);
+        }
+      }
+    }
+  };
+  var dataView = new Slick.Data.DataView({ inlineFilters: true });
+  xslick.setInitialData(dataView, columns, options, wcOptions);
+  addEventHandlers(xslick.grid, dataView);
+  $(".grid-header .ui-icon")
+  .addClass("ui-state-default ui-corner-all")
+  .mouseover(function (e) {
+    $(e.target).addClass("ui-state-hover")
+  })
+  .mouseout(function (e) {
+    $(e.target).removeClass("ui-state-hover")
+  });
+   $('#frozenColumn').val(options.frozenColumn);
+}
+
+var xslick = document.querySelector('x-slick-grid');
+if(xslick.readyFnInitialized){
+  initialize();
+}else{
+  xslick.addEventListener('loadedDependencies', function(){
+    initialize();
+    
+  });
+}
+
+
+
+
+
 
 function requiredFieldValidator(value) {
   if (value == null || value == undefined || !value.length)
@@ -269,43 +303,14 @@ function toggleFilterRow() {
 }
 
 
-$(".grid-header .ui-icon")
-  .addClass("ui-state-default ui-corner-all")
-  .mouseover(function (e) {
-    $(e.target).addClass("ui-state-hover")
-  })
-  .mouseout(function (e) {
-    $(e.target).removeClass("ui-state-hover")
-  });
+
 
 //$(function () {
   // prepare the data
-  for (var i = 0; i < 50000; i++) {
-    var d = (data[i] = {});
-
-    d["id"] = "id_" + i;
-    d["num"] = i;
-    d["title"] = "Task " + i;
-    d["duration"] = "5 days";
-    d["percentComplete"] = Math.round(Math.random() * 100);
-    d["start"] = "01/01/2009";
-    d["finish"] = "01/05/2009";
-    d["effortDriven"] = (i % 5 == 0);
-    d["title1"] = i;
-    d["title2"] = i;
-    d["title3"] = i;
-    d["title4"] = i;
-  }
+  
 
 
-  //initialize when ready - boilerplate
-var xslick=document.querySelector('x-slick-grid'); if(xslick.setInitialData){initialize();}else{window.addEventListener('WebComponentsReady', function(e){initialize();});}
 
-function initialize(){
-    var dataView = new Slick.Data.DataView({ inlineFilters: true });
-    xslick.setInitialData(dataView, columns, options, wcOptions);
-    addEventHandlers(xslick.grid, dataView);
-}
 
 function addEventHandlers(grid, dataView){
   var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
