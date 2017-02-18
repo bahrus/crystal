@@ -22,7 +22,7 @@
 <script>(function() {if ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')) {} else {var e = document.createElement('script'); e.src = '../../../bower_components/webcomponentsjs/webcomponents-lite.min.js';document.body.appendChild(e);}})();</script>
 
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
-
+<link rel="import" href="../x-slick-grid.html" />
 <table width="100%">
   <tr>
     <td valign="top" width="50%">
@@ -43,7 +43,7 @@
 
       </div>
       <br/>
-      <link rel="import" href="../x-slick-grid.html" />
+      
       <x-slick-grid
               use-slick-editors
               use-slick-formatters
@@ -81,7 +81,7 @@
   }
 
   var data = [];
-  var columns = {};
+  var columns = [];
   var analyzedTreeData = false;
   var options = {};
   var wcOptions = {};
@@ -166,7 +166,8 @@
       d["effortDriven"] = (i % 5 == 0);
     }
 
-    
+    xslick.setInitialData(data, columns, options, wcOptions);
+    addEventHandlers(xslick.grid);
   }
 
 
@@ -200,18 +201,15 @@
 
   // initialize the grid
     var xslick = document.querySelector('x-slick-grid');
-  if(xslick.setInitialData){
-    xslick.setInitialData(data, columns, options, wcOptions);
-    addEventHandlers(xslick.grid);
-  }else{
-    window.addEventListener('WebComponentsReady', function(e){
-      xslick.setInitialData(data, columns, options, wcOptions);
-      addEventHandlers(xslick.grid);
-    });
-  }
-  xslick.addEventListener('loadedDependencies', function(){
-    initialize();
-  });
+    if(xslick.readyFnInitialized){
+      initialize();
+    }else{
+      xslick.addEventListener('loadedDependencies', function(){
+        initialize();
+        
+      });
+    }
+  //grid initialized
 
   function addEventHandlers(grid){
 

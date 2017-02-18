@@ -74,15 +74,6 @@
 
 // initialize the grid
   var xslick = document.querySelector('x-slick-grid');
-  // if(xslick.setInitialData){
-  //   xslick.setInitialData(data, columns, options, wcOptions);
-  //   addEventHandlers(xslick.grid);
-  // }else{
-  //   window.addEventListener('WebComponentsReady', function(e){
-      
-      
-  //   });
-  // }
   xslick.addEventListener('loadedDependencies', function(){
     initialize();
     xslick.setInitialData(data, columns, options, wcOptions);
