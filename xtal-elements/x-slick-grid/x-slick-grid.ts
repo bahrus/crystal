@@ -149,7 +149,7 @@ module crystal.elements {
         gridOptions?: Slick.GridOptions<any>;  
         wcOptions?: crystal.elements.IXSlickGridOptions<T>;
     }
-    export const onNewGridRenderParams = 'onNewGridRenderParams';
+    //export const onNewGridRenderParams = 'onNewGridRenderParams';
 
 }
 
@@ -300,7 +300,7 @@ Polymer({
             },
             gridRenderParams:{
                 type: Object,
-                observer: crystal.elements.onNewGridRenderParams
+                observer: 'onNewGridRenderParams'
             },
             readyFnInitialized:{
                 type: Boolean,
@@ -451,7 +451,7 @@ Polymer({
                 if(childColumns) this.setEditorAndFormatter(childColumns);
             }
         },
-        [crystal.elements.onNewGridRenderParams]<T>(newVal: crystal.elements.IGridRenderParams<T>){
+        onNewGridRenderParams<T>(newVal: crystal.elements.IGridRenderParams<T>){
             this.setInitialData(newVal.data, newVal.columns, newVal.gridOptions, newVal.wcOptions);
         },
         setInitialData<T>(data: T[], columns: crystal.elements.IXSlickGridColumn<any>[], gridOptions?: Slick.GridOptions<any>,  wcOptions?: crystal.elements.IXSlickGridOptions<T>){
