@@ -26,7 +26,7 @@ interface WebComponentLibrary{
     CDNs?: CDN[];
 }
 
-const libs = {
+const ergonomicLayers = {
     webcomponents_lite_V0:{
         MajorVersion: MajorVersion.V0,
         CDNs:[
@@ -83,3 +83,17 @@ const libs = {
         NumberOfStars: 1095
     }
 } as {[key: string] : WebComponentLibrary}
+
+const webComponentLibraries = {
+    Vaadin :{
+        documentationUrl: 'https://vaadin.com/elements',
+        CodeRepoUrl: 'https://github.com/vaadin/vaadin-core-elements',
+        NumberOfStars: 228,
+        elements:{
+            grid:{
+                CodeRepoUrl: 'https://github.com/vaadin/vaadin-grid/tree/2.0-dev'
+            },
+        }
+    }
+}
+
