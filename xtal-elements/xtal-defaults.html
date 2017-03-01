@@ -1,0 +1,25 @@
+<dom-module id="xtal-defaults">
+    <script>
+    Polymer({
+        id:'xtal-defaults',
+        ready: function(){
+            var defaultTags = this.$$('template').content.children;
+            for(var i = 0, ii = defaultTags.length; i < ii; i++){
+                var defaultTag = defaultTags[i];
+                var tagName = defaultTag.nodeName.toLowerCase();
+                var matchingTags = document.getElementsByTagName(tagName);
+                var attribs = defaultTag.attributes;
+                for(var j = 0, jj = attribs.length; j < jj; j++){
+                    var attrib = attribs[j];
+                    var attribName = attrib.nodeName;
+                    var val = attrib.nodeValue;
+                    for(var k = 0, kk = matchingTags.length; k < kk; k++){
+                        var matchingTag = matchingTags[k];
+                        matchingTag.setAttribute(attribName, val);
+                    }
+                }
+            }
+        }
+    })
+    </script>
+</dom-module>
