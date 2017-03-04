@@ -4,7 +4,7 @@
 <dom-module id="xtal-browser-window">
     <template>
         <span style="cursor:pointer" id="toggle_button" raised on-click="toggleIFrame">[[collapsedText]]</span> 
-        <content></content>
+        <content on-click="markClicked"></content>
         <div id="div_iframe" 
             style$="display:none;border-style: inset;border-color: grey;overflow: scroll;height: 500px;width: {{width}}"
         >
@@ -32,9 +32,18 @@
                 collapsedText:{
                     type: String,
                     value: '►'
+                },
+                clicked:{
+                    type: Boolean,
+                    notify: true,
+                    reflectToAttribute: true
                 }
             },
+            markClicked: function(){
+                this.clicked = true;
+            },
             toggleIFrame: function(){
+                this.clicked = true;
                 var aLink;
                 if(Polymer.Settings.useShadow){
                     aLink = this.getEffectiveChildNodes()[1];
