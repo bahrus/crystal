@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    
+    <script>
+    MyInput = Polymer({
+
+      is: 'my-input',
+
+      extends: 'input',
+
+      created: function() {
+        this.style.border = '1px solid red';
+        alert('i am here');
+      }
+
+    });
+
+    var el1 = new MyInput();
+    console.log(el1 instanceof HTMLInputElement); // true
+
+    var el2 = document.createElement('input', 'my-input');
+    console.log(el2 instanceof HTMLInputElement); // true
+    </script>
+</body>
+</html>
